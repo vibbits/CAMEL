@@ -39,6 +39,8 @@ class API {
 }
 
 
+include "experiment.php";
+
 $method = $_SERVER['REQUEST_METHOD'];
 $params = $_REQUEST;
 $API    = isset($_GET['API']) ? $_GET['API'] : '';
