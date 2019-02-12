@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule api/(.*)$ api/api.php?API=$1 [QSA,NC,L]
