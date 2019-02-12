@@ -1,0 +1,6 @@
+<?php
+
+define("CONFIG_DB_HOST", "");
+define("CONFIG_DB_NAME", "");
+define("CONFIG_DB_USER", "");
+define("CONFIG_DB_PASSWORD", "");
