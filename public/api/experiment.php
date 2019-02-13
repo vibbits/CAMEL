@@ -23,8 +23,13 @@ class Experiment extends API {
                 $col_name = $entry['column_name'];
                 $col_value = $entry['value'];
                 $summary[$experiment_id][$col_name] = $col_value;
-            }            
-            echo json_encode($summary, JSON_NUMERIC_CHECK);
+            }
+            $result = array();
+            foreach ($summary as $exp_id => $exp){
+                $exp['id'] = $exp_id;
+                $result[] = $exp;
+            }
+            echo json_encode($result, JSON_NUMERIC_CHECK);
         } catch (PDOException $e) {
             echo "Error: ". $e->getMessage();
         }
