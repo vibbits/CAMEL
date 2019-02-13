@@ -169,7 +169,6 @@ header.well
 }
 
 header{
-    margin-bottom: 1em;
 }
 
 header img
@@ -643,4 +642,8 @@ text {
 pre {
     word-break: keep-all;
     word-wrap: normal;
+}
+
+.top-buffer{
+    margin-top: 2em;
 }

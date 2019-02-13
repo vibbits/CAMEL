@@ -1,16 +1,20 @@
 <div class="table-responsive">
-    <table class="table table-striped">
-        <tr>
-            <th>Reference</th>
-            <th>Journal</th>
-            <th>Species</th>
-            <th>Year</th>
-        </tr>
-        <tr data-ng-repeat="experiment in experiments">
-            <td>{{experiment.Reference}}</td>
-            <td>{{experiment.Journal}}</td>
-            <td>{{experiment.Species}}</td>
-            <td>{{experiment.Year}}</td>
-        </tr>
-    </table>
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Reference</th>
+        <th>Journal</th>
+        <th>Species</th>
+        <th>Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-ng-repeat="experiment in experiments">
+	<td>{{experiment.Reference}}</td>
+	<td>{{experiment.Journal}}</td>
+	<td>{{experiment.Species}}</td>
+	<td>{{experiment.Year}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
