@@ -168,9 +168,12 @@ header.well
     background-color: #1b2944 !important;
 }
 
+header{
+    margin-bottom: 1em;
+}
+
 header img
 {
-    margin-top: -15px;
 }
 
 body
@@ -290,7 +293,7 @@ h5
     font-family: Open Sans;
 }
 
-.panel-title
+.card-title
 {
     font-family: Dense;
     font-size: 2.5em;
@@ -304,29 +307,29 @@ div.well
     background-color: #1b2944 !important;
 }
 
-.panel-heading {
+.card-header {
     padding-top: 15px !important;
     padding-bottom: 1px !important;
 }
-.panel.panel-success > .panel-heading
+.card.card-success > .card-header
 {
     color: #fff;
     background-color: #1b2944;
 }
 
-.panel.panel-primary > .panel-heading
+.card.card-primary > .card-header
 {
     color: #fff;
     background-color: #3abbba;
 }
 
-.panel.panel-warning > .panel-heading
+.card.card-warning > .card-header
 {
     color: #fff;
     background-color: #ff681e;
 }
 
-.panel.panel-info > .panel-heading
+.card.card-info > .card-header
 {
     color: #fff;
     background-color: #5a2a82;
