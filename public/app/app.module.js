@@ -1,5 +1,5 @@
-var app = angular.module('CAMEL', ['ngRoute']);
-app.controller('AppController', function($scope, $location, $route, $document, Login) {
+var app = angular.module('CAMEL', ['ngResource','ngRoute']);
+app.controller('AppController', function($scope, $location, $route, $document) {
 
     $scope.navigateTo = function(path, savePath) {
         if (savePath) {

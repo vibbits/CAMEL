@@ -5,5 +5,8 @@ angular.module('CAMEL')
 		templateUrl:  'app/components/home/homeTemplate.html',
 		controller: 'HomeController',
 		controllerAs: 'home'
-	});
+	})
+    	.otherwise({
+		redirectTo: '/home'
+	});;
 }]);
