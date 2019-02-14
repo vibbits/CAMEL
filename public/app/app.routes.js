@@ -6,6 +6,11 @@ angular.module('CAMEL')
 		controller: 'HomeController',
 		controllerAs: 'home'
 	})
+    	.when('/experiment/:id', {
+		templateUrl:  'app/components/experiment/experimentTemplate.html',
+		controller: 'ExperimentController',
+		controllerAs: 'experiment'
+	})
     	.otherwise({
 		redirectTo: '/home'
 	});;

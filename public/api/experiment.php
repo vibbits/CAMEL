@@ -7,7 +7,7 @@ class Experiment extends API {
                 $qry = $this->db->prepare("SELECT * FROM entries");
                 $qry->setFetchMode(PDO::FETCH_ASSOC);
                 $qry->execute(array());
-                $res = $qry->fetchAll();
+                $res = $qry->fetchAll();                
             } else {
                 $qry = $this->db->prepare("SELECT * FROM entries WHERE experiment_id = :ID");
                 $qry->setFetchMode(PDO::FETCH_ASSOC);
@@ -28,6 +28,9 @@ class Experiment extends API {
             foreach ($summary as $exp_id => $exp){
                 $exp['id'] = $exp_id;
                 $result[] = $exp;
+            }
+            if (!empty($id)){
+                $result = $result[0];
             }
             echo json_encode($result, JSON_NUMERIC_CHECK);
         } catch (PDOException $e) {
