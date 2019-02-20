@@ -1,5 +1,5 @@
-<div class="table-responsive-lg">
-  <table class="table table-striped table-hover">
+<div>
+  <table id="experiment-table" class="table table-striped table-hover">
     <thead class="thead-dark">
       <tr>
 	<th scope="col">Name</th>
@@ -35,3 +35,12 @@
     </tbody>
   </table>
 </div>
+
+<script>
+  $(document).ready(function() {
+      $('#experiment-table').DataTable({
+	  "paging": false,
+	  "info": false,
+      });
+} );
+</script>
