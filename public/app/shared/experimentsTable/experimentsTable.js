@@ -4,7 +4,8 @@ angular.module("CAMEL")
         restrict: 'E',
         templateUrl: 'app/shared/experimentsTable/experimentsTable.html',
         scope: {
-            experiments: '='
+            experiments: '=',
+	    fields: '='
         },
 	link: function(scope, elem, attr) {
 	    scope.showExperiment = function(experiment) {

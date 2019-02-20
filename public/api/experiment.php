@@ -29,6 +29,7 @@ class Experiment extends API {
                 $experiment_id = $entry['experiment_id'];
                 if (!isset($summary[$experiment_id])){
                     $summary[$experiment_id] = array();
+                    $summary[$experiment_id]['name'] = $entry['name'];
                 }
                 $col_id = $entry['field_id'];
                 $col_value = $entry['value'];
