@@ -4,11 +4,12 @@ class Experiment extends API {
     public function get($id, $params) {
         try {
             $sql = "SELECT e.`id` AS `experiment_id`, e.`name`,"
-                 ."f.`id` AS `field_id`, "
+                 ."f.`id` AS `field_id`, f.`title` AS `field_title`, f.`column_order`, "
                  ."CONCAT_WS('-',ef.`value_INT`,ef.`value_VARCHAR`,ef.`value_DOUBLE`,ef.`value_BOOL`,ef.`value_TEXT`) AS `value` "
                  ."FROM `experiments` e "
                  ."JOIN `experiments_fields` ef ON e.`id` = ef.`experiment_id` "
-                 ."JOIN `fields` f ON ef.`field_id` = f.`id` ";
+                 ."JOIN `fields` f ON ef.`field_id` = f.`id` "
+                 ."ORDER BY e.`id`, f.`column_order`";
 
             //fetch all fields/values for the experiments
             if (empty($id)) {                                
@@ -30,10 +31,12 @@ class Experiment extends API {
                 if (!isset($summary[$experiment_id])){
                     $summary[$experiment_id] = array();
                     $summary[$experiment_id]['name'] = $entry['name'];
+                    $summary[$experiment_id]['fields'] = array();
                 }
-                $col_id = $entry['field_id'];
-                $col_value = $entry['value'];
-                $summary[$experiment_id][$col_id] = $col_value;
+
+                $field_id = $entry['field_id'];
+                $field_value = $entry['value'];                
+                $summary[$experiment_id]['fields'][$field_id] = $field_value;
             }
 
             //generate a list from gathered results and add the references to each entry

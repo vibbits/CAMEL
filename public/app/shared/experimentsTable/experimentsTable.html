@@ -3,12 +3,15 @@
     <thead class="thead-dark">
       <tr>
 	<th>Name</th>
-        <th data-ng-repeat="field in fields">{{field.title}}</th>
+        <th data-ng-repeat="field in fields">{{field.title}} <span data-ng-if="field.unit">({{field.unit}})</span></th>
       </tr>
     </thead>
     <tbody>
       <tr data-ng-repeat="experiment in experiments" data-ng-click="showExperiment(experiment)" class="pointer">
 	<td>{{experiment.name}}</td>
+	<td data-ng-repeat="field in fields">
+	  {{experiment.fields[field.id]}}
+	</td>
       </tr>
     </tbody>
   </table>
