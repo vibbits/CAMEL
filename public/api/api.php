@@ -40,6 +40,7 @@ class API {
 
 
 include "experiment.php";
+include "field.php";
 
 $method = $_SERVER['REQUEST_METHOD'];
 $params = $_REQUEST;
