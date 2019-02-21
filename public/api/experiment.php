@@ -3,24 +3,32 @@ class Experiment extends API {
 
     public function get($id, $params) {
         try {
+            $where = array();
+            $tokens = array();
             $sql = "SELECT e.`id` AS `experiment_id`, e.`name`,"
                  ."f.`id` AS `field_id`, f.`title` AS `field_title`, f.`column_order`, "
                  ."CONCAT_WS('-',ef.`value_INT`,ef.`value_VARCHAR`,ef.`value_DOUBLE`,ef.`value_BOOL`,ef.`value_TEXT`) AS `value` "
                  ."FROM `experiments` e "
                  ."JOIN `experiments_fields` ef ON e.`id` = ef.`experiment_id` "
-                 ."JOIN `fields` f ON ef.`field_id` = f.`id` "
-                 ."ORDER BY e.`id`, f.`column_order`";
+                 ."JOIN `fields` f ON ef.`field_id` = f.`id` ";
+            
+            $order = " ORDER BY e.`id`, f.`column_order`";
 
             //fetch all fields/values for the experiments
-            if (empty($id)) {                                
+            if (empty($id)) {
+                $sql.= $order;
                 $qry = $this->db->prepare($sql);
                 $qry->setFetchMode(PDO::FETCH_ASSOC);
                 $qry->execute(array());
                 $res = $qry->fetchAll();                
             } else {
-                $qry = $this->db->prepare($sql." WHERE experiment_id = :ID");
+                $where[]= " experiment_id = :ID";
+                $tokens[':ID'] = $id;
+
+                $sql.=" WHERE ".implode(" AND ", $where);
+                $qry = $this->db->prepare($sql);
                 $qry->setFetchMode(PDO::FETCH_ASSOC);
-                $qry->execute(array(":ID" => $id));
+                $qry->execute($tokens);
                 $res = $qry->fetchAll();
             }
 

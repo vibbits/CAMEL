@@ -1,7 +1,6 @@
 angular.module("CAMEL")
-    .controller('ExperimentController', function($scope, $location, $timeout, $routeParams, $route, $http, Experiment) {
-	var ctrl = this;
-
-	ctrl.routeParams = $routeParams;
-	ctrl.exp = Experiment.get($routeParams);
+    .controller('ExperimentController', function($scope, $location, $timeout, $routeParams, $route, $http, Experiment, Field) {
+		
+	$scope.exp = Experiment.get($routeParams);
+	$scope.fields = Field.query();
     });
