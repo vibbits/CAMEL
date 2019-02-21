@@ -647,3 +647,8 @@ pre {
 .top-buffer{
     margin-top: 2em;
 }
+
+table th.fit{
+    width: 1% !important;
+    white-space: nowrap;
+}
