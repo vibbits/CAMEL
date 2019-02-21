@@ -11,6 +11,14 @@ angular.module("CAMEL")
 		    ctrl.fields[i].show = false;
 		}
 	    }
+
+
+	    $().ready(function() {
+		$('#experiment-table').DataTable({
+		    "paging": false,
+		    "info": false,
+		});
+	    } );
 	});
 	
 	ctrl.experiments = Experiment.query();
