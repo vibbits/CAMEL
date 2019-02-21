@@ -20,7 +20,9 @@
 	  <div data-ng-switch="field.type_column">
 	    <div data-ng-switch-when="value_BOOL">
 	      <div data-ng-if="experiment.fields[field.id]!=null">
-		{{experiment.fields[field.id]? 'TRUE':'FALSE'}}		
+		<i class="material-icons">
+		  {{experiment.fields[field.id]? 'check_circle':'not_interested'}}
+		</i>
 	      </div>
 	    </div>
 	    <div data-ng-switch-when="value_VARCHAR">
