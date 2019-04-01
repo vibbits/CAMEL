@@ -3,13 +3,15 @@ import csv
 import MySQLdb
 import getpass
 import sys
+import re
 
 def db_connect(host, user, passwd, db):
     try:
         db = MySQLdb.connect(host=host,
                              user=user,
                              passwd=passwd,
-                             db=db
+                             db=db,
+                             charset='utf8'
         )
     except:
         print("Can't connect to database")
@@ -26,7 +28,7 @@ def parse(input_file_name, field_map, species_map, db):
     with open(input_file_name) as input_file:
         data = csv.DictReader(input_file, dialect="excel")
         for row in data:
-            experimentId = row['ID']
+            experimentId = int(row['ID'])
 
             ## Store Experiment
             experimentName = row['OverarchingExperiment']                            
@@ -43,7 +45,7 @@ def parse(input_file_name, field_map, species_map, db):
             try_count = 0
             while not unique_name:
                 sql = "SELECT count(*) from `experiments` WHERE `name` = %s"
-                c = db.cursor
+                c = db.cursor()
                 c.execute(sql, (try_name,))
                 exp_count = c.fetchone()[0]
                 c.close()
@@ -54,7 +56,7 @@ def parse(input_file_name, field_map, species_map, db):
                     try_count += 1
                     try_name = "{}_{}".format(experimentName, try_count)
                                                 
-            c = db.cursor
+            c = db.cursor()
             sql = "INSERT INTO `experiments` (`id`, `name`) VALUES (%s, %s)"
             c.execute(sql, (experimentId, experimentName))
             c.close()
@@ -79,18 +81,39 @@ def parse(input_file_name, field_map, species_map, db):
                 if colName in ['ID', 'OverarchingExperiment']:                    
                     pass
                 elif colName in field_map['fields']:
-                    if row[colName] != 'NA':
+                    field_value = row[colName]
+                    if field_value and field_value != 'NA':
                         c = db.cursor()
                         field_id = field_map['fields'][colName]['id']
                         field_type = field_map['fields'][colName]['type']
+                        field_unit = field_map['fields'][colName]['unit']
+
+                        if field_unit:
+                            ## Remove units when repeated inside the field
+                            field_value = field_value.replace(field_unit, '')
+                            
+                        if field_type == 'value_INT' or field_type == 'value_BOOL':
+                            ## Fix borked scientific notations
+                            scientific_pattern = '([0-9]+(\.[0-9]+)?x?)?10\^-?[0-9]+'
+                            p = re.compile(scientific_pattern)
+                            if p.fullmatch(field_value):
+                                field_value = field_value.replace('x10^', 'E')
+                                field_value = field_value.replace('10^', '1E')
+                                field_value = float(field_value)
+                                
+                            field_value = int(field_value)
+                        elif field_type == 'value_DOUBLE':
+                            field_value = float(field_value)
+                            
                         sql = "INSERT INTO `experiments_fields` (`experiment_id`, `field_id`, `{}`) VALUES (%s, %s, %s)".format(field_type)
-                        c.execute(sql, (experimentId, field_id, row[colName]))
+                        print((experimentId, field_id, field_value))
+                        c.execute(sql, (experimentId, field_id, field_value))
                         c.close()
                 elif colName in field_map['groups']:
                     group_value = int(row[colName])
                     if group_value > 0:
                         c = db.cursor()
-                        sql = "INSERT INTO `experiment_groups` (`experiment_id`,`group_id`, `active`) VALUES (%s, %s, %s)"
+                        sql = "INSERT INTO `experiments_groups` (`experiment_id`,`group_id`, `active`) VALUES (%s, %s, %s)"
                         active = 1 if row[colName] == 1 else 0
                         c.execute(sql, (experimentId, field_map['groups'][colName]['id'], active))
                         c.close()
@@ -102,7 +125,7 @@ def parse(input_file_name, field_map, species_map, db):
 
             ## Insert gathered Reference info 
             sql = "INSERT INTO `references` (`authors`, `title`, `journal`, `year`, `pages`, `url`) VALUES (%s, %s, %s, %s, %s, %s)"
-            reference['authors'] = ", ".join(reference.authors)
+            reference['authors'] = ", ".join(reference['authors'])
             c = db.cursor()
             c.execute(sql, (reference['authors'], reference['title'], reference['journal'], reference['year'], reference['pages'], reference['url']))
             c.close()
@@ -153,13 +176,15 @@ def load_field_map(mapping_file_name, db):
 
             if table == 'fields':
                 c = db.cursor()
-                sql = "SELECT id, type_column from `fields` WHERE `title` = %s"
+                sql = "SELECT id, unit, type_column from `fields` WHERE `title` = %s"
                 c.execute(sql, (field_name,))
                 res = c.fetchone()
                 field_id = res[0]
-                field_type = res[1]
+                field_unit = res[1]
+                field_type = res[2]
                 field_map['fields'][excel_header] = {}
                 field_map['fields'][excel_header]['id'] = field_id
+                field_map['fields'][excel_header]['unit'] = field_unit
                 field_map['fields'][excel_header]['type'] = field_type
                 c.close()
             elif table == 'groups':
