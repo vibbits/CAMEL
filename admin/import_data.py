@@ -26,26 +26,52 @@ def parse(input_file_name, field_map, db):
     with open(input_file_name) as input_file:
         data = csv.DictReader(input_file, dialect="excel")
         for row in data:
+            experimentId = row['ID']
             experimentName = row['OverarchingExperiment']
+
+            ## TODO : add column!!!
+            speciesName = row['Species']
             if not experimentName:
                 ## TODO: distill exp name out of species/year 
                 pass
-
+            ## Check existing experiment name
+            unique_name = False
+            try_name = experimentName
+            try_count = 0
+            while not unique_name:
+                sql = "SELECT count(*) from `experiments` WHERE `name` = %s"
+                c = db.cursor
+                c.execute(sql, (try_name,))
+                exp_count = c.fetchone()[0]
+                c.close()
+                if exp_count == 0:
+                    unique_name = True
+                    experimentName = try_name
+                else:
+                    try_count += 1
+                    try_name = "{}_{}".format(experimentName, try_count)
+                                                
             c = db.cursor
-            sql = "INSERT INTO `experiments` (`name`) VALUES (%s)"
-            c.execute(sql, (experimentName,))
-            experiment_id = c.lastrowid
+            sql = "INSERT INTO `experiments` (`id`, `name`) VALUES (%s, %s)"
+            c.execute(sql, (experimentId, experimentName))
             c.close()
             
             authors = []
             for colName in row:
+                if colName in ['ID', 'OverarchingExperiment', 'Species']:
+                    pass
                 if colName.isdigit():
                     authors.append(row[colName])
                 elif colName in field_map['fields']:
                     c = db.cursor()
-                    sql = "INSERT INTO `experiments_fields` (`experiment_id`, `field_id`, {}) VALUES (%s, %s, %s)".format(col_type)
-                    c.execute(sql, (experiment_id, field_map['fields'][colName]), row[colName])
+                    field_id = field_map['fields'][colName]['id']
+                    field_type = field_map['fields'][colName]['type']
+                    sql = "INSERT INTO `experiments_fields` (`experiment_id`, `field_id`, `{}`) VALUES (%s, %s, %s)".format(field_type)
+                    c.execute(sql, (experimentId, field_id, row[colName])
                     c.close()
+                elif colName in field_map['groups']:
+                    
+                    pass
                 elif colName in field_map['references']:
                     ##collect reference data
                     pass
@@ -54,6 +80,19 @@ def parse(input_file_name, field_map, db):
             
 
 def load_field_map(mapping_file_name, db):
+    '''
+    Create a dictionary for all available fields from a tab delimited file.
+
+    Format: Type/Excel header/Field name
+
+    fields: 
+      Retrieve field id and value type
+    groups:
+      Retrieve group id
+    references:
+      
+    
+    '''
     field_map = {}
     field_map['fields'] = {}
     field_map['groups'] = {}
@@ -63,19 +102,23 @@ def load_field_map(mapping_file_name, db):
             (table, excel_header, field_name) = line.strip().split('\t')
 
             if table == 'fields':
-                ## TODO: also get column type
                 c = db.cursor()
-                sql = "SELECT id from `fields` WHERE `title` = %s"
+                sql = "SELECT id, type_column from `fields` WHERE `title` = %s"
                 c.execute(sql, (field_name,))
-                field_id = c.fetchone()[0]
-                field_map['fields'][excel_header] = field_id
+                res = c.fetchone()
+                field_id = res[0]
+                field_type = res[1]
+                field_map['fields'][excel_header] = {}
+                field_map['fields'][excel_header]['id'] = field_id
+                field_map['fields'][excel_header]['type'] = field_type
                 c.close()
             elif table == 'groups':
                 c = db.cursor()
                 sql = "SELECT id from `groups` WHERE `title` = %s"
                 c.execute(sql, (field_name,))
                 field_id = c.fetchone()[0]
-                field_map['groups'][excel_header] = field_id
+                field_map['groups'][excel_header] = {}
+                field_map['groups'][excel_header]['id'] = field_id
                 c.close()
             else:                
                 field_map['references'][excel_header] = field_name
