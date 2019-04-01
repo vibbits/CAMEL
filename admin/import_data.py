@@ -18,7 +18,7 @@ def db_connect(host, user, passwd, db):
     return db
 
 
-def parse(input_file_name, field_map, db):
+def parse(input_file_name, field_map, species_map, db):
     '''
     Read a single row from the Excel csv file at a time and
     write it to the database;
@@ -27,13 +27,16 @@ def parse(input_file_name, field_map, db):
         data = csv.DictReader(input_file, dialect="excel")
         for row in data:
             experimentId = row['ID']
-            experimentName = row['OverarchingExperiment']
 
-            ## TODO : add column!!!
-            speciesName = row['Species']
+            ## Store Experiment
+            experimentName = row['OverarchingExperiment']                            
             if not experimentName:
-                ## TODO: distill exp name out of species/year 
-                pass
+                first_author = row['1']
+                year = row['year']
+                experimentName = first_author+"_"+year
+
+            species_ids = species_map[experimentId]
+
             ## Check existing experiment name
             unique_name = False
             try_name = experimentName
@@ -55,29 +58,76 @@ def parse(input_file_name, field_map, db):
             sql = "INSERT INTO `experiments` (`id`, `name`) VALUES (%s, %s)"
             c.execute(sql, (experimentId, experimentName))
             c.close()
+
+            ## Link species
+            c = db.cursor()
+            for species_id in species_ids:
+                sql = "INSERT INTO `experiments_species` (`experiment_id`, `species_id`) VALUES (%s, %s)"
+                c.execute(sql, (experimentId,species_id))                
+            c.close()
             
-            authors = []
+            ## Add fields and references
+            reference = {
+                'authors': [],
+                'title': '',
+                'journal': '',
+                'year': '',
+                'pages': '',
+                'url': ''
+            }
             for colName in row:
-                if colName in ['ID', 'OverarchingExperiment', 'Species']:
+                if colName in ['ID', 'OverarchingExperiment']:                    
                     pass
-                if colName.isdigit():
-                    authors.append(row[colName])
                 elif colName in field_map['fields']:
-                    c = db.cursor()
-                    field_id = field_map['fields'][colName]['id']
-                    field_type = field_map['fields'][colName]['type']
-                    sql = "INSERT INTO `experiments_fields` (`experiment_id`, `field_id`, `{}`) VALUES (%s, %s, %s)".format(field_type)
-                    c.execute(sql, (experimentId, field_id, row[colName])
-                    c.close()
+                    if row[colName] != 'NA':
+                        c = db.cursor()
+                        field_id = field_map['fields'][colName]['id']
+                        field_type = field_map['fields'][colName]['type']
+                        sql = "INSERT INTO `experiments_fields` (`experiment_id`, `field_id`, `{}`) VALUES (%s, %s, %s)".format(field_type)
+                        c.execute(sql, (experimentId, field_id, row[colName]))
+                        c.close()
                 elif colName in field_map['groups']:
-                    
-                    pass
+                    group_value = int(row[colName])
+                    if group_value > 0:
+                        c = db.cursor()
+                        sql = "INSERT INTO `experiment_groups` (`experiment_id`,`group_id`, `active`) VALUES (%s, %s, %s)"
+                        active = 1 if row[colName] == 1 else 0
+                        c.execute(sql, (experimentId, field_map['groups'][colName]['id'], active))
+                        c.close()
+                if colName.isdigit():
+                    reference['authors'].append(row[colName])
                 elif colName in field_map['references']:
                     ##collect reference data
-                    pass
+                    reference[colName] = row[colName]
 
+            ## Insert gathered Reference info 
+            sql = "INSERT INTO `references` (`authors`, `title`, `journal`, `year`, `pages`, `url`) VALUES (%s, %s, %s, %s, %s, %s)"
+            reference['authors'] = ", ".join(reference.authors)
+            c = db.cursor()
+            c.execute(sql, (reference['authors'], reference['title'], reference['journal'], reference['year'], reference['pages'], reference['url']))
+            c.close()
             
-            
+                              
+def load_species_map(species_map_file):
+    '''
+    In case of the original CAMEL data, the species
+    and the join table (experiment_id -> species-id) are stored on 
+    separate excel sheets. 
+    By keeping the id's both for experiments and species, we can easily 
+    reuse the foreign key mappings from the join table.
+    '''
+    with open(species_map_file) as species_file:
+        species_file.readline() ##skip header
+        exp_map = {}
+        for line in species_file:
+            (experiment_id, species_id) = line.strip().split('\t')
+            experiment_id = int(experiment_id)
+            species_id = int(species_id)
+            if experiment_id not in exp_map:
+                exp_map[experiment_id] = []
+            exp_map[experiment_id].append(species_id)
+        return exp_map
+
 
 def load_field_map(mapping_file_name, db):
     '''
@@ -134,6 +184,11 @@ def load_field_map(mapping_file_name, db):
               type=click.Path(exists=True),
               required = True
 )
+@click.option('-s', '--species', 'species_map_file',
+              help="TAB delimited mapping from experiment_id to species_id",
+              type=click.Path(exists=True),
+              required = True
+)
 @click.option('-h', '--host', 'db_host',
               help="Database server hostname",
               required = True
@@ -148,7 +203,7 @@ def load_field_map(mapping_file_name, db):
               help="Database name (default: CAMEL)",
               default="CAMEL"
 )
-def main(input_file_name, field_names, db_host, db_user, db_name, db_passwd):
+def main(input_file_name, field_names, species_map_file, db_host, db_user, db_name, db_passwd):
     '''
     Parse the original CAMEL input table from Excel and write the data
     into the CAMEL database.
@@ -164,7 +219,8 @@ def main(input_file_name, field_names, db_host, db_user, db_name, db_passwd):
     db = db_connect(db_host, db_user, db_passwd, db_name)
 
     field_map = load_field_map(field_names, db)
-    parse(input_file_name, field_map, db)
+    species_map = load_species_map(species_map_file)
+    parse(input_file_name, field_map, species_map, db)
     
     db.close()
 
