@@ -78,37 +78,39 @@ def parse(input_file_name, field_map, species_map, db):
                 'url': ''
             }
             for colName in row:
-                if colName in ['ID', 'OverarchingExperiment']:                    
+                if colName in ['ID', 'OverarchingExperiment']:
                     pass
                 elif colName in field_map['fields']:
-                    field_value = row[colName]
+                    raw_field_value = row[colName]
                     if field_value and field_value != 'NA':
-                        c = db.cursor()
                         field_id = field_map['fields'][colName]['id']
                         field_type = field_map['fields'][colName]['type']
                         field_unit = field_map['fields'][colName]['unit']
 
-                        if field_unit:
-                            ## Remove units when repeated inside the field
-                            field_value = field_value.replace(field_unit, '')
-                            
-                        if field_type == 'value_INT' or field_type == 'value_BOOL':
-                            ## Fix borked scientific notations
-                            scientific_pattern = '([0-9]+(\.[0-9]+)?x?)?10\^-?[0-9]+'
-                            p = re.compile(scientific_pattern)
-                            if p.fullmatch(field_value):
-                                field_value = field_value.replace('x10^', 'E')
-                                field_value = field_value.replace('10^', '1E')
+                        multiple_values = [strip(v) for v in raw_field_value.split('and')]
+                        for field_value in multiple_values:
+                            if field_unit:
+                                ## Remove units when repeated inside the field
+                                field_value = field_value.replace(field_unit, '')
+
+                            if field_type == 'value_INT' or field_type == 'value_BOOL':
+                                ## Fix borked scientific notations
+                                scientific_pattern = '([0-9]+(\.[0-9]+)?x?)?10\^-?[0-9]+'
+                                p = re.compile(scientific_pattern)
+                                if p.fullmatch(field_value):
+                                    field_value = field_value.replace('x10^', 'E')
+                                    field_value = field_value.replace('10^', '1E')
+                                    field_value = float(field_value)
+
+                                field_value = int(field_value)
+                            elif field_type == 'value_DOUBLE':
                                 field_value = float(field_value)
-                                
-                            field_value = int(field_value)
-                        elif field_type == 'value_DOUBLE':
-                            field_value = float(field_value)
-                            
-                        sql = "INSERT INTO `experiments_fields` (`experiment_id`, `field_id`, `{}`) VALUES (%s, %s, %s)".format(field_type)
-                        print((experimentId, field_id, field_value))
-                        c.execute(sql, (experimentId, field_id, field_value))
-                        c.close()
+
+                            c = db.cursor()
+                            sql = "INSERT INTO `experiments_fields` (`experiment_id`, `field_id`, `{}`) VALUES (%s, %s, %s)".format(field_type)
+                            print((experimentId, field_id, field_value))
+                            c.execute(sql, (experimentId, field_id, field_value))
+                            c.close()
                 elif colName in field_map['groups']:
                     group_value = int(row[colName])
                     if group_value > 0:
