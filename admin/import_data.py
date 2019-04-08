@@ -31,10 +31,10 @@ def parse(input_file_name, field_map, species_map, db):
             experimentId = int(row['ID'])
 
             ## Store Experiment
-            experimentName = row['OverarchingExperiment']                            
+            experimentName = row['OverarchingExperiment'].strip()
             if not experimentName:
-                first_author = row['1']
-                year = row['year']
+                first_author = row['1'].strip()
+                year = row['year'].strip()
                 experimentName = first_author+"_"+year
 
 
@@ -121,14 +121,14 @@ def parse(input_file_name, field_map, species_map, db):
                         c.execute(sql, (experimentId, field_map['groups'][colName]['id'], active))
                         c.close()
                 if colName.isdigit():
-                    reference['authors'].append(row[colName])
+                    reference['authors'].append(row[colName].strip())
                 elif colName in field_map['references']:
                     ##collect reference data
-                    reference[colName] = row[colName]
+                    reference[colName] = row[colName].strip()
 
             ## Insert gathered Reference info 
             sql = "INSERT INTO `references` (`authors`, `title`, `journal`, `year`, `pages`, `url`) VALUES (%s, %s, %s, %s, %s, %s)"
-            reference['authors'] = ", ".join(reference['authors'])
+            reference['authors'] = ", ".join([a.strip() for a in reference['authors']])
             c = db.cursor()
             c.execute(sql, (reference['authors'], reference['title'], reference['journal'], reference['year'], reference['pages'], reference['url']))
             c.close()
@@ -239,6 +239,7 @@ def main(input_file_name, field_names, species_map_file, db_host, db_user, db_na
 
     INPUT: the original input file, exported from Excel as a CSV.
     
+    Already in database: the species and fields (loaded directly)
 
     '''
     if not db_user:
