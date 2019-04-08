@@ -109,7 +109,6 @@ def parse(input_file_name, field_map, species_map, db):
 
                             c = db.cursor()
                             sql = "INSERT INTO `experiments_fields` (`experiment_id`, `field_id`, `{}`) VALUES (%s, %s, %s)".format(field_type)
-                            print((experimentId, field_id, field_value))
                             c.execute(sql, (experimentId, field_id, field_value))
                             c.close()
                 elif colName in field_map['groups']:
@@ -128,12 +127,13 @@ def parse(input_file_name, field_map, species_map, db):
 
             ## Insert gathered Reference info 
             sql = "INSERT INTO `references` (`authors`, `title`, `journal`, `year`, `pages`, `url`) VALUES (%s, %s, %s, %s, %s, %s)"
-            reference['authors'] = ", ".join([a.strip() for a in reference['authors']])
+            reference['authors'] = ", ".join([a for a in reference['authors'] if a])
             c = db.cursor()
             c.execute(sql, (reference['authors'], reference['title'], reference['journal'], reference['year'], reference['pages'], reference['url']))
             c.close()
 
             db.commit()
+            print("Imported experiment {} : {}".format(experimentId, experimentName))
                               
 def load_species_map(species_map_file):
     '''
@@ -239,7 +239,7 @@ def main(input_file_name, field_names, species_map_file, db_host, db_user, db_na
 
     INPUT: the original input file, exported from Excel as a CSV.
     
-    Already in database: the species and fields (loaded directly)
+    Already in database: the species, fields and groups (loaded directly)
 
     '''
     if not db_user:
