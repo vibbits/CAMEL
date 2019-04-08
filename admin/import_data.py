@@ -116,20 +116,32 @@ def parse(input_file_name, field_map, species_map, db):
                     if group_value > 0:
                         c = db.cursor()
                         sql = "INSERT INTO `experiments_groups` (`experiment_id`,`group_id`, `active`) VALUES (%s, %s, %s)"
-                        active = 1 if row[colName] == 1 else 0
+                        active = 1 if group_value == 1 else 0
                         c.execute(sql, (experimentId, field_map['groups'][colName]['id'], active))
                         c.close()
-                if colName.isdigit():
+                elif colName.isdigit():
                     reference['authors'].append(row[colName].strip())
                 elif colName in field_map['references']:
-                    ##collect reference data
-                    reference[colName] = row[colName].strip()
+                    ref_field = field_map['references'][colName]
+                    ref_value = row[colName].strip()
+                    ## Strip out the ridiculous systemMessages some URLs seem to contain
+                    p = re.compile('(https?://.*)\?systemMessage=')
+                    match = p.match(ref_value)
+                    if match:
+                        ref_value = match.groups()[0]
+                    reference[ref_field] = ref_value
+                else:
+                    raise ValueError('Unknown column header: {}'.format(colName))
 
-            ## Insert gathered Reference info 
-            sql = "INSERT INTO `references` (`authors`, `title`, `journal`, `year`, `pages`, `url`) VALUES (%s, %s, %s, %s, %s, %s)"
+            ## Insert gathered Reference info
+            ## In our original data: assume every entry belongs to only one reference and vice versa
             reference['authors'] = ", ".join([a for a in reference['authors'] if a])
             c = db.cursor()
+            sql = "INSERT INTO `references` (`authors`, `title`, `journal`, `year`, `pages`, `url`) VALUES (%s, %s, %s, %s, %s, %s)"
             c.execute(sql, (reference['authors'], reference['title'], reference['journal'], reference['year'], reference['pages'], reference['url']))
+            new_ref_id = c.lastrowid;
+            sql = "INSERT INTO `experiments_references` (`experiment_id`, `reference_id`) VALUES (%s, %s)"
+            c.execute(sql, (experimentId, new_ref_id))
             c.close()
 
             db.commit()
