@@ -88,7 +88,7 @@ def parse(input_file_name, field_map, species_map, db):
                         field_type = field_map['fields'][colName]['type']
                         field_unit = field_map['fields'][colName]['unit']
 
-                        multiple_values = [v.strip() for v in raw_field_value.split('and')]
+                        multiple_values = [v.strip() for v in re.split('and|AND', raw_field_value)]
                         for field_value in multiple_values:
                             if field_unit:
                                 ## Remove units when repeated inside the field
