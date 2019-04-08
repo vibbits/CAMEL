@@ -37,7 +37,6 @@ def parse(input_file_name, field_map, species_map, db):
                 year = row['year']
                 experimentName = first_author+"_"+year
 
-            species_ids = species_map[experimentId]
 
             ## Check existing experiment name
             unique_name = False
@@ -61,12 +60,14 @@ def parse(input_file_name, field_map, species_map, db):
             c.execute(sql, (experimentId, experimentName))
             c.close()
 
-            ## Link species
-            c = db.cursor()
-            for species_id in species_ids:
-                sql = "INSERT INTO `experiments_species` (`experiment_id`, `species_id`) VALUES (%s, %s)"
-                c.execute(sql, (experimentId,species_id))                
-            c.close()
+            ## Link species            
+            if experimentId in species_map:
+                species_ids = species_map[experimentId]
+                c = db.cursor()
+                for species_id in species_ids:
+                    sql = "INSERT INTO `experiments_species` (`experiment_id`, `species_id`) VALUES (%s, %s)"
+                    c.execute(sql, (experimentId,species_id))                
+                c.close()
             
             ## Add fields and references
             reference = {
@@ -82,12 +83,12 @@ def parse(input_file_name, field_map, species_map, db):
                     pass
                 elif colName in field_map['fields']:
                     raw_field_value = row[colName]
-                    if field_value and field_value != 'NA':
+                    if raw_field_value and raw_field_value.upper() != 'NA':
                         field_id = field_map['fields'][colName]['id']
                         field_type = field_map['fields'][colName]['type']
                         field_unit = field_map['fields'][colName]['unit']
 
-                        multiple_values = [strip(v) for v in raw_field_value.split('and')]
+                        multiple_values = [v.strip() for v in raw_field_value.split('and')]
                         for field_value in multiple_values:
                             if field_unit:
                                 ## Remove units when repeated inside the field
@@ -131,7 +132,8 @@ def parse(input_file_name, field_map, species_map, db):
             c = db.cursor()
             c.execute(sql, (reference['authors'], reference['title'], reference['journal'], reference['year'], reference['pages'], reference['url']))
             c.close()
-            
+
+            db.commit()
                               
 def load_species_map(species_map_file):
     '''
