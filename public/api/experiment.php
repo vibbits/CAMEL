@@ -1,18 +1,17 @@
 <?php
 class Experiment extends API {
-
     public function get($id, $params) {
         try {
             $where = array();
             $tokens = array();
             $sql = "SELECT e.`id` AS `experiment_id`, e.`name`,"
-                 ."f.`id` AS `field_id`, f.`title` AS `field_title`, f.`column_order`, "
+                 ."f.`id` AS `field_id`, f.`title` AS `field_title`, f.`weight`, "
                  ."CONCAT_WS('-',ef.`value_INT`,ef.`value_VARCHAR`,ef.`value_DOUBLE`,ef.`value_BOOL`,ef.`value_TEXT`) AS `value` "
                  ."FROM `experiments` e "
                  ."JOIN `experiments_fields` ef ON e.`id` = ef.`experiment_id` "
                  ."JOIN `fields` f ON ef.`field_id` = f.`id` ";
             
-            $order = " ORDER BY e.`id`, f.`column_order`";
+            $order = " ORDER BY e.`id`, f.`weight`";
 
             //fetch all fields/values for the experiments
             if (empty($id)) {
@@ -40,6 +39,7 @@ class Experiment extends API {
                     $summary[$experiment_id] = array();
                     $summary[$experiment_id]['name'] = $entry['name'];
                     $summary[$experiment_id]['fields'] = array();
+                    //$summary[$experiment_id]['groups'] = array();
                 }
 
                 $field_id = $entry['field_id'];
@@ -50,9 +50,10 @@ class Experiment extends API {
             //generate a list from gathered results and add the references to each entry
             $result = array();
             foreach ($summary as $exp_id => $exp){
-                $sql = "SELECT `id`, `pubmed_id`, `reference`, `url` "
-                     ."FROM `references` "
-                     ."WHERE `experiment_id` = :ID";
+                $sql = "SELECT `r`.`id`, `r`.`authors`, `r`.`title`, `r`.`journal`, `r`.`year`, `r`.`pages`, `r`.`pubmed_id`, `r`.`url` "
+                     ."FROM `references` r "
+                     ."JOIN `experiments_references` er ON `r`.`id` = `er`.`reference_id` "
+                     ."WHERE `er`.`experiment_id` = :ID";
                 
                 $qry = $this->db->prepare($sql);
                 $qry->setFetchMode(PDO::FETCH_ASSOC);

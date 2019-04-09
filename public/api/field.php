@@ -2,9 +2,9 @@
 class Field extends API {
     public function get($id, $params){
         try {
-            $sql = "SELECT `id`, `title`, `unit`, `type_column`, `options`, `link`, `required`, `column_order` "
+            $sql = "SELECT `id`, `title`, `unit`, `type_column`, `options`, `link`, `required`, `weight` "
                  ."FROM `fields` "
-                 ."ORDER BY `column_order`";
+                 ."ORDER BY `weight`";
 
             $qry = $this->db->prepare($sql);
             $qry->setFetchMode(PDO::FETCH_ASSOC);
