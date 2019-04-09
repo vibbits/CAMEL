@@ -652,3 +652,10 @@ table th.fit{
     width: 1% !important;
     white-space: nowrap;
 }
+
+
+.field-value{
+    background-color: lightgrey;
+    padding: 0 2px 0 2px;
+    margin-right: 15px;
+}
