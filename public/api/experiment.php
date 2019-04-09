@@ -4,7 +4,7 @@ class Experiment extends API {
         try {
             $where = array();
             $tokens = array();
-            $sql = "SELECT e.`id` AS `experiment_id`, e.`name`,"
+            $sql = "SELECT e.`id` AS `experiment_id`, e.`name`, "
                  ."f.`id` AS `field_id`, f.`title` AS `field_title`, f.`weight`, "
                  ."CONCAT_WS('-',ef.`value_INT`,ef.`value_VARCHAR`,ef.`value_DOUBLE`,ef.`value_BOOL`,ef.`value_TEXT`) AS `value` "
                  ."FROM `experiments` e "
@@ -43,8 +43,11 @@ class Experiment extends API {
                 }
 
                 $field_id = $entry['field_id'];
-                $field_value = $entry['value'];                
-                $summary[$experiment_id]['fields'][$field_id] = $field_value;
+                $field_value = $entry['value'];
+                if (!isset($summary[$experiment_id]['fields'][$field_id])){
+                    $summary[$experiment_id]['fields'][$field_id] = array();
+                }
+                $summary[$experiment_id]['fields'][$field_id][] = $field_value;
             }
 
             //generate a list from gathered results and add the references to each entry
