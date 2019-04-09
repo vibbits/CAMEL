@@ -26,6 +26,11 @@
 		  </span>
 		</div>
 	      </div>
+	      <div data-ng-switch-when="value_TEXT">
+		<div data-ng-repeat="value in exp.fields[field.id]">
+		  {{value}}
+		</div>
+	      </div>
 	      <div data-ng-switch-default>
 		<span class="field-value" data-ng-repeat="value in exp.fields[field.id]">
 		  {{value}}
