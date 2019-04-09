@@ -53,10 +53,10 @@ class Experiment extends API {
             //generate a list from gathered results and add the references to each entry
             $result = array();
             foreach ($summary as $exp_id => $exp){
-                $sql = "SELECT `r`.`id`, `r`.`authors`, `r`.`title`, `r`.`journal`, `r`.`year`, `r`.`pages`, `r`.`pubmed_id`, `r`.`url` "
+                $sql = "SELECT r.`id`, r.`authors`, r.`title`, r.`journal`, r.`year`, r.`pages`, r.`pubmed_id`, r.`url` "
                      ."FROM `references` r "
-                     ."JOIN `experiments_references` er ON `r`.`id` = `er`.`reference_id` "
-                     ."WHERE `er`.`experiment_id` = :ID";
+                     ."JOIN `experiments_references` er ON r.`id` = er.`reference_id` "
+                     ."WHERE er.`experiment_id` = :ID";
                 
                 $qry = $this->db->prepare($sql);
                 $qry->setFetchMode(PDO::FETCH_ASSOC);
