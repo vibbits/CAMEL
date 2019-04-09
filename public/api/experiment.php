@@ -50,7 +50,7 @@ class Experiment extends API {
                 $summary[$experiment_id]['fields'][$field_id][] = $field_value;
             }
 
-            //generate a list from gathered results and add the references to each entry
+            //generate a list from gathered results and add the references and species to each entry
             $result = array();
             foreach ($summary as $exp_id => $exp){
                 $sql = "SELECT r.`id`, r.`authors`, r.`title`, r.`journal`, r.`year`, r.`pages`, r.`pubmed_id`, r.`url` "

@@ -1,8 +1,3 @@
-<div>
-  <ul>
-    <li data-ng-repeat="field in fields">{{field.title}}</li>
-  </ul>
-</div>
 <div class="table-responsive">
   <table id="experiment-table" class="table table-striped table-hover">
     <thead class="thead-dark">
@@ -30,11 +25,13 @@
 		<a href="{{experiment.fields[field.id]}}">{{experiment.fields[field.id]}}</a>
 	      </div>
 	      <div data-ng-if="!field.link">
-		{{experiment.fields[field.id]}}
+		{{experiment.fields[field.id].join('; ')}}
 	      </div>
 	    </div>
 	    <div data-ng-switch-default>
-	      {{experiment.fields[field.id]}}
+	      <span data-ng-repeat="value in experiment.fields[field.id]">
+		{{value}}
+	      </span>
 	    </div>
 	  </div>
 	</td>
