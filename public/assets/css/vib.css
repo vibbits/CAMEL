@@ -669,3 +669,9 @@ ul.reference-list{
 ul.reference-list li{
     list-style-type: '- ';
 }
+ul.link-list{
+    padding-left: 1em;
+}
+ul.link-list li{
+    list-style-type: none;
+}

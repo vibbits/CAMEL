@@ -19,9 +19,9 @@
 	      </div>
 	      <div data-ng-switch-when="value_VARCHAR">
 		<div data-ng-if="field.link">
-		  <ul>
+		  <ul class="link-list">
 		    <li data-ng-repeat="value in exp.fields[field.id]">
-		      <a href="{{value}}">{{value}}</a>
+		      <a href="{{value}}" target="_blank">{{value}}</a>
 		    </li>
 		  </ul>
 		</div>
