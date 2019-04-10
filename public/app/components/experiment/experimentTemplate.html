@@ -4,7 +4,12 @@
     <div class="table-responsive-md">    
       <table class="table table-striped thead-dark">	
 	<tr data-ng-repeat="field in fields" data-ng-if="exp.fields[field.id]!=null">
-	  <th class="fit">{{field.title}} <span data-ng-if="field.unit">({{field.unit}})</span></th>
+	  <th class="fit">
+	    {{field.title}} <span data-ng-if="field.unit">({{field.unit}})</span>
+	    <span data-ng-if="field.description">
+	      <i class="material-icons" title="{{field.description}}">info</i>
+	    </span>
+	  </th>
 	  <td>
 	    <div data-ng-switch="field.type_column">
 	      <div data-ng-switch-when="value_BOOL">

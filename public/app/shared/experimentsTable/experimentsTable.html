@@ -5,6 +5,9 @@
 	<th scope="col">Name</th>
         <th scope="col" data-ng-repeat="field in fields" data-ng-if="field.show">
 	  {{field.title}} <span data-ng-if="field.unit">({{field.unit}})</span>
+	  <span data-ng-if="field.description">
+	    <i class="material-icons" title="{{field.description}}">info</i>
+	  </span>
 	</th>
       </tr>
     </thead>
