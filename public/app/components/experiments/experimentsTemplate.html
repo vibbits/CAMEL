@@ -6,7 +6,7 @@
     <div class="card-body">
       <div id="field-selector">
 	<div data-ng-repeat="field in experiments.fields">
-	  <input id="field_{{field.id}}" type="checkbox" name="{{field.id}}" data-ng-checked="{{field.show}}"/>
+	  <input id="field_{{field.id}}" type="checkbox" name="{{field.id}}" data-ng-model="field.show""/>
 	  <label for="field_{{field.id}}">
 	    {{field.title}}
 	  </label>
