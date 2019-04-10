@@ -659,3 +659,10 @@ table th.fit{
     padding: 0 2px 0 2px;
     margin-right: 15px;
 }
+
+ul.reference-list{
+    padding-left: 1em;
+}
+ul.reference-list li{
+    list-style-type: '- ';
+}

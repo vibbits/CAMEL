@@ -41,13 +41,16 @@
 	</tr>
 	<tr>
 	  <th>Reference(s)</th>
-	  <th>
-	    <ul>
+	  <td>
+	    <ul class="reference-list">
 	      <li data-ng-repeat="ref in exp.references">
-		<a href="{{ref.url}}">{{ref.reference}}</a>
+		<div class="paper-reference">
+		  {{ref.authors}}, <em>{{ref.title}}</em> ({{ref.year}}) {{ref.journal}}, {{ref.pages}}
+		  <span data-ng-if="ref.url">(<a href="{{ref.url}}" target="_blank">article</a>)</span>
+		</div>
 	      </li>
 	    </ul>
-	  </th>
+	  </td>
 	</tr>
       </table>
     </div>
