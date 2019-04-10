@@ -60,13 +60,14 @@ def parse(input_file_name, field_map, species_map, db):
             c.execute(sql, (experimentId, experimentName))
             c.close()
 
-            ## Link species            
+            ## Enter species fields
             if experimentId in species_map:
-                species_ids = species_map[experimentId]
+                species_names = species_map[experimentId]
+                species_field_id = field_map['fields']['species']['id']
                 c = db.cursor()
-                for species_id in species_ids:
-                    sql = "INSERT INTO `experiments_species` (`experiment_id`, `species_id`) VALUES (%s, %s)"
-                    c.execute(sql, (experimentId,species_id))                
+                for species_name in species_names:
+                    sql = "INSERT INTO `experiments_fields` (`experiment_id`, `field_id`, `value_VARCHAR`) VALUES (%s, %s, %s)"
+                    c.execute(sql, (experimentId,species_field_id,species_name))
                 c.close()
             
             ## Add fields and references
@@ -151,24 +152,34 @@ def parse(input_file_name, field_map, species_map, db):
             db.commit()
             print("Imported experiment {} : {}".format(experimentId, experimentName))
                               
-def load_species_map(species_map_file):
+def load_species_map(species_file, species_map_file):
     '''
     In case of the original CAMEL data, the species
     and the join table (experiment_id -> species-id) are stored on 
     separate excel sheets. 
     By keeping the id's both for experiments and species, we can easily 
     reuse the foreign key mappings from the join table.
+
+    :return: mapping from experiment_id -> list of species names
     '''
-    with open(species_map_file) as species_file:
-        species_file.readline() ##skip header
+
+    species = {}
+    with open(species_file) as species_list:
+        species_list.readline() ## skip header
+        for line in species_list:
+            (species_id, species_name) = line.strip().split('\t')
+            species[species_id] = species_name
+    
+    with open(species_map_file) as species_map:
+        species_map.readline() ##skip header
         exp_map = {}
-        for line in species_file:
+        for line in species_map:
             (experiment_id, species_id) = line.strip().split('\t')
             experiment_id = int(experiment_id)
-            species_id = int(species_id)
+            species_name = species[species_id]
             if experiment_id not in exp_map:
                 exp_map[experiment_id] = []
-            exp_map[experiment_id].append(species_id)
+            exp_map[experiment_id].append(species_name)
         return exp_map
 
 
@@ -229,7 +240,12 @@ def load_field_map(mapping_file_name, db):
               type=click.Path(exists=True),
               required = True
 )
-@click.option('-s', '--species', 'species_map_file',
+@click.option('-s', '--species', 'species_file',
+              help="TAB delimited list of species and their id",
+              type=click.Path(exists=True),
+              required = True
+)
+@click.option('-m', '--mapspecies', 'species_map_file',
               help="TAB delimited mapping from experiment_id to species_id",
               type=click.Path(exists=True),
               required = True
@@ -248,14 +264,14 @@ def load_field_map(mapping_file_name, db):
               help="Database name (default: CAMEL)",
               default="CAMEL"
 )
-def main(input_file_name, field_names, species_map_file, db_host, db_user, db_name, db_passwd):
+def main(input_file_name, field_names, species_file, species_map_file, db_host, db_user, db_name, db_passwd):
     '''
     Parse the original CAMEL input table from Excel and write the data
     into the CAMEL database.
 
     INPUT: the original input file, exported from Excel as a CSV.
     
-    Already in database: the species, fields and groups (loaded directly)
+    Already in database: fields and groups (imported directly)
 
     '''
     if not db_user:
@@ -265,7 +281,7 @@ def main(input_file_name, field_names, species_map_file, db_host, db_user, db_na
     db = db_connect(db_host, db_user, db_passwd, db_name)
 
     field_map = load_field_map(field_names, db)
-    species_map = load_species_map(species_map_file)
+    species_map = load_species_map(species_file, species_map_file)
     parse(input_file_name, field_map, species_map, db)
     
     db.close()

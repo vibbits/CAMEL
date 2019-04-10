@@ -39,7 +39,6 @@ class Experiment extends API {
                     $summary[$experiment_id] = array();
                     $summary[$experiment_id]['name'] = $entry['name'];
                     $summary[$experiment_id]['fields'] = array();
-                    //$summary[$experiment_id]['groups'] = array();
                 }
 
                 $field_id = $entry['field_id'];
@@ -53,6 +52,10 @@ class Experiment extends API {
             //generate a list from gathered results and add the references and species to each entry
             $result = array();
             foreach ($summary as $exp_id => $exp){
+                //ID
+                $exp['id'] = $exp_id;
+
+                //References
                 $sql = "SELECT r.`id`, r.`authors`, r.`title`, r.`journal`, r.`year`, r.`pages`, r.`pubmed_id`, r.`url` "
                      ."FROM `references` r "
                      ."JOIN `experiments_references` er ON r.`id` = er.`reference_id` "
@@ -63,8 +66,8 @@ class Experiment extends API {
                 $qry->execute(array(":ID" => $exp_id));
                 $res = $qry->fetchAll();
                                 
-                $exp['id'] = $exp_id;
                 $exp['references'] = $res;
+                
                 $result[] = $exp;
             }
             if (!empty($id)){
