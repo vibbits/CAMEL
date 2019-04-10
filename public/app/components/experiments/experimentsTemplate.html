@@ -1,3 +1,21 @@
-<div class="row top-buffer">
+<div class="row mt-5 mb-3">
+  <div class="card">
+    <div class="card-header">
+      Fields
+    </div>
+    <div class="card-body">
+      <div id="field-selector">
+	<div data-ng-repeat="field in experiments.fields">
+	  <input id="field_{{field.id}}" type="checkbox" name="{{field.id}}" data-ng-checked="{{field.show}}"/>
+	  <label for="field_{{field.id}}">
+	    {{field.title}}
+	  </label>
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
   <experiments-table experiments="experiments.experiments" fields="experiments.fields"></experiments-table>
 </div>

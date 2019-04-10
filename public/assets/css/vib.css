@@ -644,16 +644,19 @@ pre {
     word-wrap: normal;
 }
 
-.top-buffer{
-    margin-top: 2em;
-}
 
 table th.fit{
     width: 1% !important;
     white-space: nowrap;
 }
 
+/*experiment overview page*/
+#field-selector{
+    height: 10em;
+    overflow: auto;    
+}
 
+/*experiment page*/
 .field-value{
     background-color: lightgrey;
     padding: 0 2px 0 2px;
