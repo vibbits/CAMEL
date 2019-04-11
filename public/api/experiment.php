@@ -8,8 +8,8 @@ class Experiment extends API {
                  ."f.`id` AS `field_id`, f.`title` AS `field_title`, f.`weight`, "
                  ."CONCAT_WS('-',ef.`value_INT`,ef.`value_VARCHAR`,ef.`value_DOUBLE`,ef.`value_BOOL`,ef.`value_TEXT`) AS `value` "
                  ."FROM `experiments` e "
-                 ."JOIN `experiments_fields` ef ON e.`id` = ef.`experiment_id` "
-                 ."JOIN `fields` f ON ef.`field_id` = f.`id` ";
+                 ."LEFT JOIN `experiments_fields` ef ON e.`id` = ef.`experiment_id` "
+                 ."LEFT JOIN `fields` f ON ef.`field_id` = f.`id` ";
             
             $order = " ORDER BY e.`id`, f.`weight`";
 
@@ -21,7 +21,7 @@ class Experiment extends API {
                 $qry->execute(array());
                 $res = $qry->fetchAll();                
             } else {
-                $where[]= " experiment_id = :ID";
+                $where[]= " e.`id` = :ID";
                 $tokens[':ID'] = $id;
 
                 $sql.=" WHERE ".implode(" AND ", $where);
