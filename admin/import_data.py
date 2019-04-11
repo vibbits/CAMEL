@@ -83,7 +83,7 @@ def parse(input_file_name, field_map, species_map, db):
                 if colName in ['ID', 'OverarchingExperiment']:
                     pass
                 elif colName in field_map['fields']:
-                    raw_field_value = row[colName]
+                    raw_field_value = row[colName].strip()
                     if field_map['fields'][colName]['group']:
                         group_value = int(raw_field_value)
                         if group_value > 0:
