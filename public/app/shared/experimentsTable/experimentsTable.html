@@ -17,9 +17,9 @@
 	<td data-ng-repeat="field in fields" data-ng-if="field.show">
 	  <div data-ng-switch="field.type_column">
 	    <div data-ng-switch-when="value_BOOL">
-	      <div data-ng-if="experiment.fields[field.id]!=null">
+	      <div data-ng-if="experiment.fields[field.id]">
 		<i class="material-icons">
-		  {{experiment.fields[field.id]? 'check_circle':'not_interested'}}
+		  {{experiment.fields[field.id]==1? 'check_circle':'not_interested'}}
 		</i>
 	      </div>
 	    </div>

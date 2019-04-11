@@ -2,7 +2,7 @@
 class Field extends API {
     public function get($id, $params){
         try {
-            $sql = "SELECT `id`, `title`, `unit`, `description`, `type_column`, `options`, `link`, `required`, `weight` "
+            $sql = "SELECT `id`, `title`, `unit`, `description`, `type_column`, `options`, `link`, `required`, `weight`, `group`, `group_id` "
                  ."FROM `fields` "
                  ."ORDER BY `weight`";
 

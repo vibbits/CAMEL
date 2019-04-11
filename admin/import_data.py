@@ -84,7 +84,16 @@ def parse(input_file_name, field_map, species_map, db):
                     pass
                 elif colName in field_map['fields']:
                     raw_field_value = row[colName]
-                    if raw_field_value and raw_field_value.upper() != 'NA':
+                    if field_map['fields'][colName]['group']:
+                        group_value = int(raw_field_value)
+                        if group_value > 0:
+                            c = db.cursor()
+                            sql = "INSERT INTO `experiments_fields` (`experiment_id`, `field_id`, `value_BOOL`) VALUES (%s, %s, %s)"
+                            active = 1 if group_value == 1 else 0
+                            c.execute(sql, (experimentId, field_map['fields'][colName]['id'], active))
+                            c.close()
+                        
+                    elif raw_field_value and raw_field_value.upper() != 'NA':
                         field_id = field_map['fields'][colName]['id']
                         field_type = field_map['fields'][colName]['type']
                         field_unit = field_map['fields'][colName]['unit']
@@ -115,15 +124,7 @@ def parse(input_file_name, field_map, species_map, db):
                             c = db.cursor()
                             sql = "INSERT INTO `experiments_fields` (`experiment_id`, `field_id`, `{}`) VALUES (%s, %s, %s)".format(field_type)
                             c.execute(sql, (experimentId, field_id, field_value))
-                            c.close()
-                elif colName in field_map['groups']:
-                    group_value = int(row[colName])
-                    if group_value > 0:
-                        c = db.cursor()
-                        sql = "INSERT INTO `experiments_groups` (`experiment_id`,`group_id`, `active`) VALUES (%s, %s, %s)"
-                        active = 1 if group_value == 1 else 0
-                        c.execute(sql, (experimentId, field_map['groups'][colName]['id'], active))
-                        c.close()
+                            c.close()                    
                 elif colName.isdigit():
                     reference['authors'].append(row[colName].strip())
                 elif colName in field_map['references']:
@@ -191,15 +192,12 @@ def load_field_map(mapping_file_name, db):
 
     fields: 
       Retrieve field id and value type
-    groups:
-      Retrieve group id
     references:
-      
+      Only store field name
     
     '''
     field_map = {}
     field_map['fields'] = {}
-    field_map['groups'] = {}
     field_map['references'] = {}
     with open(mapping_file_name) as mapping_file:
         for line in mapping_file:
@@ -207,28 +205,22 @@ def load_field_map(mapping_file_name, db):
 
             if table == 'fields':
                 c = db.cursor()
-                sql = "SELECT id, unit, type_column from `fields` WHERE `title` = %s"
+                sql = "SELECT `id`, `unit`, `type_column`, `group` from `fields` WHERE `title` = %s"
                 c.execute(sql, (field_name,))
                 res = c.fetchone()
                 field_id = res[0]
                 field_unit = res[1]
                 field_type = res[2]
+                field_group = True if res[3]==1 else False
                 field_map['fields'][excel_header] = {}
                 field_map['fields'][excel_header]['id'] = field_id
                 field_map['fields'][excel_header]['unit'] = field_unit
                 field_map['fields'][excel_header]['type'] = field_type
-                c.close()
-            elif table == 'groups':
-                c = db.cursor()
-                sql = "SELECT id from `groups` WHERE `title` = %s"
-                c.execute(sql, (field_name,))
-                field_id = c.fetchone()[0]
-                field_map['groups'][excel_header] = {}
-                field_map['groups'][excel_header]['id'] = field_id
+                field_map['fields'][excel_header]['group'] = field_group 
                 c.close()
             else:                
                 field_map['references'][excel_header] = field_name
-            
+
     return field_map
 
 @click.command()

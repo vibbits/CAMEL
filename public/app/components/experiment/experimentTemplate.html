@@ -3,7 +3,7 @@
     <h5 class="card-title">{{exp.name}}</h5>
     <div class="table-responsive-md">    
       <table class="table table-striped thead-dark">	
-	<tr data-ng-repeat="field in fields" data-ng-if="exp.fields[field.id]!=null">
+	<tr data-ng-repeat="field in fields" data-ng-if="exp.fields[field.id]">
 	  <th class="fit">
 	    {{field.title}} <span data-ng-if="field.unit">({{field.unit}})</span>
 	    <span data-ng-if="field.description">
@@ -14,7 +14,7 @@
 	    <div data-ng-switch="field.type_column">
 	      <div data-ng-switch-when="value_BOOL">
 		<i class="material-icons">
-		  {{exp.fields[field.id]? 'check_circle':'not_interested'}}
+		  {{exp.fields[field.id]==1? 'check_circle':'not_interested'}}
 		</i>
 	      </div>
 	      <div data-ng-switch-when="value_VARCHAR">

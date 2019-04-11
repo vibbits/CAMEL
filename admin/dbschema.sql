@@ -55,26 +55,6 @@ CREATE TABLE `experiments_fields` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `experiments_groups`
---
-
-DROP TABLE IF EXISTS `experiments_groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `experiments_groups` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `experiment_id` int(11) DEFAULT NULL,
-  `group_id` int(11) DEFAULT NULL,
-  `active` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_group_experiment_id` (`experiment_id`),
-  KEY `fk_group_group_id` (`group_id`),
-  CONSTRAINT `fk_group_experiment_id` FOREIGN KEY (`experiment_id`) REFERENCES `experiments` (`id`),
-  CONSTRAINT `fk_group_group_id` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25831 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `experiments_references`
 --
 
@@ -109,28 +89,13 @@ CREATE TABLE `fields` (
   `options` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Comma separated list of options',
   `link` tinyint(1) NOT NULL DEFAULT 0,
   `required` tinyint(1) NOT NULL DEFAULT 0,
+  `group` tinyint(1) DEFAULT 0,
   `weight` int(4) DEFAULT NULL,
   `group_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_group_id` (`group_id`),
-  CONSTRAINT `fk_group_id` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
+  CONSTRAINT `fk_group_id` FOREIGN KEY (`group_id`) REFERENCES `fields` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `groups`
---
-
-DROP TABLE IF EXISTS `groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `groups` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(150) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `weight` int(4) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -162,4 +127,4 @@ CREATE TABLE `references` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-10 13:18:24
+-- Dump completed on 2019-04-11 11:30:39
