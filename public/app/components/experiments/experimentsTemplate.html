@@ -20,6 +20,7 @@
 
 <div class="row">
   <div class="col-12">
-    <experiments-table experiments="experiments.experiments" fields="experiments.fields"></experiments-table>
+    <div ng-hide="experiments.loaded">Loading experiment data...</div>
+    <experiments-table experiments="experiments.experiments" fields="experiments.fields" ng-show="experiments.loaded"></experiments-table>
   </div>
 </div>

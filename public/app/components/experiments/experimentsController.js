@@ -3,6 +3,8 @@ angular.module("CAMEL")
 	var ctrl = this;
 	var showNr = 5;
 
+	ctrl.loaded = false;
+	
 	//extra field for short references
 	var shortRef = {
 	    'id': 'ref',
@@ -36,5 +38,6 @@ angular.module("CAMEL")
 	    	    ctrl.experiments[i]['fields']['ref'].push(ref);
 		}
 	    }
+	    ctrl.loaded = true;
 	});	
     });
