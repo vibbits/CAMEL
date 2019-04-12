@@ -3,6 +3,7 @@ class Experiment extends API {
     public function get($id, $params) {
         try {
             $where = array();
+            $filter = array();
             $tokens = array();
             $sql = "SELECT e.`id` AS `experiment_id`, e.`name`, "
                  ."f.`id` AS `field_id`, f.`title` AS `field_title`, f.`weight`, "
@@ -10,15 +11,27 @@ class Experiment extends API {
                  ."FROM `experiments` e "
                  ."LEFT JOIN `experiments_fields` ef ON e.`id` = ef.`experiment_id` "
                  ."LEFT JOIN `fields` f ON ef.`field_id` = f.`id` ";
+
+            $filter_b = "WHERE e.`id` IN (SELECT ef_filter.`experiment_id` "
+                      ."FROM `experiments_fields` ef_filter "
+                      ."WHERE ";
+            $filter_e = ") ";
             
             $order = " ORDER BY e.`id`, f.`weight`";
 
+
+            
             //fetch all fields/values for the experiments
             if (empty($id)) {
+                if (isset($params['Species'])){
+                    $filter_query = "(ef_filter.`field_id` = 1 AND ef_filter.`value_VARCHAR` like CONCAT('%', :Species ,'%')) ";
+                    $tokens[':Species'] = $params['Species'];
+                    $sql.=$filter_b . $filter_query . $filter_e;
+                }
                 $sql.= $order;
                 $qry = $this->db->prepare($sql);
                 $qry->setFetchMode(PDO::FETCH_ASSOC);
-                $qry->execute(array());
+                $qry->execute($tokens);
                 $res = $qry->fetchAll();                
             } else {
                 $where[]= " e.`id` = :ID";

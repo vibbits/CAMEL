@@ -16,7 +16,20 @@
       </div>
     </div>
   </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+	Filter
+      </div>
+      <div class="card-body">
+	<label for="species-filter">Species: </label>
+	<input id="species-filter" data-ng-model="experiments.filter.Species" data-ng-change="experiments.query()">
+      </div>
+    </div>
+  </div>    
 </div>
+
+
 
 <div class="row">
   <div class="col-12">

@@ -2,13 +2,11 @@ angular.module("CAMEL")
     .controller('ExperimentsController', function($scope, $location, $timeout, $routeParams, $route, $http, Experiment, Field) {
 	var ctrl = this;
 	var showNr = 5;
-
-	ctrl.loaded = false;
 	
 	//extra field for short references
 	var shortRef = {
 	    'id': 'ref',
-	    'title': "Reference",
+	    'title': "Short reference",
 	    'type_column': 'value_VARCHAR'	    
 	}
 	
@@ -22,11 +20,12 @@ angular.module("CAMEL")
 	    }
 	    ctrl.fields.push(shortRef);
 	});
+
 	
-	ctrl.experiments = Experiment.query(function(){
-	    for (var i=0; i<ctrl.experiments.length; i++){
-		longRefs = ctrl.experiments[i]['references'];
-		ctrl.experiments[i]['fields']['ref'] = [];
+	function addShortRefs(){
+	    for (var i=0; i<ctrl.tmp_experiments.length; i++){
+		longRefs = ctrl.tmp_experiments[i]['references'];
+		ctrl.tmp_experiments[i]['fields']['ref'] = [];
 		for (var j=0; j<longRefs.length; j++){
 		    longRef = longRefs[j];
 		    authors = longRef['authors'].split(', ');
@@ -35,9 +34,20 @@ angular.module("CAMEL")
 			shortAuthor+=" et al.";
 		    }
 		    ref = shortAuthor +" ("+longRef['year']+") "+longRef['journal'];
-	    	    ctrl.experiments[i]['fields']['ref'].push(ref);
+	    	    ctrl.tmp_experiments[i]['fields']['ref'].push(ref);
 		}
 	    }
-	    ctrl.loaded = true;
-	});	
+	}
+
+	ctrl.filter = {};
+	ctrl.query = function(){
+	    ctrl.tmp_experiments = Experiment.query(ctrl.filter, function(){
+		addShortRefs();
+		ctrl.experiments = ctrl.tmp_experiments;
+		ctrl.loaded = true;
+	    });
+	}
+	ctrl.loaded = false;
+	ctrl.query();
+	
     });
