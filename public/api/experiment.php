@@ -25,16 +25,20 @@ class Experiment extends API {
                 if (isset($params['ExperimentName'])){
                     $where[] = "e.`name` like CONCAT('%', :ExperimentName ,'%') ";
                     $tokens[':ExperimentName'] = $params['ExperimentName'];
-                }
-                if (isset($params['Species'])){
-                    $filter_query = "(ef_filter.`field_id` = 1 AND ef_filter.`value_VARCHAR` like CONCAT('%', :Species ,'%')) ";
-                    $tokens[':Species'] = $params['Species'];
-                    $where[] = $filter_b . $filter_query . $filter_e;
+                }                
+                foreach($params as $key => $value){
+                    if (is_numeric($key)){
+                        $filter_query = "(ef_filter.`field_id` = :FieldID_$key AND ef_filter.`value_VARCHAR` like CONCAT('%', :FieldValue_$key ,'%')) ";
+                        $tokens[":FieldID_$key"] = $key;
+                        $tokens[":FieldValue_$key"] = $value;
+                        $where[] = $filter_b . $filter_query . $filter_e;
+                    }
                 }
                 if (count($where) > 0){                    
                     $sql.=" WHERE ".implode(" AND ", $where);
                 }
-                $sql.= $order;                
+                $sql.= $order;
+                error_log($sql);
                 $qry = $this->db->prepare($sql);
                 $qry->setFetchMode(PDO::FETCH_ASSOC);
                 $qry->execute($tokens);

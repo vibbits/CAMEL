@@ -23,6 +23,11 @@
     <div class="card">
       <div class="card-header">
 	Filter
+	<i class="material-icons pointer" data-ng-click="experiments.toggleHelp()">{{'help'}}</i>
+      </div>
+      <div class="card-body" data-ng-show="experiments.showHelp">
+	<p>Different filters will be applied in an <code>AND</code> fashion (eg. "this species, with this many lines, published in this year")</p>
+	<p>Multiple filters for the same field will be used as <code>OR</code> (eg. "this species or this species, or...")</p>
       </div>
       <div class="card-body">
 	<div id="filter-blocks">
@@ -31,8 +36,8 @@
 	    <input id="expname-filter" data-ng-model="experiments.filter.ExperimentName" data-ng-change="experiments.query()">
 	  </div>
 	  <div class="filter-item" data-ng-repeat="field in experiments.filterBlocks track by $index">
-	    <label for="filter">{{field.title}}: </label>
-	    <input id="filter">
+	    <label for="filter-{{$index}}">{{field.title}}: </label>
+	    <input id="filter-{{$index}}" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.query()">
 	    <i class="material-icons pointer" data-ng-click="experiments.removeFilterItem($index)">{{'delete_forever'}}</i>
 	  </div>
 	</div>
@@ -45,7 +50,10 @@
 
 <div class="row">
   <div class="col-12">
-    <div ng-hide="experiments.loaded">Loading experiment data...</div>
-    <experiments-table experiments="experiments.experiments" fields="experiments.fields" ng-show="experiments.loaded"></experiments-table>
+    <div>
+      Showing <code>{{experiments.exp_count}}</code> experiments 
+      <span data-ng-hide="experiments.loaded">(Refreshing data...)</span>
+    </div>
+    <experiments-table experiments="experiments.experiments" fields="experiments.fields" data-ng-show="experiments.init_loaded"></experiments-table>
   </div>
 </div>

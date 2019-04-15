@@ -27,7 +27,15 @@ angular.module("CAMEL")
 	    ctrl.filterBlocks.push(field);
 	}
 	ctrl.removeFilterItem = function(filterBlockIndex){
+	    field_id = ctrl.filterBlocks[filterBlockIndex].id;
+	    delete ctrl.filter[field_id];
 	    ctrl.filterBlocks.splice(filterBlockIndex, 1);
+	    ctrl.query();
+	}
+
+	ctrl.showHelp = false;
+	ctrl.toggleHelp = function(){
+	    ctrl.showHelp= !ctrl.showHelp;
 	}
 	
 	function addShortRefs(){
@@ -49,13 +57,18 @@ angular.module("CAMEL")
 
 	ctrl.filter = {};
 	ctrl.query = function(){
+	    ctrl.loaded = false;
 	    ctrl.tmp_experiments = Experiment.query(ctrl.filter, function(){
 		addShortRefs();
 		ctrl.experiments = ctrl.tmp_experiments;
+		ctrl.exp_count = ctrl.experiments.length;
 		ctrl.loaded = true;
+		ctrl.init_loaded = true;
 	    });
 	}
-	ctrl.loaded = false;
+	
+	ctrl.init_loaded = false;
+	ctrl.exp_count = 0;
 	ctrl.query();
 	
     });
