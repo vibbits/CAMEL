@@ -21,6 +21,14 @@ angular.module("CAMEL")
 	    ctrl.fields.push(shortRef);
 	});
 
+
+	ctrl.filterBlocks = []
+	ctrl.addFilterItem = function(field){
+	    ctrl.filterBlocks.push(field);
+	}
+	ctrl.removeFilterItem = function(filterBlockIndex){
+	    ctrl.filterBlocks.splice(filterBlockIndex, 1);
+	}
 	
 	function addShortRefs(){
 	    for (var i=0; i<ctrl.tmp_experiments.length; i++){

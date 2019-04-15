@@ -7,10 +7,13 @@
       <div class="card-body">
 	<div id="field-selector">
 	  <div data-ng-repeat="field in experiments.fields">
-	    <input id="field_{{field.id}}" type="checkbox" name="{{field.id}}" data-ng-model="field.show">
-	    <label for="field_{{field.id}}">
-	      {{field.title}}
-	    </label>
+	    <div class="filter-control">
+	      <i class="material-icons pointer" data-ng-click="experiments.addFilterItem(field)">{{'add_circle_outline'}}</i>
+	      <input id="field_{{field.id}}" type="checkbox" name="{{field.id}}" data-ng-model="field.show">
+	      <label for="field_{{field.id}}">
+		{{field.title}}
+	      </label>
+	    </div>
 	  </div>
 	</div>
       </div>
@@ -22,17 +25,20 @@
 	Filter
       </div>
       <div class="card-body">
-	<div class="filter-item">
-	  <label for="expname-filter">Name: </label>
-	  <input id="expname-filter" data-ng-model="experiments.filter.ExperimentName" data-ng-change="experiments.query()">
-	</div>
-	<div class="filter-item">
-	  <label for="species-filter">Species: </label>
-	  <input id="species-filter" data-ng-model="experiments.filter.Species" data-ng-change="experiments.query()">
+	<div id="filter-blocks">
+	  <div class="filter-item">
+	    <label for="expname-filter">Name: </label>
+	    <input id="expname-filter" data-ng-model="experiments.filter.ExperimentName" data-ng-change="experiments.query()">
+	  </div>
+	  <div class="filter-item" data-ng-repeat="field in experiments.filterBlocks track by $index">
+	    <label for="filter">{{field.title}}: </label>
+	    <input id="filter">
+	    <i class="material-icons pointer" data-ng-click="experiments.removeFilterItem($index)">{{'delete_forever'}}</i>
+	  </div>
 	</div>
       </div>
     </div>
-  </div>    
+  </div>
 </div>
 
 

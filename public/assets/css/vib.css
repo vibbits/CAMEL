@@ -652,7 +652,12 @@ table th.fit{
 
 /*experiment overview page*/
 #field-selector{
-    height: 10em;
+    height: 15em;
+    overflow: auto;    
+}
+
+#filter-blocks{
+    height: 15em;
     overflow: auto;    
 }
 
