@@ -12,7 +12,7 @@ class Experiment extends API {
                  ."LEFT JOIN `experiments_fields` ef ON e.`id` = ef.`experiment_id` "
                  ."LEFT JOIN `fields` f ON ef.`field_id` = f.`id` ";
 
-            $filter_b = "WHERE e.`id` IN (SELECT ef_filter.`experiment_id` "
+            $filter_b = "e.`id` IN (SELECT ef_filter.`experiment_id` "
                       ."FROM `experiments_fields` ef_filter "
                       ."WHERE ";
             $filter_e = ") ";
@@ -20,15 +20,21 @@ class Experiment extends API {
             $order = " ORDER BY e.`id`, f.`weight`";
 
 
-            
             //fetch all fields/values for the experiments
             if (empty($id)) {
+                if (isset($params['ExperimentName'])){
+                    $where[] = "e.`name` like CONCAT('%', :ExperimentName ,'%') ";
+                    $tokens[':ExperimentName'] = $params['ExperimentName'];
+                }
                 if (isset($params['Species'])){
                     $filter_query = "(ef_filter.`field_id` = 1 AND ef_filter.`value_VARCHAR` like CONCAT('%', :Species ,'%')) ";
                     $tokens[':Species'] = $params['Species'];
-                    $sql.=$filter_b . $filter_query . $filter_e;
+                    $where[] = $filter_b . $filter_query . $filter_e;
                 }
-                $sql.= $order;
+                if (count($where) > 0){                    
+                    $sql.=" WHERE ".implode(" AND ", $where);
+                }
+                $sql.= $order;                
                 $qry = $this->db->prepare($sql);
                 $qry->setFetchMode(PDO::FETCH_ASSOC);
                 $qry->execute($tokens);

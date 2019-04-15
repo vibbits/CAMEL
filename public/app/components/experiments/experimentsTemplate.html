@@ -22,8 +22,14 @@
 	Filter
       </div>
       <div class="card-body">
-	<label for="species-filter">Species: </label>
-	<input id="species-filter" data-ng-model="experiments.filter.Species" data-ng-change="experiments.query()">
+	<div class="filter-item">
+	  <label for="expname-filter">Name: </label>
+	  <input id="expname-filter" data-ng-model="experiments.filter.ExperimentName" data-ng-change="experiments.query()">
+	</div>
+	<div class="filter-item">
+	  <label for="species-filter">Species: </label>
+	  <input id="species-filter" data-ng-model="experiments.filter.Species" data-ng-change="experiments.query()">
+	</div>
       </div>
     </div>
   </div>    
