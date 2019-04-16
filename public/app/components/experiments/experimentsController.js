@@ -29,13 +29,20 @@ angular.module("CAMEL")
 	ctrl.removeFilterItem = function(filterBlockIndex){
 	    field_id = ctrl.filterBlocks[filterBlockIndex].id;
 	    delete ctrl.filter[field_id];
+	    delete ctrl.filter['min_'+field_id];
+	    delete ctrl.filter['max_'+field_id];
+	    delete ctrl.filter['bool_'+field_id];
 	    ctrl.filterBlocks.splice(filterBlockIndex, 1);
 	    ctrl.query();
 	}
 
+	
 	ctrl.showHelp = false;
 	ctrl.toggleHelp = function(){
 	    ctrl.showHelp= !ctrl.showHelp;
+	}
+	ctrl.toggleColumn = function(field){
+	    field.show = !field.show;
 	}
 	
 	function addShortRefs(){

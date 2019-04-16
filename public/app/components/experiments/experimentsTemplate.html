@@ -9,10 +9,9 @@
 	  <div data-ng-repeat="field in experiments.fields">
 	    <div class="filter-control">
 	      <i class="material-icons pointer" data-ng-click="experiments.addFilterItem(field)">{{'add_circle_outline'}}</i>
-	      <input id="field_{{field.id}}" type="checkbox" name="{{field.id}}" data-ng-model="field.show">
-	      <label for="field_{{field.id}}">
-		{{field.title}}
-	      </label>
+	      <i class="material-icons pointer" data-ng-click="experiments.toggleColumn(field)" data-ng-show="field.show">{{'remove_circle_outline'}}</i>
+	      <i class="material-icons pointer" data-ng-click="experiments.toggleColumn(field)" data-ng-hide="field.show">{{'add_circle_outline'}}</i>
+	      <span>{{field.title}}</span>
 	    </div>
 	  </div>
 	</div>
@@ -45,11 +44,11 @@
 		<input id="filter-{{$index}}" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.query()">
 	      </span>
 	      <span data-ng-switch-when="value_BOOL">
-		<input id="filter-{{$index}}" type="checkbox" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.query()">
+		<input id="filter-{{$index}}" type="checkbox" data-ng-model="experiments.filter['bool_'+field.id]" data-ng-change="experiments.query()">
 	      </span>
 	      <div data-ng-switch-when="value_INT">
-		Min: <input id="filter-{{$index}}" data-ng-model="experiments.filter[field.id]['min']" data-ng-change="experiments.query()">
-		Max: <input id="filter-{{$index}}" data-ng-model="experiments.filter[field.id]['max']" data-ng-change="experiments.query()">
+		Min: <input id="filter-{{$index}}" data-ng-model="experiments.filter['min_'+field.id]" data-ng-change="experiments.query()">
+		Max: <input id="filter-{{$index}}" data-ng-model="experiments.filter['max_'+field.id]" data-ng-change="experiments.query()">
 	      </div>
 	      <i class="material-icons pointer" data-ng-click="experiments.removeFilterItem($index)">{{'delete_forever'}}</i>
 	    </div>

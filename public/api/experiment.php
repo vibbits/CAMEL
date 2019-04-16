@@ -32,6 +32,31 @@ class Experiment extends API {
                         $tokens[":FieldID_$key"] = $key;
                         $tokens[":FieldValue_$key"] = $value;
                         $where[] = $filter_b . $filter_query . $filter_e;
+                    } elseif (substr($key, 0,4)=='min_' || substr($key, 0,4)=='max_') {
+                        $field_id = explode('_', $key)[1];
+                        $filter_query = "(ef_filter.`field_id` = :FieldID_$field_id ";
+                        $tokens[":FieldID_$field_id"] = $field_id;
+                        
+                        if (isset($params['min_'.$field_id])){
+                            $min_value = $params['min_'.$field_id];
+                            $filter_query.= "AND ef_filter.`value_INT` >= :FieldMinValue_$field_id ";
+                            $tokens[":FieldMinValue_$field_id"] = $min_value;
+                        }                            
+                        if (isset($params['max_'.$field_id])){
+                            $max_value = $params['max_'.$field_id];
+                            $filter_query.= "AND ef_filter.`value_INT` <= :FieldMaxValue_$field_id ";
+                            $tokens[":FieldMaxValue_$field_id"] = $max_value;
+                        }
+                        $filter_query.= ") ";
+                        $where[] = $filter_b . $filter_query . $filter_e;
+                    } elseif (substr($key, 0,5)=='bool_') {
+                        $field_id = explode('_', $key)[1];
+                        $bool_value = $value=='true'? 1:0;
+                        $filter_query = "(ef_filter.`field_id` = :FieldID_$field_id "
+                                      ."AND ef_filter.`value_BOOL` = :FieldValue_$field_id) ";
+                        $tokens[":FieldID_$field_id"] = $field_id;
+                        $tokens[":FieldValue_$field_id"] = $bool_value;
+                        $where[] = $filter_b . $filter_query . $filter_e;
                     }
                 }
                 if (count($where) > 0){                    
