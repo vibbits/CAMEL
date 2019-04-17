@@ -34,17 +34,17 @@
 	    <div data-ng-switch="field.type_column">
 	      <label for="filter-{{field.id}}">{{field.title}}: </label>
 	      <span data-ng-switch-when="value_VARCHAR">
-		<input id="filter-{{field.id}}" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.query()">
+		<input id="filter-{{field.id}}" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.filterUpdate(field.id)">
 	      </span>
 	      <span data-ng-switch-when="value_TEXT">
-		<input id="filter-{{field.id}}" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.query()">
+		<input id="filter-{{field.id}}" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.filterUpdate(field.id)">
 	      </span>
 	      <span data-ng-switch-when="value_BOOL">
-		<input id="filter-{{field.id}}" type="checkbox" data-ng-model="experiments.filter['bool_'+field.id]" data-ng-change="experiments.query()">
+		<input id="filter-{{field.id}}" type="checkbox" data-ng-model="experiments.filter['bool_'+field.id]" data-ng-change="experiments.filterUpdate('bool_'+field.id)">
 	      </span>
 	      <div data-ng-switch-when="value_INT">
-		Min: <input id="filter-{{field.id}}" data-ng-model="experiments.filter['min_'+field.id]" data-ng-change="experiments.query()">
-		Max: <input id="filter-{{field.id}}" data-ng-model="experiments.filter['max_'+field.id]" data-ng-change="experiments.query()">
+		Min: <input id="filter-{{field.id}}" data-ng-model="experiments.filter['min_'+field.id]" data-ng-change="experiments.filterUpdate('min_'+field.id)">
+		Max: <input id="filter-{{field.id}}" data-ng-model="experiments.filter['max_'+field.id]" data-ng-change="experiments.filterUpdate('max_'+field.id)">
 	      </div>
 	      <i class="material-icons pointer" data-ng-click="experiments.toggleFilterItem(field)">{{'delete_forever'}}</i>
 	    </div>

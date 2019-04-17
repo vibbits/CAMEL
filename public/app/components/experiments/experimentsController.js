@@ -63,6 +63,13 @@ angular.module("CAMEL")
 	    }
 	}
 
+	ctrl.filterUpdate = function(filter_id){
+	    if (ctrl.filter[filter_id] === ""){
+		delete ctrl.filter[filter_id];
+	    }
+	    ctrl.query();
+	}
+	
 	ctrl.filter = {};
 	ctrl.query = function(){
 	    ctrl.loaded = false;
@@ -74,7 +81,8 @@ angular.module("CAMEL")
 		ctrl.init_loaded = true;
 	    });
 	}
-	
+
+	//Init query
 	ctrl.init_loaded = false;
 	ctrl.exp_count = 0;
 	ctrl.query();
