@@ -17,30 +17,31 @@ angular.module("CAMEL")
 		} else {
 		    ctrl.fields[i].show = false;
 		}
+		ctrl.fields[i].filter = false;
 	    }
 	    ctrl.fields.push(shortRef);
 	});
 
 
-	ctrl.filterBlocks = []
-	ctrl.addFilterItem = function(field){
-	    ctrl.filterBlocks.push(field);
-	}
-	ctrl.removeFilterItem = function(filterBlockIndex){
-	    field_id = ctrl.filterBlocks[filterBlockIndex].id;
-	    delete ctrl.filter[field_id];
-	    delete ctrl.filter['min_'+field_id];
-	    delete ctrl.filter['max_'+field_id];
-	    delete ctrl.filter['bool_'+field_id];
-	    ctrl.filterBlocks.splice(filterBlockIndex, 1);
-	    ctrl.query();
+	ctrl.toggleFilterItem = function(field){
+	    if (field.filter){
+		field.filter = false;
+		console.log(ctrl.filter);
+		if (field.type_column == 'value_VARCHAR' || field.type_column == 'value_TEXT'){
+		    delete ctrl.filter[field.id];
+		} else if (field.type_column == 'value_INT'){
+		    delete ctrl.filter['min_'+field.id];
+		    delete ctrl.filter['max_'+field.id];
+		} else if (field.type_column == 'value_BOOL'){
+		    delete ctrl.filter['bool_'+field.id];
+		} 
+		ctrl.query();
+	    } else {
+		field.filter = true;
+	    }
 	}
 
 	
-	ctrl.showHelp = false;
-	ctrl.toggleHelp = function(){
-	    ctrl.showHelp= !ctrl.showHelp;
-	}
 	ctrl.toggleColumn = function(field){
 	    field.show = !field.show;
 	}

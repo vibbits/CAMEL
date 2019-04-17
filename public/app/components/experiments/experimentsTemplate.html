@@ -8,10 +8,10 @@
 	<div id="field-selector">
 	  <div data-ng-repeat="field in experiments.fields">
 	    <div class="filter-control">
-	      <i class="material-icons pointer" data-ng-click="experiments.addFilterItem(field)">{{'add_circle_outline'}}</i>
-	      <i class="material-icons pointer" data-ng-click="experiments.toggleColumn(field)" data-ng-show="field.show">{{'remove_circle_outline'}}</i>
-	      <i class="material-icons pointer" data-ng-click="experiments.toggleColumn(field)" data-ng-hide="field.show">{{'add_circle_outline'}}</i>
-	      <span>{{field.title}}</span>
+	      <i class="material-icons pointer" data-ng-class="{'md-icon-faded': !field.filter}" data-ng-click="experiments.toggleFilterItem(field)">filter_list</i>
+	      <span class="pointer" data-ng-class="{'column-name-selected': field.show}" data-ng-click="experiments.toggleColumn(field)">
+		{{field.title}}
+	      </span>
 	    </div>
 	  </div>
 	</div>
@@ -22,35 +22,31 @@
     <div class="card">
       <div class="card-header">
 	Filter
-	<i class="material-icons pointer" data-ng-click="experiments.toggleHelp()">{{'help'}}</i>
-      </div>
-      <div class="card-body" data-ng-show="experiments.showHelp">
-	<p>Different filters will be applied in an <code>AND</code> fashion (eg. "this species, with this many lines, published in this year")</p>
-	<p>Multiple filters for the same field will be used as <code>OR</code> (eg. "this species or this species, or...")</p>
       </div>
       <div class="card-body">
 	<div id="filter-blocks">
 	  <div class="filter-item">
-	    <label for="expname-filter"><strong>Name:</strong> </label>
+	    <label for="expname-filter">Name: </label>
 	    <input id="expname-filter" data-ng-model="experiments.filter.ExperimentName" data-ng-change="experiments.query()">
-	  </div>	  
-	  <div class="filter-item" data-ng-repeat="field in experiments.filterBlocks track by $index">
+	  </div>
+	  <hr>
+	  <div class="filter-item" data-ng-repeat="field in experiments.fields" data-ng-if="field.filter">
 	    <div data-ng-switch="field.type_column">
-	      <label for="filter-{{$index}}">{{field.title}}: </label>
+	      <label for="filter-{{field.id}}">{{field.title}}: </label>
 	      <span data-ng-switch-when="value_VARCHAR">
-		<input id="filter-{{$index}}" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.query()">
+		<input id="filter-{{field.id}}" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.query()">
 	      </span>
 	      <span data-ng-switch-when="value_TEXT">
-		<input id="filter-{{$index}}" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.query()">
+		<input id="filter-{{field.id}}" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.query()">
 	      </span>
 	      <span data-ng-switch-when="value_BOOL">
-		<input id="filter-{{$index}}" type="checkbox" data-ng-model="experiments.filter['bool_'+field.id]" data-ng-change="experiments.query()">
+		<input id="filter-{{field.id}}" type="checkbox" data-ng-model="experiments.filter['bool_'+field.id]" data-ng-change="experiments.query()">
 	      </span>
 	      <div data-ng-switch-when="value_INT">
-		Min: <input id="filter-{{$index}}" data-ng-model="experiments.filter['min_'+field.id]" data-ng-change="experiments.query()">
-		Max: <input id="filter-{{$index}}" data-ng-model="experiments.filter['max_'+field.id]" data-ng-change="experiments.query()">
+		Min: <input id="filter-{{field.id}}" data-ng-model="experiments.filter['min_'+field.id]" data-ng-change="experiments.query()">
+		Max: <input id="filter-{{field.id}}" data-ng-model="experiments.filter['max_'+field.id]" data-ng-change="experiments.query()">
 	      </div>
-	      <i class="material-icons pointer" data-ng-click="experiments.removeFilterItem($index)">{{'delete_forever'}}</i>
+	      <i class="material-icons pointer" data-ng-click="experiments.toggleFilterItem(field)">{{'delete_forever'}}</i>
 	    </div>
 	  </div>
 	</div>

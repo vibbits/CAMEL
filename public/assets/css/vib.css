@@ -661,6 +661,13 @@ table th.fit{
     overflow: auto;    
 }
 
+.column-name-selected{
+    font-weight: bold;
+}
+.md-icon-faded{
+    color: #c5c5c5;
+}
+
 /*experiment page*/
 .field-value{
     background-color: lightgrey;
