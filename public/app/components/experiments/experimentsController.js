@@ -32,6 +32,9 @@ angular.module("CAMEL")
 		} else if (field.type_column == 'value_INT'){
 		    delete ctrl.filter['min_'+field.id];
 		    delete ctrl.filter['max_'+field.id];
+		} else if (field.type_column == 'value_DOUBLE'){
+		    delete ctrl.filter['dmin_'+field.id];
+		    delete ctrl.filter['dmax_'+field.id];
 		} else if (field.type_column == 'value_BOOL'){
 		    delete ctrl.filter['bool_'+field.id];
 		} 

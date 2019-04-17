@@ -49,6 +49,24 @@ class Experiment extends API {
                         }
                         $filter_query.= ") ";
                         $where[] = $filter_b . $filter_query . $filter_e;
+                    }
+                    elseif (substr($key, 0,5)=='dmin_' || substr($key, 0,5)=='dmax_') {
+                        $field_id = explode('_', $key)[1];
+                        $filter_query = "(ef_filter.`field_id` = :FieldID_$field_id ";
+                        $tokens[":FieldID_$field_id"] = $field_id;
+                        
+                        if (isset($params['dmin_'.$field_id])){
+                            $min_value = $params['dmin_'.$field_id];
+                            $filter_query.= "AND ef_filter.`value_DOUBLE` >= :FieldMinValue_$field_id ";
+                            $tokens[":FieldMinValue_$field_id"] = $min_value;
+                        }                            
+                        if (isset($params['dmax_'.$field_id])){
+                            $max_value = $params['dmax_'.$field_id];
+                            $filter_query.= "AND ef_filter.`value_DOUBLE` <= :FieldMaxValue_$field_id ";
+                            $tokens[":FieldMaxValue_$field_id"] = $max_value;
+                        }
+                        $filter_query.= ") ";
+                        $where[] = $filter_b . $filter_query . $filter_e;
                     } elseif (substr($key, 0,5)=='bool_') {
                         $field_id = explode('_', $key)[1];
                         $bool_value = $value=='true'? 1:0;
