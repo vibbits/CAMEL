@@ -2,8 +2,11 @@
   <table id="experiment-table" class="table table-striped table-hover">
     <thead class="thead-dark">
       <tr>
-	<th scope="col">Name</th>
-        <th scope="col" data-ng-repeat="field in fields" data-ng-if="field.show">
+	<th scope="col" class="pointer" data-ng-click="sortExperiments('name')">
+	  Name
+	  <i class="material-icons" data-ng-if="orderKey=='name'">swap_vertical_circle</i>
+	</th>
+        <th scope="col" class="pointer" data-ng-repeat="field in fields" data-ng-if="field.show" data-ng-click="sortExperiments(field.id)">
 	  {{field.title}} <span data-ng-if="field.unit">({{field.unit}})</span>
 	  <span data-ng-if="field.description">
 	    <i class="material-icons" title="{{field.description}}">info</i>
@@ -12,7 +15,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr data-ng-repeat="experiment in experiments" data-ng-click="showExperiment(experiment)" class="pointer">
+      <tr data-ng-repeat="experiment in experiments | orderBy: orderKey:orderDesc:fieldComparator" data-ng-click="showExperiment(experiment)" class="pointer">
 	<th scope="row">{{experiment.name}}</th>
 	<td data-ng-repeat="field in fields" data-ng-if="field.show">
 	  <div data-ng-switch="field.type_column">
