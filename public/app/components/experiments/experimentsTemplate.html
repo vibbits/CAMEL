@@ -27,13 +27,16 @@
       </div>
       <div class="card-body">
 	<div id="filter-blocks">
+	  <!-- Fixed experiment name filter -->
 	  <div class="form-group filter-item">
 	    <label for="expname-filter">Experiment Name:</label>
 	    <input id="expname-filter" class="form-control" data-ng-model="experiments.filter.ExperimentName" data-ng-change="experiments.query()">
 	  </div>
+
+	  <!-- Dynamic filters -->
 	  <div class="form-group filter-item" data-ng-repeat="field in experiments.fields" data-ng-if="field.filter">
 	    <span data-ng-switch="field.type_column">
-	      <label for="filter-{{field.id}}">{{field.title}}: </label>
+	      <label for="filter-{{field.id}}">{{field.title}} <span data-ng-if="field.unit">({{field.unit}})</span>:</label>
 	      <span data-ng-switch-when="value_VARCHAR">
 		<input id="filter-{{field.id}}" class="form-control" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.filterUpdate(field.id)">
 	      </span>
