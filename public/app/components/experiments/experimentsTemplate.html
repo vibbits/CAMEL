@@ -76,11 +76,16 @@
 
 <!-- Experiment table -->
 <div class="row">
+  <div class="col-md-6">
+    Showing <code>{{experiments.exp_count}}</code> experiments 
+    <span data-ng-hide="experiments.loaded">(Refreshing data... )</span>    
+  </div>
+  <div class="col-md-6 text-md-right">
+    <i class="material-icons pointer" title="Save search results as CSV">save_alt</i>
+  </div>
+</div>
+<div class="row">
   <div class="col-12">
-    <div>
-      Showing <code>{{experiments.exp_count}}</code> experiments 
-      <span data-ng-hide="experiments.loaded">(Refreshing data... )</span>
-    </div>
     <experiments-table experiments="experiments.experiments" fields="experiments.fields" data-ng-show="experiments.init_loaded"></experiments-table>
   </div>
 </div>
