@@ -41,7 +41,7 @@
 		<input id="filter-{{field.id}}" class="form-control" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.filterUpdate(field.id)">
 	      </span>
 	      <span data-ng-switch-when="value_BOOL">
-		<input id="filter-{{field.id}}" type="checkbox" data-ng-model="experiments.filter['bool_'+field.id]" data-ng-change="experiments.filterUpdate('bool_'+field.id)">
+		<input id="filter-{{field.id}}" type="checkbox" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.filterUpdate(field.id)">
 	      </span>
 	      <span class="form-row" data-ng-switch-when="value_INT">
 		<div class="col">
@@ -56,11 +56,11 @@
 	      <span class="form-row" data-ng-switch-when="value_DOUBLE">
 		<div class="col">
 		  <label for="filter-min-{{field.id}}">Min:</label>
-		  <input id="filter-min-{{field.id}}" class="form-control" data-ng-model="experiments.filter['dmin_'+field.id]" data-ng-change="experiments.filterUpdate('dmin_'+field.id)">
+		  <input id="filter-min-{{field.id}}" class="form-control" data-ng-model="experiments.filter['min_'+field.id]" data-ng-change="experiments.filterUpdate('min_'+field.id)">
 		</div>
 		<div class="col">
 		  <label for="filter-max-{{field.id}}">Max:</label>
-		  <input id="filter-max-{{field.id}}" class="form-control" data-ng-model="experiments.filter['dmax_'+field.id]" data-ng-change="experiments.filterUpdate('dmax_'+field.id)">
+		  <input id="filter-max-{{field.id}}" class="form-control" data-ng-model="experiments.filter['max_'+field.id]" data-ng-change="experiments.filterUpdate('max_'+field.id)">
 		</div>
 	      </span>
 	      <button type="button" class="close" aria-label="Close" data-ng-click="experiments.toggleFilterItem(field)">

@@ -19,62 +19,66 @@ class Experiment extends API {
             
             $order = " ORDER BY e.`id`, f.`weight`";
 
-
+            //map all field types
+            $fields_sql = "SELECT `id`, `type_column` FROM `fields`";
+            $qry = $this->db->prepare($fields_sql);
+            $qry->setFetchMode(PDO::FETCH_ASSOC);
+            $qry->execute();
+            $res = $qry->fetchAll();
+            $field_types = array();
+            foreach ($res as $row){
+                $field_types[$row['id']] = explode('_', $row['type_column'])[1];
+            }
+            
             //fetch all fields/values for the experiments
             if (empty($id)) {
                 if (isset($params['ExperimentName'])){
                     $where[] = "e.`name` like CONCAT('%', :ExperimentName ,'%') ";
                     $tokens[':ExperimentName'] = $params['ExperimentName'];
-                }                
+                }
+                
                 foreach($params as $key => $value){
-                    if (is_numeric($key)){
-                        $filter_query = "(ef_filter.`field_id` = :FieldID_$key AND ef_filter.`value_VARCHAR` like CONCAT('%', :FieldValue_$key ,'%')) ";
-                        $tokens[":FieldID_$key"] = $key;
-                        $tokens[":FieldValue_$key"] = $value;
-                        $where[] = $filter_b . $filter_query . $filter_e;
-                    } elseif (substr($key, 0,4)=='min_' || substr($key, 0,4)=='max_') {
-                        $field_id = explode('_', $key)[1];
-                        $filter_query = "(ef_filter.`field_id` = :FieldID_$field_id ";
+                    $key_parts = explode('_', $key);
+                    if (count($key_parts) == 2){
+                        $field_id = $key_parts[1];                        
+                    } else {
+                        $field_id = $key;
+                    }
+                    $field_type = $field_types[$field_id];
+
+                    switch($field_type){
+                    case 'VARCHAR':
+                    case 'TEXT':
+                        $filter_query = "(ef_filter.`field_id` = :FieldID_$field_id AND ef_filter.`value_$field_type` like CONCAT('%', :FieldValue_$field_id ,'%')) ";
                         $tokens[":FieldID_$field_id"] = $field_id;
-                        
+                        $tokens[":FieldValue_$field_id"] = $value;
+                        $where[] = $filter_b . $filter_query . $filter_e;
+                        break;
+                    case 'INT':
+                    case 'DOUBLE':
+                        $filter_query = "(ef_filter.`field_id` = :FieldID_$field_id ";
+                        $tokens[":FieldID_$field_id"] = $field_id;                        
                         if (isset($params['min_'.$field_id])){
                             $min_value = $params['min_'.$field_id];
-                            $filter_query.= "AND ef_filter.`value_INT` >= :FieldMinValue_$field_id ";
+                            $filter_query.= "AND ef_filter.`value_$field_type` >= :FieldMinValue_$field_id ";
                             $tokens[":FieldMinValue_$field_id"] = $min_value;
                         }                            
                         if (isset($params['max_'.$field_id])){
                             $max_value = $params['max_'.$field_id];
-                            $filter_query.= "AND ef_filter.`value_INT` <= :FieldMaxValue_$field_id ";
+                            $filter_query.= "AND ef_filter.`value_$field_type` <= :FieldMaxValue_$field_id ";
                             $tokens[":FieldMaxValue_$field_id"] = $max_value;
                         }
                         $filter_query.= ") ";
                         $where[] = $filter_b . $filter_query . $filter_e;
-                    }
-                    elseif (substr($key, 0,5)=='dmin_' || substr($key, 0,5)=='dmax_') {
-                        $field_id = explode('_', $key)[1];
-                        $filter_query = "(ef_filter.`field_id` = :FieldID_$field_id ";
-                        $tokens[":FieldID_$field_id"] = $field_id;
-                        
-                        if (isset($params['dmin_'.$field_id])){
-                            $min_value = $params['dmin_'.$field_id];
-                            $filter_query.= "AND ef_filter.`value_DOUBLE` >= :FieldMinValue_$field_id ";
-                            $tokens[":FieldMinValue_$field_id"] = $min_value;
-                        }                            
-                        if (isset($params['dmax_'.$field_id])){
-                            $max_value = $params['dmax_'.$field_id];
-                            $filter_query.= "AND ef_filter.`value_DOUBLE` <= :FieldMaxValue_$field_id ";
-                            $tokens[":FieldMaxValue_$field_id"] = $max_value;
-                        }
-                        $filter_query.= ") ";
-                        $where[] = $filter_b . $filter_query . $filter_e;
-                    } elseif (substr($key, 0,5)=='bool_') {
-                        $field_id = explode('_', $key)[1];
+                        break;
+                    case 'BOOL':
                         $bool_value = $value=='true'? 1:0;
                         $filter_query = "(ef_filter.`field_id` = :FieldID_$field_id "
                                       ."AND ef_filter.`value_BOOL` = :FieldValue_$field_id) ";
                         $tokens[":FieldID_$field_id"] = $field_id;
                         $tokens[":FieldValue_$field_id"] = $bool_value;
                         $where[] = $filter_b . $filter_query . $filter_e;
+                        break;
                     }
                 }
                 if (count($where) > 0){                    

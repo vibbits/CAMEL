@@ -26,18 +26,18 @@ angular.module("CAMEL")
 	ctrl.toggleFilterItem = function(field){
 	    if (field.filter){
 		field.filter = false;
-		console.log(ctrl.filter);
-		if (field.type_column == 'value_VARCHAR' || field.type_column == 'value_TEXT'){
+		switch(field.type_column){
+		case 'value_VARCHAR':
+		case 'value_TEXT':
+		case 'value_BOOL':
 		    delete ctrl.filter[field.id];
-		} else if (field.type_column == 'value_INT'){
+		    break;
+		case 'value_INT':
+		case 'value_DOUBLE':
 		    delete ctrl.filter['min_'+field.id];
 		    delete ctrl.filter['max_'+field.id];
-		} else if (field.type_column == 'value_DOUBLE'){
-		    delete ctrl.filter['dmin_'+field.id];
-		    delete ctrl.filter['dmax_'+field.id];
-		} else if (field.type_column == 'value_BOOL'){
-		    delete ctrl.filter['bool_'+field.id];
-		} 
+		    break;
+		}
 		ctrl.query();
 	    } else {
 		field.filter = true;
