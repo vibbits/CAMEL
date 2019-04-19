@@ -1,6 +1,3 @@
-function isNumeric(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
 angular.module("CAMEL")
 .directive('experimentsTable', function($location) {
     return {
@@ -16,9 +13,14 @@ angular.module("CAMEL")
 	    };
 	    scope.orderKey = '';
 	    scope.keyRealm = 'exp';
+	    scope.keyType = '';
 	    scope.orderDesc = false;
 	    scope.sortExperiments = function(key, keyRealm='exp'){
 		scope.keyRealm=keyRealm;
+		if (keyRealm == 'fields'){
+		    scope.keyType = key.type_column;
+		    key = key.id;
+		}
 		if (scope.orderKey != key){
 		    scope.orderKey = key;
 		    scope.orderDesc = false;
@@ -51,25 +53,21 @@ angular.module("CAMEL")
 
 		if (scope.keyRealm=='fields'){
 		    //order by dynamic fields
-		    
+
 		    //non-existent fields are at the end of the list
 		    //existing fields are arrays: order by the first item
 		    if (exp1.value.fields.hasOwnProperty(scope.orderKey)){
 			field1 = exp1.value.fields[scope.orderKey][0];
-			if (isNumeric(field1)){
-			    field1 = parseFloat(field1);
-			} else {
-			    field1 = field1.toLowerCase();
+			if (scope.keyType == 'value_VARCHAR' || scope.keyType == 'value_TEXT'){
+			    field1 = field1.toString().toLowerCase();
 			}
 		    } else {
 			return 1;
 		    }
 		    if (exp2.value.fields.hasOwnProperty(scope.orderKey)){
 			field2 = exp2.value.fields[scope.orderKey][0];
-			if (isNumeric(field2)){
-			    field2 = parseFloat(field2);
-			} else {
-			    field2 = field2.toLowerCase();
+			if (scope.keyType == 'value_VARCHAR' || scope.keyType == 'value_TEXT'){
+			    field2 = field2.toString().toLowerCase();
 			}
 		    } else {
 			return -1;
