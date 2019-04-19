@@ -66,7 +66,7 @@ angular.module("CAMEL")
 		    }
 		    if (exp2.value.fields.hasOwnProperty(scope.orderKey)){
 			field2 = exp2.value.fields[scope.orderKey][0];
-			if (isNumeric(field1)){
+			if (isNumeric(field2)){
 			    field2 = parseFloat(field2);
 			} else {
 			    field2 = field2.toLowerCase();
