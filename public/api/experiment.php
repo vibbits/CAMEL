@@ -151,6 +151,7 @@ class Experiment extends API {
 
     public function post($id, $params){
         //TODO: authentication check
+        $suggestion_mode = false;
         try{
             $params = json_decode(file_get_contents("php://input"));
             if (empty($id)){
