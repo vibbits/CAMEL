@@ -148,4 +148,21 @@ class Experiment extends API {
             echo "Error: ". $e->getMessage();
         }
     }
+
+    public function post($id, $params){
+        //TODO: authentication check
+        try{
+            $params = json_decode(file_get_contents("php://input"));
+            if (empty($id)){
+                //Insert new experiment
+                //non-admin additions get the "suggestion" flag.
+            } else {
+                //Update existing experiment
+                //non-admin updates are stored as new experiment with a "suggestion" flag
+                //and a reference to the original experiment.
+            }
+        } catch (PDOException $e) {
+            echo("Error: ".$e->getMessage());
+        }
+    }
 }
