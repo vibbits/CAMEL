@@ -85,7 +85,6 @@ class Experiment extends API {
                     $sql.=" WHERE ".implode(" AND ", $where);
                 }
                 $sql.= $order;
-                error_log($sql);
                 $qry = $this->db->prepare($sql);
                 $qry->setFetchMode(PDO::FETCH_ASSOC);
                 $qry->execute($tokens);
