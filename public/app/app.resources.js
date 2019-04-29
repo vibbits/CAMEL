@@ -3,5 +3,5 @@ angular.module("CAMEL")
     return $resource("api/experiment/:id", {id: '@ID'});
 })
 .factory("Field", function FieldFactory($resource) {
-    return $resource("api/field/");
+    return $resource("api/field/:id", {id: '@ID'});
 });
