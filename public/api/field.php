@@ -19,17 +19,23 @@ class Field extends API {
             }
         } else {
             //With given field id: return value stats
-            $sql = "SELECT `title`, `unit`, `type_column` "
-                 ."FROM `fields` "
-                 ."WHERE id = :ID";
+            $sql = "SELECT `id`, `title`, `unit`, `type_column` "
+                 ."FROM `fields` ";
+
             $tokens = array();
-            $tokens[':ID'] = $id;
+            if (is_numeric($id)){
+                $sql .= "WHERE id = :ID";
+                $tokens[':ID'] = $id;
+            } else {
+                $sql .= "WHERE `title` = :TITLE";
+                $tokens[':TITLE'] = $id;
+            }
             $qry = $this->db->prepare($sql);
             $qry->setFetchMode(PDO::FETCH_ASSOC);
             $qry->execute($tokens);
             $field_props = $qry->fetch();
 
-            $type_col = $field_props['type_column'];
+            $type_col = $field_props['type_column'];            
             $sql = "SELECT ef.`$type_col` value, COUNT(ef.`$type_col`) number "
                  ."FROM experiments_fields ef "
                  ."WHERE ef.field_id = :FIELD_ID "
@@ -37,7 +43,7 @@ class Field extends API {
                  ."ORDER BY number DESC";
 
             $tokens = array();
-            $tokens[':FIELD_ID'] = $id;
+            $tokens[':FIELD_ID'] = $field_props['id'];
             $qry = $this->db->prepare($sql);
             $qry->setFetchMode(PDO::FETCH_ASSOC);
             $qry->execute($tokens);

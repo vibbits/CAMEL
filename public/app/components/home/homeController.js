@@ -8,7 +8,7 @@ angular.module("CAMEL")
 
 	
 	
-	speciesStats = Field.get({'id': 1}, function(){
+	speciesStats = Field.get({'id': 'Species'}, function(){
 	    var myChart = echarts.init(document.getElementById('chart-species'));
 
 	    const colNr = 8;
