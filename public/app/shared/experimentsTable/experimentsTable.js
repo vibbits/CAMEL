@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-.directive('experimentsTable', function($location) {
+    .directive('experimentsTable', function($location, State) {
     return {
         restrict: 'E',
         templateUrl: 'app/shared/experimentsTable/experimentsTable.html',
@@ -11,25 +11,34 @@ angular.module("CAMEL")
 	    scope.showExperiment = function(experiment) {
 		$location.path("/experiment/"+experiment.id);
 	    };
-	    scope.orderKey = '';
-	    scope.keyRealm = 'exp';
-	    scope.keyType = '';
-	    scope.orderDesc = false;
+
+	    
+	    if (!State.expOrder.hasOwnProperty('key')){
+		scope.orderParams = {};
+		scope.orderParams.key = '';
+		scope.orderParams.realm = 'exp';
+		scope.orderParams.type = '';
+		scope.orderParams.desc = false;
+		State.expOrder = scope.orderParams;
+	    } else {
+		scope.orderParams = State.expOrder;
+	    }
+
 	    scope.sortExperiments = function(key, keyRealm='exp'){
-		scope.keyRealm=keyRealm;
+		scope.orderParams.realm=keyRealm;
 		if (keyRealm == 'fields'){
-		    scope.keyType = key.type_column;
+		    scope.orderParams.type = key.type_column;
 		    key = key.id;
 		}
-		if (scope.orderKey != key){
-		    scope.orderKey = key;
-		    scope.orderDesc = false;
+		if (scope.orderParams.key != key){
+		    scope.orderParams.key = key;
+		    scope.orderParams.desc = false;
 		} else {
-		    if (!scope.orderDesc){
-			scope.orderDesc = true;
+		    if (!scope.orderParams.desc){
+			scope.orderParams.desc = true;
 		    } else {
-			scope.orderKey = '';
-			scope.orderDesc = false;
+			scope.orderParams.key = '';
+			scope.orderParams.desc = false;
 		    }		    
 		}
 	    }
@@ -37,36 +46,36 @@ angular.module("CAMEL")
 	    //orderBy experiments
 	    scope.fieldComparator = function(exp1, exp2){
 		//both experiments should be objects. if not, keep their natural order.
-		if (!scope.orderKey || exp1.type !== 'object' || exp2.type !== 'object'){
+		if (!scope.orderParams.key || exp1.type !== 'object' || exp2.type !== 'object'){
 		    return (exp1.index < exp2.index) ? -1 : 1;
 		}
 
 		//order by direct experiment fields
-		if (scope.keyRealm=='exp'){
-		    return (exp1.value[scope.orderKey].toLowerCase() < exp2.value[scope.orderKey].toLowerCase())? -1:1;
+		if (scope.orderParams.realm=='exp'){
+		    return (exp1.value[scope.orderParams.key].toLowerCase() < exp2.value[scope.orderParams.key].toLowerCase())? -1:1;
 		}
 
 		//order by reference fields
-		if (scope.keyRealm=='ref'){
+		if (scope.orderParams.realm=='ref'){
 		    //TODO
 		}
 
-		if (scope.keyRealm=='fields'){
+		if (scope.orderParams.realm=='fields'){
 		    //order by dynamic fields
 
 		    //non-existent fields are at the end of the list
 		    //existing fields are arrays: order by the first item
-		    if (exp1.value.fields.hasOwnProperty(scope.orderKey)){
-			field1 = exp1.value.fields[scope.orderKey][0];
-			if (scope.keyType == 'value_VARCHAR' || scope.keyType == 'value_TEXT'){
+		    if (exp1.value.fields.hasOwnProperty(scope.orderParams.key)){
+			field1 = exp1.value.fields[scope.orderParams.key][0];
+			if (scope.orderParams.type == 'value_VARCHAR' || scope.orderParams.type == 'value_TEXT'){
 			    field1 = field1.toString().toLowerCase();
 			}
 		    } else {
 			return 1;
 		    }
-		    if (exp2.value.fields.hasOwnProperty(scope.orderKey)){
-			field2 = exp2.value.fields[scope.orderKey][0];
-			if (scope.keyType == 'value_VARCHAR' || scope.keyType == 'value_TEXT'){
+		    if (exp2.value.fields.hasOwnProperty(scope.orderParams.key)){
+			field2 = exp2.value.fields[scope.orderParams.key][0];
+			if (scope.orderParams.type == 'value_VARCHAR' || scope.orderParams.type == 'value_TEXT'){
 			    field2 = field2.toString().toLowerCase();
 			}
 		    } else {

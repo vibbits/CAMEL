@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .controller('ExperimentsController', function($scope, $location, $timeout, $routeParams, $route, $http, Experiment, Field) {
+    .controller('ExperimentsController', function($scope, $location, $timeout, $routeParams, $route, $http, Experiment, Field, State) {
 	var ctrl = this;
 	var showNr = 5;
 	
@@ -9,18 +9,24 @@ angular.module("CAMEL")
 	    'title': "Short reference",
 	    'type_column': 'value_VARCHAR'	    
 	}
-	
-	ctrl.fields = Field.query(function(){
-	    for (var i=0; i<ctrl.fields.length; i++){
-		if (i<showNr){
-		    ctrl.fields[i].show = true;
-		} else {
-		    ctrl.fields[i].show = false;
+
+	//Init fields
+	if (State.expFields.length == 0){
+	    ctrl.fields = Field.query(function(){
+		for (var i=0; i<ctrl.fields.length; i++){
+		    if (i<showNr){
+			ctrl.fields[i].show = true;
+		    } else {
+			ctrl.fields[i].show = false;
+		    }
+		    ctrl.fields[i].filter = false;
 		}
-		ctrl.fields[i].filter = false;
-	    }
-	    ctrl.fields.push(shortRef);
-	});
+		ctrl.fields.push(shortRef);
+		State.expFields = ctrl.fields;
+	    });
+	} else {
+	    ctrl.fields = State.expFields;
+	}
 
 
 	ctrl.toggleFilterItem = function(field){
@@ -72,8 +78,8 @@ angular.module("CAMEL")
 	    }
 	    ctrl.query();
 	}
-	
-	ctrl.filter = {};
+
+
 	ctrl.query = function(){
 	    ctrl.loaded = false;
 	    ctrl.tmp_experiments = Experiment.query(ctrl.filter, function(){
@@ -86,6 +92,7 @@ angular.module("CAMEL")
 	}
 
 	//Init query
+	ctrl.filter = State.expFilter;
 	ctrl.init_loaded = false;
 	ctrl.exp_count = 0;
 	ctrl.query();
