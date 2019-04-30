@@ -19,19 +19,17 @@
   </a>
 </div>
 <div class="row mt-3">
-  <div class="card col-md-6">
-    <div class="card-body">
-      <h5 class="card-title">Most used Species</h5>
-      <div id="chart-species" style="height:500px;">
-      </div>
-    </div>
-  </div>
-  <div class="col-auto"></div>
   <div class="card col-md-5">
     <div class="card-body">
+      <h5 class="card-title">Most used Species</h5>
+      <count-chart field-title="Species" col-nr="8"></count-chart>      
+    </div>
+  </div>
+  <div class="col-md-1"></div>
+  <div class="card col-md-6">
+    <div class="card-body">
       <h5 class="card-title">Sequencing Technology over time</h5>
-      <div id="chart-wgs-tech" style="height:500px;">
-      </div>
+      <time-chart field-title="WGS Technology"></time-chart>
     </div>
   </div>
 </div>
