@@ -2,6 +2,11 @@ angular.module("CAMEL")
     .controller('ExperimentsController', function($scope, $location, $timeout, $routeParams, $route, $http, Experiment, Field, State) {
 	var ctrl = this;
 	var showNr = 5;
+
+	ctrl.showReferences = false;
+	ctrl.toggleShowReferences = function(){
+	    ctrl.showReferences = !ctrl.showReferences;
+	}
 	
 	//Init fields
 	if (State.expFields.length == 0){
