@@ -6,15 +6,22 @@
 	  Name
 	  <i class="material-icons" data-ng-if="orderParams.key=='name'">swap_vertical_circle</i>
 	</th>
-        <th scope="col" class="pointer" data-ng-repeat="field in fields" data-ng-if="field.show" data-ng-click="sortExperiments(field, 'fields')">
+        <th scope="col" class="pointer"
+	    data-ng-repeat="field in fields"
+	    data-ng-if="field.show"
+	    data-ng-click="sortExperiments(field, 'fields')">
 	  {{field.title}} <span data-ng-if="field.unit">({{field.unit}})</span>	  
 	  <span data-ng-if="field.description">
 	    <i class="material-icons" title="{{field.description}}">info</i>
 	  </span>
 	  <i class="material-icons" data-ng-if="orderParams.key==field.id">swap_vertical_circle</i>
 	</th>
-	<th scope="col" data-ng-repeat="ref in refs" data-ng-if="ref.show">
+	<th scope="col" class="pointer"
+	    data-ng-repeat="ref in refs"
+	    data-ng-if="ref.show"
+	    data-ng-click="sortExperiments(ref, 'refs')">
 	  {{ref.header}}
+	  <i class="material-icons" data-ng-if="orderParams.key==ref.field">swap_vertical_circle</i>
 	</th>
       </tr>
     </thead>

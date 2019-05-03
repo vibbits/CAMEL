@@ -6,6 +6,7 @@ app.factory('State', function(){
     return {
 	expFilter: {},
 	expFields: [],
-	expOrder: {}
+	expOrder: {},
+	expRefs: {}
     }
 });

@@ -31,6 +31,9 @@ angular.module("CAMEL")
 		    scope.orderParams.type = key.type_column;
 		    key = key.id;
 		}
+		if (keyRealm == 'refs'){
+		    key = key.field;
+		}
 		if (scope.orderParams.key != key){
 		    scope.orderParams.key = key;
 		    scope.orderParams.desc = false;
@@ -57,8 +60,10 @@ angular.module("CAMEL")
 		}
 
 		//order by reference fields
-		if (scope.orderParams.realm=='ref'){
-		    //TODO
+		if (scope.orderParams.realm=='refs'){
+		    field1 = exp1.value.references[0][scope.orderParams.key];
+		    field2 = exp2.value.references[0][scope.orderParams.key];
+		    return (field1 < field2)? -1:1;
 		}
 
 		if (scope.orderParams.realm=='fields'){

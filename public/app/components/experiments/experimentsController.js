@@ -3,31 +3,36 @@ angular.module("CAMEL")
 	var ctrl = this;
 	var showNr = 5;
 
-	ctrl.refs = {
-	    authors: {
-		header: 'Authors',
-		field: 'authors',
-		show: false,
-		filter: false
-	    },
-	    title: {
-		header: 'Pub. Title',
-		field: 'title',
-		show: false,
-		filter: false
-	    },	    
-	    year: {
-		header: 'Year',
-		field: 'year',
-		show: false,
-		filter: false
-	    },
-	    journal: {
-		header: 'Journal',
-		field: 'journal',
-		show: false,
-		filter: false
+	if (!State.expRefs.hasOwnProperty('authors')){	    
+	    ctrl.refs = {
+		authors: {
+		    header: 'Authors',
+		    field: 'authors',
+		    show: false,
+		    filter: false
+		},
+		title: {
+		    header: 'Pub. Title',
+		    field: 'title',
+		    show: false,
+		    filter: false
+		},	    
+		year: {
+		    header: 'Year',
+		    field: 'year',
+		    show: false,
+		    filter: false
+		},
+		journal: {
+		    header: 'Journal',
+		    field: 'journal',
+		    show: false,
+		    filter: false
+		}
 	    }
+	    State.expRefs = ctrl.refs;
+	} else {
+	    ctrl.refs = State.expRefs;
 	}
 
 	ctrl.toggleRefShow = function(ref){
