@@ -3,9 +3,38 @@ angular.module("CAMEL")
 	var ctrl = this;
 	var showNr = 5;
 
-	ctrl.showReferences = false;
-	ctrl.toggleShowReferences = function(){
-	    ctrl.showReferences = !ctrl.showReferences;
+	ctrl.refs = {
+	    authors: {
+		header: 'Authors',
+		field: 'authors',
+		show: false,
+		filter: false
+	    },
+	    title: {
+		header: 'Pub. Title',
+		field: 'title',
+		show: false,
+		filter: false
+	    },	    
+	    year: {
+		header: 'Year',
+		field: 'year',
+		show: false,
+		filter: false
+	    },
+	    journal: {
+		header: 'Journal',
+		field: 'journal',
+		show: false,
+		filter: false
+	    }
+	}
+
+	ctrl.toggleRefShow = function(ref){
+	    ref.show = !ref.show;
+	}
+	ctrl.toggleRefFilter = function(ref){
+	    ref.filter = !ref.filter;
 	}
 	
 	//Init fields
@@ -19,7 +48,6 @@ angular.module("CAMEL")
 		    }
 		    ctrl.fields[i].filter = false;
 		}
-		ctrl.fields.push(shortRef);
 		State.expFields = ctrl.fields;
 	    });
 	} else {

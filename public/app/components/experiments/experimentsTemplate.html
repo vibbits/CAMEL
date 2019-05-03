@@ -17,8 +17,18 @@
 	  </div>
 	  <hr>
 	  <div>
-	    <span class="pointer" data-ng-class="{'column-name-selected': experiments.showReferences}" data-ng-click="experiments.toggleShowReferences()">
-	      References
+	    References:<br>
+	    <span data-ng-repeat="ref in experiments.refs">
+	      <i class="material-icons align-middle pointer"
+		 data-ng-class="{'md-icon-faded': !ref.filter}"
+		 data-ng-click="experiments.toggleRefFilter(ref)">filter_list
+	      </i>
+	      <span class="pointer"
+		    data-ng-class="{'column-name-selected': ref.show}"
+		    data-ng-click="experiments.toggleRefShow(ref)">
+		{{ref.field}}
+	      </span>
+	      <span data-ng-if="!$last">, </span>
 	    </span>
 	  </div>
 	</div>
@@ -95,6 +105,6 @@
 </div>
 <div class="row">
   <div class="col-12">
-    <experiments-table experiments="experiments.experiments" fields="experiments.fields" data-ng-show="experiments.init_loaded"></experiments-table>
+    <experiments-table experiments="experiments.experiments" fields="experiments.fields" refs="experiments.refs" data-ng-show="experiments.init_loaded"></experiments-table>
   </div>
 </div>

@@ -13,6 +13,9 @@
 	  </span>
 	  <i class="material-icons" data-ng-if="orderParams.key==field.id">swap_vertical_circle</i>
 	</th>
+	<th scope="col" data-ng-repeat="ref in refs" data-ng-if="ref.show">
+	  {{ref.header}}
+	</th>
       </tr>
     </thead>
     <tbody>
@@ -45,6 +48,13 @@
 	      </span>
 	    </div>
 	  </div>
+	</td>
+	<td data-ng-repeat="ref in refs" data-ng-if="ref.show">
+	  <ul data-ng-class="{'no-list-style': experiment.references.length <= 1}">
+	    <li data-ng-repeat="pub in experiment.references">
+	      {{pub[ref.field]}}
+	    </li>
+	  </ul>
 	</td>
       </tr>
     </tbody>
