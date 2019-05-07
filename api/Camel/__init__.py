@@ -2,9 +2,10 @@ from flask import Flask
 from flask_restful import Api
 import configparser
 import sys
+import os
 import MySQLdb
 
-from Camel.experiment import Experiment
+from Camel.experiment import Experiment, ExperimentList
 from Camel.field import Field, FieldList
 
 ## Init Flask App
@@ -19,7 +20,10 @@ api.add_resource(Field, '/field/<string:id>')
 
 ## Load configuration
 config = configparser.ConfigParser()
-config.read('../camel.conf')
+package_path = os.path.dirname(os.path.abspath(__file__))
+app_path = os.path.dirname(os.path.dirname(package_path))
+config_path = os.path.join(app_path, 'camel.conf')
+config.read(config_path)
 
 
 ## Database connection

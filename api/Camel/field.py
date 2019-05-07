@@ -5,6 +5,7 @@ import Camel as app
 class FieldList(Resource):
     def __init__(self):
         self.db = app.get_db()
+        super(FieldList, self).__init__()
         
     def get(self):        
         sql = ("SELECT `id`, `title`, `unit`, `description`, `type_column`, `options`, `link`, `required`, `weight`, `group`, `group_id` "
@@ -35,7 +36,6 @@ class Field(Resource):
             sql += "WHERE `id` = %(id)s"
             tokens['id'] = id
         else:
-            print(id)
             sql += "WHERE `title` = %(title)s"
             tokens['title'] = id
 
