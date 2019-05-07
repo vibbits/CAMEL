@@ -5,7 +5,7 @@ import sys
 import MySQLdb
 
 from Camel.experiment import Experiment
-from Camel.field import Field
+from Camel.field import Field, FieldList
 
 ## Init Flask App
 app = Flask(__name__)
@@ -13,14 +13,15 @@ api = Api(app)
 
 ## Define routing
 api.add_resource(Experiment, '/experiment')
-api.add_resource(Field, '/field')
+api.add_resource(FieldList, '/field')
+api.add_resource(Field, '/field/<string:id>')
 
 ## Load configuration
 config = configparser.ConfigParser()
 config.read('../camel.conf')
 
 
-## Resources
+## Database connection
 def get_db():
     db_conf = config['database']
     try:
