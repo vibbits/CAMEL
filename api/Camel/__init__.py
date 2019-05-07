@@ -12,7 +12,8 @@ app = Flask(__name__)
 api = Api(app)
 
 ## Define routing
-api.add_resource(Experiment, '/experiment')
+api.add_resource(ExperimentList, '/experiment')
+api.add_resource(Experiment, '/experiment/<int:id>')
 api.add_resource(FieldList, '/field')
 api.add_resource(Field, '/field/<string:id>')
 
