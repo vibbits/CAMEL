@@ -35,52 +35,59 @@ class ExperimentList(Resource):
         field_types = {}
         for row in res:
             field_types[row['id']] = row['type_column'].split('_')[1]
-                        
-        ##fetch all fields/values for the experiments        
-        if 'ExperimentName' in request.form:
+
+        ##Filters
+        ##Name filter
+        if 'ExperimentName' in request.args:
             where.append("e.`name` like CONCAT('%', %(ExperimentName)s ,'%') ")
-            tokens['ExperimentName'] = request.form['ExperimentName']
-                
-        for key in request.form:
-            value = request.form[key]
+            tokens['ExperimentName'] = request.args['ExperimentName']
+
+        ##Field filters
+        for key in request.args:
+            value = request.args[key]
             key_parts = key.split('_')
             if len(key_parts) == 2:
                 field_id = key_parts[1]
             else:
                 field_id = key
-                    
-            field_type = field_types[field_id]
+
+            ##Only process filters on field nr here
+            if field_id.isnumeric():
+                field_id = int(field_id)
+                field_type = field_types[field_id]
+            else:
+                continue
             
             if field_type == 'VARCHAR' or field_type == 'TEXT':
                 filter_query = ("(ef_filter.`field_id` = %(FieldID_{field_id})s AND ef_filter.`value_{field_type}` "
                                 "LIKE CONCAT('%', %(FieldValue_{field_id})s ,'%')) ").format(field_id=field_id, field_type=field_type)
-                
-                tokens["FieldID_"+field_id] = field_id
-                tokens["FieldValue_"+field_id] = value
+
+                tokens["FieldID_{}".format(field_id)] = field_id
+                tokens["FieldValue_{}".format(field_id)] = value
                 where.append(filter_b + filter_query + filter_e)
                 
             elif field_type == 'INT' or field_type == 'DOUBLE':
                 filter_query = "(ef_filter.`field_id` = %(FieldID_{field_id})s ".format(field_id=field_id)
-                tokens["FieldID_"+field_id] = field_id
+                tokens["FieldID_{}".format(field_id)] = field_id
                 
-                if 'min_'+field_id in request.form:
-                    min_value = request.form['min_'+field_id]
+                if 'min_'+str(field_id) in request.args:
+                    min_value = request.args['min_'+str(field_id)]
                     filter_query+= "AND ef_filter.`value_{field_type}` >= %(FieldMinValue_{field_id})s ".format(field_type=field_type, field_id=field_id)
-                    tokens["FieldMinValue_"+field_id] = min_value
-                if 'max_'+field_id in request.form:
-                    max_value = request.form['max_'+field_id]
+                    tokens["FieldMinValue_{}".format(field_id)] = min_value
+                if 'max_'+str(field_id) in request.args:
+                    max_value = request.args['max_'+str(field_id)]
                     filter_query+= "AND ef_filter.`value_{field_type}` <= %(FieldMaxValue_{field_id})s ".format(field_type=field_type, field_id=field_id)
-                    tokens["FieldMaxValue_"+field_id] = max_value
+                    tokens["FieldMaxValue_{}".format(field_id)] = max_value
 
                 filter_query+= ") "
                 where.append(filter_b + filter_query + filter_e)
                 
-            elif request.form == 'BOOL':
+            elif request.args == 'BOOL':
                 bool_value = 1 if value=='true' else 0
                 filter_query = ("(ef_filter.`field_id` = %(FieldID_{field_id})s "
                                 "AND ef_filter.`value_BOOL` = %(FieldValue_{field_id})s) ").format(field_id=field_id)
-                tokens["FieldID_"+field_id] = field_id
-                tokens["FieldValue_"+field_id] = bool_value
+                tokens["FieldID_{}".format(field_id)] = field_id
+                tokens["FieldValue_{}".format(field_id)] = bool_value
                 where.append(filter_b + filter_query + filter_e)
 
                 
@@ -88,14 +95,13 @@ class ExperimentList(Resource):
             sql+=" WHERE "+' AND '.join(where)
             
         sql+= order
-            
+
         c = self.db.cursor(DictCursor)
         c.execute(sql, tokens)
         res = c.fetchall()
         c.close()
 
-        
-        ##gather fields/values per experiment in an assoc array
+        ##Combine all field/value results into one entry per experiment
         summary = {}
         for entry in res:
             experiment_id = entry['experiment_id']
@@ -113,7 +119,7 @@ class ExperimentList(Resource):
             summary[experiment_id]['fields'][field_id].append(field_value)
 
 
-        ##generate a list from gathered results and add the references and species to each entry
+        ##generate a list from gathered summary results and add the references to each entry
         result = []
         for exp_id in summary:
             exp = summary[exp_id]
