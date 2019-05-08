@@ -60,7 +60,7 @@ class ExperimentList(Resource):
             
             if field_type == 'VARCHAR' or field_type == 'TEXT':
                 filter_query = ("(ef_filter.`field_id` = %(FieldID_{field_id})s AND ef_filter.`value_{field_type}` "
-                                "LIKE CONCAT('%', %(FieldValue_{field_id})s ,'%')) ").format(field_id=field_id, field_type=field_type)
+                                "LIKE CONCAT('%%', %(FieldValue_{field_id})s ,'%%')) ").format(field_id=field_id, field_type=field_type)
 
                 tokens["FieldID_{}".format(field_id)] = field_id
                 tokens["FieldValue_{}".format(field_id)] = value
