@@ -45,8 +45,8 @@ class Field(Resource):
         c.close()
         
         type_col = field_props['type_column']
-        
-        if 'timeline' not in request.form or not request.form['timeline'] == '1':
+
+        if 'timeline' not in request.args or not request.args['timeline'] == '1':
             sql = ("SELECT ef.`{type_col}` value, COUNT(*) number "
                    "FROM `experiments_fields` ef "
                    "WHERE ef.`field_id` = %(field_id)s "
