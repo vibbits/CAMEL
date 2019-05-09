@@ -1,12 +1,8 @@
-from flask_restful import Resource, request, reqparse
+from flask_restful import request, reqparse
 from MySQLdb.cursors import DictCursor
-import Camel as app
+from Camel.camel_resource import CamelResource
 
-class FieldList(Resource):
-    def __init__(self):
-        self.db = app.get_db()
-        super(FieldList, self).__init__()
-        
+class FieldList(CamelResource):        
     def get(self):        
         sql = ("SELECT `id`, `title`, `unit`, `description`, `type_column`, `options`, `link`, `required`, `weight`, `group`, `group_id` "
                "FROM `fields` "
@@ -18,10 +14,7 @@ class FieldList(Resource):
         c.close()
         return rows
         
-class Field(Resource):
-    def __init__(self):
-        self.db = app.get_db()
-        super(Field, self).__init__()
+class Field(CamelResource):
         
     def get(self, id):
         self.reqparse = reqparse.RequestParser()
