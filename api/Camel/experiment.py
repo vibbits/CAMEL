@@ -53,9 +53,12 @@ def _compact(res, field_types, db):
             summary[experiment_id] = {}
             summary[experiment_id]['name'] = entry['name']
             summary[experiment_id]['fields'] = {}
-
+        
         field_id = entry['field_id']
-        field_type = field_types[field_id]        
+        if field_id is None:
+            continue
+        
+        field_type = field_types[field_id]
         field_value = entry['value_'+field_type]
             
         if field_id not in summary[experiment_id]['fields']:
