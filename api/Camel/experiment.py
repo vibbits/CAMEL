@@ -1,6 +1,6 @@
 from flask_restful import request
 from MySQLdb.cursors import DictCursor
-from Camel.camel_resource import CamelResource
+from Camel import CamelResource
 
 def _compose_query(where_base = [], where_field = [], where_ref = []):
     '''

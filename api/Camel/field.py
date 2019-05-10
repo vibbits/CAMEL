@@ -1,6 +1,6 @@
 from flask_restful import request, reqparse
 from MySQLdb.cursors import DictCursor
-from Camel.camel_resource import CamelResource
+from Camel import CamelResource
 
 class FieldList(CamelResource):        
     def get(self):        
