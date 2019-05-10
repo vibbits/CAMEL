@@ -62,7 +62,13 @@ angular.module("CAMEL")
 		//order by reference fields
 		if (scope.orderParams.realm=='refs'){
 		    field1 = exp1.value.references[0][scope.orderParams.key];
+		    if (typeof(field1)=='string'){
+			field1 = field1.toLowerCase();
+		    }
 		    field2 = exp2.value.references[0][scope.orderParams.key];
+		    if (typeof(field2)=='string'){
+			field2 = field2.toLowerCase();
+		    }
 		    return (field1 < field2)? -1:1;
 		}
 
@@ -87,7 +93,6 @@ angular.module("CAMEL")
 		    } else {
 			return -1;
 		    }
-
 		    //compare given fields
 		    return (field1 < field2)? -1:1;
 		}
