@@ -12,7 +12,7 @@ def _compose_query(where_base = [], where_field = [], where_ref = []):
     '''
     base = ("SELECT e.`id` AS `experiment_id`, e.`name`, "
            "f.`id` AS `field_id`, f.`title` AS `field_title`, f.`weight`, "
-           "CONCAT_WS('-',ef.`value_INT`,ef.`value_VARCHAR`,ef.`value_DOUBLE`,ef.`value_BOOL`,ef.`value_TEXT`) AS `value` "
+           "ef.`value_INT`, ef.`value_VARCHAR`, ef.`value_DOUBLE`, ef.`value_BOOL`, ef.`value_TEXT` "
            "FROM `experiments` e "
            "LEFT JOIN `experiments_fields` ef ON e.`id` = ef.`experiment_id` "
            "LEFT JOIN `fields` f ON ef.`field_id` = f.`id` ")
@@ -39,7 +39,7 @@ def _compose_query(where_base = [], where_field = [], where_ref = []):
 
     return sql
 
-def _compact(res, db):
+def _compact(res, field_types, db):
     '''
     Gather all result values from the query and group them by experiment.
 
@@ -55,7 +55,8 @@ def _compact(res, db):
             summary[experiment_id]['fields'] = {}
 
         field_id = entry['field_id']
-        field_value = entry['value']
+        field_type = field_types[field_id]        
+        field_value = entry['value_'+field_type]
             
         if field_id not in summary[experiment_id]['fields']:
             summary[experiment_id]['fields'][field_id] = []
@@ -173,7 +174,7 @@ class ExperimentList(CamelResource):
         res = c.fetchall()
         c.close()
 
-        result = _compact(res, self.db)
+        result = _compact(res, field_types, self.db)
         return result
 
 
@@ -187,7 +188,8 @@ class Experiment(CamelResource):
         c.execute(sql, tokens)
         res = c.fetchall()
         c.close()
-        result = _compact(res, self.db)
+        field_types = _map_field_types(self.db)
+        result = _compact(res, field_types, self.db)
         
         return result
         
