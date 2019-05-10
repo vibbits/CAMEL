@@ -194,5 +194,5 @@ class Experiment(CamelResource):
         field_types = _map_field_types(self.db)
         result = _compact(res, field_types, self.db)
         
-        return result
-        
+        return result[0]
+    
