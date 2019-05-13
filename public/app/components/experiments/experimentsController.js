@@ -63,17 +63,26 @@ angular.module("CAMEL")
 	ctrl.toggleFilterItem = function(field){
 	    if (field.filter){
 		field.filter = false;
-		switch(field.type_column){
-		case 'value_VARCHAR':
-		case 'value_TEXT':
-		case 'value_BOOL':
-		    delete ctrl.filter[field.id];
-		    break;
-		case 'value_INT':
-		case 'value_DOUBLE':
-		    delete ctrl.filter['min_'+field.id];
-		    delete ctrl.filter['max_'+field.id];
-		    break;
+		if (field.hasOwnProperty('type_column')){
+		    switch(field.type_column){
+		    case 'value_VARCHAR':
+		    case 'value_TEXT':
+		    case 'value_BOOL':
+			delete ctrl.filter[field.id];
+			break;
+		    case 'value_INT':
+		    case 'value_DOUBLE':
+			delete ctrl.filter['min_'+field.id];
+			delete ctrl.filter['max_'+field.id];
+			break;
+		    }
+		} else{
+		    if (field.field == 'year'){
+			delete ctrl.filter['ref_min_year'];
+			delete ctrl.filter['ref_max_year'];
+		    } else {
+			delete ctrl.filter['ref_'+field.field];
+		    }
 		}
 		ctrl.query();
 	    } else {

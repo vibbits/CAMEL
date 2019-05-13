@@ -118,70 +118,95 @@ def _map_field_types(db):
 
             
 class ExperimentList(CamelResource):
+    def _add_field_filters(self, field_id, field_type, value):
+        if field_type == 'VARCHAR' or field_type == 'TEXT':
+            filter_query = ("(ef_filter.`field_id` = %(FieldID_{field_id})s AND ef_filter.`value_{field_type}` "
+                            "LIKE CONCAT('%%', %(FieldValue_{field_id})s ,'%%')) ").format(field_id=field_id, field_type=field_type)
+
+            self.tokens["FieldID_{}".format(field_id)] = field_id
+            self.tokens["FieldValue_{}".format(field_id)] = value
+            self.where_field.append(filter_query)
+
+        elif field_type == 'INT' or field_type == 'DOUBLE':
+            filter_query = "(ef_filter.`field_id` = %(FieldID_{field_id})s ".format(field_id=field_id)
+            self.tokens["FieldID_{}".format(field_id)] = field_id
+
+            if 'min_'+str(field_id) in request.args:
+                min_value = request.args['min_'+str(field_id)]
+                filter_query+= "AND ef_filter.`value_{field_type}` >= %(FieldMinValue_{field_id})s ".format(field_type=field_type, field_id=field_id)
+                self.tokens["FieldMinValue_{}".format(field_id)] = min_value
+            if 'max_'+str(field_id) in request.args:
+                max_value = request.args['max_'+str(field_id)]
+                filter_query+= "AND ef_filter.`value_{field_type}` <= %(FieldMaxValue_{field_id})s ".format(field_type=field_type, field_id=field_id)
+                self.tokens["FieldMaxValue_{}".format(field_id)] = max_value
+
+            filter_query+= ") "
+            self.where_field.append(filter_query)
+
+        elif field_type == 'BOOL':
+            bool_value = 1 if value=='true' else 0
+            filter_query = ("(ef_filter.`field_id` = %(FieldID_{field_id})s "
+                            "AND ef_filter.`value_BOOL` = %(FieldValue_{field_id})s) ").format(field_id=field_id)
+            self.tokens["FieldID_{}".format(field_id)] = field_id
+            self.tokens["FieldValue_{}".format(field_id)] = bool_value
+            self.where_field.append(filter_query)
+        
+    def _add_ref_filters(self, field_id, value):
+        ref_parts = field_id.split('_', 1)
+        if len(ref_parts) == 1 or (ref_parts[0] != 'min' and ref_parts[0] != 'max'):
+            ref_filter_query = "(r_filter.`{ref_field}` LIKE CONCAT('%%', %(RefValue_{ref_field})s, '%%')) ".format(ref_field=field_id)
+            self.tokens['RefValue_{}'.format(field_id)] = value
+            self.where_ref.append(ref_filter_query)
+        else:
+            if field_id == 'min_year':
+                ref_filter_query = "r_filter.`year` >= %(MinYear)s "
+                self.tokens['MinYear'] = value
+            elif field_id == 'max_year':
+                ref_filter_query = "r_filter.`year` <= %(MaxYear)s "
+                self.tokens['MaxYear'] = value
+            self.where_ref.append(ref_filter_query)
+            
     def get(self):               
-        tokens = {}                        
+        self.tokens = {}                        
         
         ##Filters
         ##Name filter
-        where_base = []
+        self.where_base = []
         if 'ExperimentName' in request.args:
-            where_base.append("e.`name` LIKE CONCAT('%%', %(ExperimentName)s ,'%%') ")
+            self.where_base.append("e.`name` LIKE CONCAT('%%', %(ExperimentName)s ,'%%') ")
             tokens['ExperimentName'] = request.args['ExperimentName']
 
         ##Field filters
-        where_field = []
+        self.where_field = []
+        self.where_ref = []
         field_types = _map_field_types(self.db)
+        
         for key in request.args:
             value = request.args[key]
-            key_parts = key.split('_')
+            
+            key_parts = key.split('_', 1)
             if len(key_parts) == 2:
-                field_id = key_parts[1]
+                field_prefix = key_parts[0]
+                field_id = key_parts[1]                
             else:
+                field_prefix = ''
                 field_id = key
 
-            ##Only process filters on field nr here
+            ## Field filter
             if field_id.isnumeric():
                 field_id = int(field_id)
                 field_type = field_types[field_id]
-            else:
-                continue
+                self._add_field_filters(field_id, field_type, value)
 
-            if field_type == 'VARCHAR' or field_type == 'TEXT':
-                filter_query = ("(ef_filter.`field_id` = %(FieldID_{field_id})s AND ef_filter.`value_{field_type}` "
-                                "LIKE CONCAT('%%', %(FieldValue_{field_id})s ,'%%')) ").format(field_id=field_id, field_type=field_type)
-
-                tokens["FieldID_{}".format(field_id)] = field_id
-                tokens["FieldValue_{}".format(field_id)] = value
-                where_field.append(filter_query)
-                
-            elif field_type == 'INT' or field_type == 'DOUBLE':
-                filter_query = "(ef_filter.`field_id` = %(FieldID_{field_id})s ".format(field_id=field_id)
-                tokens["FieldID_{}".format(field_id)] = field_id
-                
-                if 'min_'+str(field_id) in request.args:
-                    min_value = request.args['min_'+str(field_id)]
-                    filter_query+= "AND ef_filter.`value_{field_type}` >= %(FieldMinValue_{field_id})s ".format(field_type=field_type, field_id=field_id)
-                    tokens["FieldMinValue_{}".format(field_id)] = min_value
-                if 'max_'+str(field_id) in request.args:
-                    max_value = request.args['max_'+str(field_id)]
-                    filter_query+= "AND ef_filter.`value_{field_type}` <= %(FieldMaxValue_{field_id})s ".format(field_type=field_type, field_id=field_id)
-                    tokens["FieldMaxValue_{}".format(field_id)] = max_value
-
-                filter_query+= ") "
-                where_field.append(filter_query)
-                
-            elif field_type == 'BOOL':
-                bool_value = 1 if value=='true' else 0
-                filter_query = ("(ef_filter.`field_id` = %(FieldID_{field_id})s "
-                                "AND ef_filter.`value_BOOL` = %(FieldValue_{field_id})s) ").format(field_id=field_id)
-                tokens["FieldID_{}".format(field_id)] = field_id
-                tokens["FieldValue_{}".format(field_id)] = bool_value
-                where_field.append(filter_query)
+            ## Ref filter
+            elif field_prefix == 'ref':
+                self._add_ref_filters(field_id, value)
 
                 
         c = self.db.cursor(DictCursor)
-        sql = _compose_query(where_base, where_field)
-        c.execute(sql, tokens)
+        sql = _compose_query(self.where_base, self.where_field, self.where_ref)
+
+        c.execute(sql, self.tokens)
         res = c.fetchall()
         c.close()
 
@@ -190,7 +215,7 @@ class ExperimentList(CamelResource):
 
 
 class Experiment(CamelResource):
-    def get(self, id):        
+    def get(self, id):
         where_base = ["e.`id` = %(id)s"]
         tokens = {'id': id}
         

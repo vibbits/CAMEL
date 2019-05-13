@@ -92,15 +92,21 @@
 	    <span class="form-row" data-ng-if="ref.field=='year'">
 	      <div class="col">
 		<label for="filter-min-year">Min:</label>
-		<input id="filter-min-year" class="form-control" data-ng-model="experiments.filter['ref_min_year']" data-ng-change="experiments.filterUpdate('min_year')">
+		<input id="filter-min-year" class="form-control" data-ng-model="experiments.filter['ref_min_year']" data-ng-change="experiments.filterUpdate('ref_min_year')">
 	      </div>
 	      <div class="col">
 		<label for="filter-max-year">Max:</label>
-		<input id="filter-max-year" class="form-control" data-ng-model="experiments.filter['ref_max_year']" data-ng-change="experiments.filterUpdate('max_year')">
+		<input id="filter-max-year" class="form-control" data-ng-model="experiments.filter['ref_max_year']" data-ng-change="experiments.filterUpdate('ref_max_year')">
 	      </div>
+	      <button type="button" class="close" aria-label="Close" data-ng-click="experiments.toggleFilterItem(ref)">
+		<span aria-hidden="true">&times;</span>
+	      </button>
 	    </span>
 	    <span class="form-row" data-ng-if="ref.field!='year'">
-	      <input id="filter-{{ref.field}}" class="form-control" data-ng-model="experiments.filter[ref.field]" data-ng-change="experiments.filterUpdate(ref.field)">
+	      <input id="filter-{{ref.field}}" class="form-control" data-ng-model="experiments.filter['ref_'+ref.field]" data-ng-change="experiments.filterUpdate('ref_'+ref.field)">
+	      <button type="button" class="close" aria-label="Close" data-ng-click="experiments.toggleFilterItem(ref)">
+		<span aria-hidden="true">&times;</span>
+	      </button>
 	    </span>
 	  </div>
 	</div>
