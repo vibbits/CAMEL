@@ -19,17 +19,25 @@ def _compose_query(where_base = [], where_field = [], where_ref = []):
 
     field_filter = ("e.`id` IN (SELECT ef_filter.`experiment_id` "
                          "FROM `experiments_fields` ef_filter "
-                         "WHERE ")
+                         "WHERE {} ) ")
 
-    ref_filter = ""
+    ref_filter = ("e.`id` IN (SELECT er_filter.`experiment_id` "
+                  "FROM `experiments_references` er_filter "
+                  "JOIN `references` r_filter ON er_filter.`reference_id` = r_filter.`id` "
+                  "WHERE {} ) ")
+
     
     order = " ORDER BY e.`id`, f.`weight`"
 
     where = []
     where+= where_base
     for wf in where_field:
-        wf_sql = field_filter + wf + ") "
+        wf_sql = field_filter.format(wf)
         where.append(wf_sql)
+        
+    for wr in where_ref:
+        wr_sql = ref_filter.format(wr)
+        where.append(wr_sql)
 
     sql = base
     if len(where) > 0:
