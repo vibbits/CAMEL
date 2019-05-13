@@ -170,11 +170,15 @@ class ExperimentList(CamelResource):
         self.tokens = {}                        
         
         ##Filters
+        ## Filters are key_value pairs with the key formatted like:
+        ## ExperimentName
+        ## <int> (int being a field id)
+        ## min_<int> | max_<int> (min/max values for an integer field, <int> being a field id)
+        ## ref_<field> (reference data, field being 'authors', 'journal' or 'title'
+        ## ref_min_year | ref_max_year (reference year min/max values)
+                
         ##Name filter
         self.where_base = []
-        if 'ExperimentName' in request.args:
-            self.where_base.append("e.`name` LIKE CONCAT('%%', %(ExperimentName)s ,'%%') ")
-            tokens['ExperimentName'] = request.args['ExperimentName']
 
         ##Field filters
         self.where_field = []
@@ -183,7 +187,12 @@ class ExperimentList(CamelResource):
         
         for key in request.args:
             value = request.args[key]
-            
+
+            if key == 'ExperimentName':
+                self.where_base.append("e.`name` LIKE CONCAT('%%', %(ExperimentName)s ,'%%') ")
+                self.tokens['ExperimentName'] = request.args['ExperimentName']
+                continue
+
             key_parts = key.split('_', 1)
             if len(key_parts) == 2:
                 field_prefix = key_parts[0]
