@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .controller('ExperimentsController', function($scope, $location, $timeout, $routeParams, $route, $http, Experiment, Field, State) {
+    .controller('ExperimentsController', function($scope, $location, $window, $timeout, $routeParams, $route, $http, Experiment, Field, State) {
 	var ctrl = this;
 	var showNr = 5;
 
@@ -118,5 +118,15 @@ angular.module("CAMEL")
 	ctrl.init_loaded = false;
 	ctrl.exp_count = 0;
 	ctrl.query();
+
+	ctrl.export = function(){
+	    filter_params = $.param(ctrl.filter);
+	    export_url = "api/export";
+	    if (filter_params != ''){
+		export_url+='?';
+		export_url+=filter_params;
+	    }
+	    $window.location.href = export_url;
+	};
 	
     });
