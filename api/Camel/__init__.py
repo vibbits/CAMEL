@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, make_response
 from flask_restful import Api, Resource
 
 import sys
@@ -50,5 +50,13 @@ api.add_resource(Experiment, '/experiment/<int:id>')
 api.add_resource(FieldList, '/field')
 api.add_resource(Field, '/field/<string:id>')
 
+## Export
 
+@app.route('/export')
+def export_csv():
+    expList = ExperimentList()
+    csv = expList.csv()
 
+    response = make_response(csv)
+    response.headers["Content-Disposition"] = "attachment; filename=camel_export.csv"
+    return response

@@ -1,6 +1,10 @@
 from flask_restful import request
 from MySQLdb.cursors import DictCursor
 from Camel import CamelResource
+from Camel.field import FieldList
+
+import io
+import csv
 
 def _compose_query(where_base = [], where_field = [], where_ref = []):
     '''
@@ -51,7 +55,7 @@ def _compact(res, field_types, db):
     '''
     Gather all result values from the query and group them by experiment.
 
-    :return a list a dictionaries, one per experiment 
+    :return a list of dictionaries, one per experiment 
     '''
     ##Combine all field/value results into a 'summary' (one entry per experiment)
     summary = {}
@@ -98,22 +102,18 @@ def _compact(res, field_types, db):
 
     return result
 
-def _map_field_types(db):
+def _map_field_types():
     '''
     :return a mapping of field id's to field type (VARCHAR, TEXT, INT, BOOL)
     '''
-    fields_sql = "SELECT `id`, `type_column` FROM `fields`"
-    c = db.cursor(DictCursor)
-    c.execute(fields_sql)
-    res = c.fetchall()
-    c.close()
-        
+    fieldList = FieldList()
+    rows = fieldList.retrieveFieldData()
+            
     field_types = {}
-    for row in res:
+    for row in rows:
         field_types[row['id']] = row['type_column'].split('_')[1]
 
     return field_types
-
 
 
             
@@ -165,25 +165,27 @@ class ExperimentList(CamelResource):
                 ref_filter_query = "r_filter.`year` <= %(MaxYear)s "
                 self.tokens['MaxYear'] = value
             self.where_ref.append(ref_filter_query)
-            
-    def get(self):               
+
+    def retrieveExperimentData(self):
+        '''
+        Gather all experiment data, filtered by field and reference
+
+        Filters are key_value pairs with the key formatted like:
+        - ExperimentName
+        - <int> (int being a field id)
+        - min_<int> | max_<int> (min/max values for an integer field, <int> being a field id)
+        - ref_<field> (reference data, field being 'authors', 'journal' or 'title'
+        - ref_min_year | ref_max_year (reference year min/max values)
+        '''
         self.tokens = {}                        
-        
-        ##Filters
-        ## Filters are key_value pairs with the key formatted like:
-        ## ExperimentName
-        ## <int> (int being a field id)
-        ## min_<int> | max_<int> (min/max values for an integer field, <int> being a field id)
-        ## ref_<field> (reference data, field being 'authors', 'journal' or 'title'
-        ## ref_min_year | ref_max_year (reference year min/max values)
-                
+                        
         ##Name filter
         self.where_base = []
 
         ##Field filters
         self.where_field = []
         self.where_ref = []
-        field_types = _map_field_types(self.db)
+        field_types = _map_field_types()
         
         for key in request.args:
             value = request.args[key]
@@ -222,6 +224,83 @@ class ExperimentList(CamelResource):
         result = _compact(res, field_types, self.db)
         return result
 
+    def csv(self):
+        '''
+        Retrieve all (filtered) experiment data and format as a CSV string
+        '''
+        output = io.StringIO()
+        writer = csv.writer(output,
+                            dialect="excel",
+                            quoting=csv.QUOTE_MINIMAL)
+        data = self.retrieveExperimentData()
+
+        fieldList = FieldList()
+        fields = fieldList.retrieveFieldData()
+        
+        ## Write header
+        header_fields = []
+        header_fields.append("id")
+        header_fields.append("name")
+        header_fields.append("paper_title")
+        header_fields.append("paper_authors")
+        header_fields.append("paper_journal")
+        header_fields.append("paper_year")
+        header_fields.append("paper_pages")
+        header_fields.append("paper_url")
+        header_fields.append("pubmed_id")
+
+        for f in fields:
+            header_fields.append(f['title'])
+            
+        writer.writerow(header_fields)
+
+        ## Write data
+        for exp in data:
+            row = []
+            row.append(exp['id'])
+            row.append(exp['name'])
+            
+            titles=[]
+            authors=[]
+            journals=[]
+            years=[]
+            pages=[]
+            urls=[]
+            pubmed_ids=[]
+            for ref in exp['references']:
+                titles.append(ref['title'])
+                authors.append(ref['authors'])
+                journals.append(ref['journal'])
+                years.append(ref['year'])
+                pages.append(ref['pages'])
+                urls.append(ref['url'])
+                pubmed_ids.append(ref['pubmed_id'])
+
+            row.append('\n'.join([t if t is not None else '' for t in titles]))
+            row.append('\n'.join([a if a is not None else ''for a in authors]))
+            row.append('\n'.join([j if j is not None else '' for j in journals]))
+            row.append('\n'.join([str(y) for y in years]))
+            row.append('\n'.join([p if p is not None else '' for p in pages]))
+            row.append('\n'.join([u if u is not None else '' for u in urls]))
+            row.append('\n'.join([p if p is not None else '' for p in pubmed_ids]))
+
+            for field in fields:
+                field_id = field['id']
+                if field_id in exp['fields']:
+                    field_values = exp['fields'][field_id]                
+                    row.append('\n'.join([str(f) if f is not None else '' for f in field_values]))
+                else:
+                    row.append('')                    
+            
+            writer.writerow(row)
+            
+        return output.getvalue()
+            
+    
+    def get(self):               
+        result = self.retrieveExperimentData()
+        return result
+
 
 class Experiment(CamelResource):
     def get(self, id):
@@ -233,7 +312,7 @@ class Experiment(CamelResource):
         c.execute(sql, tokens)
         res = c.fetchall()
         c.close()
-        field_types = _map_field_types(self.db)
+        field_types = _map_field_types()
         result = _compact(res, field_types, self.db)
         
         return result[0]

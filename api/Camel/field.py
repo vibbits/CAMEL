@@ -2,8 +2,8 @@ from flask_restful import request, reqparse
 from MySQLdb.cursors import DictCursor
 from Camel import CamelResource
 
-class FieldList(CamelResource):        
-    def get(self):        
+class FieldList(CamelResource):
+    def retrieveFieldData(self):
         sql = ("SELECT `id`, `title`, `unit`, `description`, `type_column`, `options`, `link`, `required`, `weight`, `group`, `group_id` "
                "FROM `fields` "
                "ORDER BY `weight`")
@@ -12,6 +12,10 @@ class FieldList(CamelResource):
         c.execute(sql)
         rows = c.fetchall()
         c.close()
+        return rows
+    
+    def get(self):        
+        rows = self.retrieveFieldData()
         return rows
         
 class Field(CamelResource):
