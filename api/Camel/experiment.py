@@ -2,6 +2,7 @@ from flask_restful import request
 from MySQLdb.cursors import DictCursor
 from Camel import CamelResource
 from Camel.field import FieldList
+from Camel.auth import is_authenticated
 
 import io
 import csv
@@ -297,7 +298,7 @@ class ExperimentList(CamelResource):
         return output.getvalue()
             
     
-    def get(self):               
+    def get(self):
         result = self.retrieveExperimentData()
         return result
 
