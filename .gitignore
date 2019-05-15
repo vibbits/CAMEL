@@ -1,3 +1,4 @@
 *~
 camel.conf
 __pycache__
+auth/.htpasswd
