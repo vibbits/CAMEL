@@ -51,9 +51,10 @@ def start_session():
 @application.route('/')
 def authenticate():
     token = start_session()
-    msg = "Authentication successful: {}".format(token)
+    msg = "Authentication successful"
     response = make_response(msg)
-    return msg
+    response.headers['Authorization'] = token
+    return response
 
 
 if __name__ == '__main__':
