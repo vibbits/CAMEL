@@ -1,4 +1,0 @@
-AuthType Basic
-AuthName "KU Leuven Shibboleth Authentication"
-AuthUserFile /home/thpar/git/CAMEL/public/.htpasswd
-Require valid-user
