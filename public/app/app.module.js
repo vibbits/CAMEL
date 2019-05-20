@@ -4,8 +4,6 @@ app.controller('AppController', function($scope, $rootScope, $location, $route, 
     
     $scope.loginToken = null;
     $scope.setLoginToken = function(token){
-	//now using the login token as user name
-	//might be replaced by actual user information at later point
 	$scope.loginToken = token;
     }
     
@@ -17,7 +15,12 @@ app.controller('AppController', function($scope, $rootScope, $location, $route, 
 	    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
 	});
     };
-    
+
+    $scope.logout = function(){
+	AuthService.logout();
+	$location.path('/');
+	$scope.loginToken = null;
+    }
     
 });
 
