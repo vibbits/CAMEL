@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .controller('HomeController', function($location, $routeParams, $route, Experiment, Field) {
+    .controller('HomeController', function($location, $routeParams, $route, $scope, Experiment, Field) {
 	var ctrl = this;
 	
 	ctrl.experiments = Experiment.query(function(){
