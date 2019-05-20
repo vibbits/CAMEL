@@ -10,7 +10,6 @@ app.controller('AppController', function($scope, $rootScope, $location, $route, 
     }
     
     $scope.login = function(){
-	console.log("Attempting login");
 	AuthService.login().then(function(token){
 	    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
 	    $scope.setLoginToken(token);

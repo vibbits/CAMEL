@@ -19,6 +19,7 @@
   <script type="text/javascript" src="app/components/home/homeController.js"></script>
   <script type="text/javascript" src="app/components/experiments/experimentsController.js"></script>
   <script type="text/javascript" src="app/components/experiment/experimentController.js"></script>
+  <script type="text/javascript" src="app/components/fields/fieldsController.js"></script>
   <script type="text/javascript" src="app/shared/experimentsTable/experimentsTable.js"></script>
   <script type="text/javascript" src="app/shared/countChart/countChart.js"></script>
   <script type="text/javascript" src="app/shared/timeChart/timeChart.js"></script>
@@ -37,7 +38,8 @@
     </header>
     <data-ng-view></data-ng-view>
     <footer class="row mt-3">
-      <div class="pointer text-center" data-ng-click='login()'>Login</div>
+      <div class="pointer text-center" data-ng-if="!loginToken" data-ng-click='login()'>Admin Login (KU Leuven)</div>
+      <div class="pointer text-center" data-ng-if="loginToken" data-ng-click='logout()'>Log out</div>
     </footer>
   </div>
 </body>
