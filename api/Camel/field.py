@@ -69,3 +69,4 @@ class Field(CamelResource):
         c.close()                
                 
         return field_props
+

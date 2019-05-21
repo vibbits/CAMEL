@@ -38,7 +38,7 @@ def db_connect():
 def start_session():
     import uuid
     token = str(uuid.uuid4())
-    sql = "INSERT INTO `sessions` (`token`) VALUES (%(token)s)"
+    sql = "INSERT INTO `sessions` (`token`, `created`) VALUES (%(token)s, NOW())"
     db = db_connect()
     c = db.cursor()
     c.execute(sql, {'token': token})
@@ -55,6 +55,24 @@ def authenticate():
     response = make_response(msg)
     response.headers['Authorization'] = token
     return response
+
+@application.route('/logout')
+def logout():
+    if 'Authorization' in request.headers:
+        token = request.headers['Authorization']
+
+        ## Delete current token and clean up expired tokens.
+        sql = "DELETE FROM `sessions` WHERE `token` = %(token)s OR `created` < NOW() - INTERVAL 1 DAY"
+        db = db_connect()
+        c = db.cursor()
+        c.execute(sql, {'token': token})
+        db.commit()
+        c.close()    
+        db.close()
+        return "Logged out"
+    else:        
+        return "Not logged in", 401
+
 
 
 if __name__ == '__main__':

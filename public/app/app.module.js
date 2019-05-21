@@ -11,12 +11,13 @@ app.controller('AppController', function($scope, $rootScope, $location, $route, 
 	    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
 	});
     };
-
+        
     $scope.logout = function(){
-	AuthService.logout();
-	$location.path('/');
-    }
-    
+	AuthService.logout().(function(){
+	    $rootScope.broadcast(AUTH_EVENTS.logoutSuccess);
+	    $location.path('/');
+	});
+    };
 });
 
 app.factory('State', function(){

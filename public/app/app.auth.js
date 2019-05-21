@@ -13,8 +13,12 @@ angular.module('CAMEL')
 	};
 
 	authService.logout = function(){
-	    Session.destroy();
-	}
+	    return $http
+		.head('auth/logout')
+		.then(function(res){
+		    Session.destroy();		    
+		});
+	};
 	
 	authService.isAuthenticated = function(){
 	    return !!Session.token;

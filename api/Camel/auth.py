@@ -34,19 +34,3 @@ def is_authenticated():
 
     return len(rows)==1
     
-
-def stop_session():
-    if 'Authorization' in request.headers:
-        token = request.headers['Authorization']
-        
-        sql = "DELETE FROM `sessions` WHERE `token` = %(token)s"
-        db = db_connect(config)
-        c = db.cursor()
-        c.execute(sql, {'token': token})
-        db.commit()
-        c.close()    
-        db.close()
-        return "Logged out"
-    else:        
-        return "Not logged in", 401
-

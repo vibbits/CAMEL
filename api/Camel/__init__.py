@@ -60,8 +60,3 @@ def export_csv():
     response = make_response(csv)
     response.headers["Content-Disposition"] = "attachment; filename=camel_export.csv"
     return response
-
-import Camel.auth
-@app.route('/logout')
-def logout():
-    return auth.stop_session()
