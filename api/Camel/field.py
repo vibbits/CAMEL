@@ -54,10 +54,28 @@ class FieldList(CamelResource):
         return "Success"
 
     
-class Field(CamelResource):        
-    def get(self, id):
+class Field(CamelResource):
+    def __init__(self):
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('timeline', type = int, help = 'timeline is an optional flag [0|1]')
+
+        ##PUT arguments
+        self.reqparse.add_argument('title', type = str, location = 'json')
+        self.reqparse.add_argument('unit', type = str, location = 'json')
+        self.reqparse.add_argument('description', type = str, location = 'json')
+        self.reqparse.add_argument('type_column', type = str, location = 'json')
+        self.reqparse.add_argument('link', type = int, location = 'json')
+        self.reqparse.add_argument('required', type = int, location = 'json')
+        self.reqparse.add_argument('group', type = int, location = 'json')
+        self.reqparse.add_argument('weight', type = int, location = 'json')
+        self.reqparse.add_argument('group_id', type = int, location = 'json')
+
+        ##Optional GET argumkent
+        self.reqparse.add_argument('timeline', type = int, help = 'timeline is an optional flag [0|1]', location= 'args')
+        
+        super(Field, self).__init__()
+    
+    
+    def get(self, id):
         self.reqparse.parse_args()
                 
         sql = ("SELECT `id`, `title`, `unit`, `type_column` "
@@ -104,3 +122,10 @@ class Field(CamelResource):
         c.close()                
                 
         return field_props
+
+    def put(self):
+        if not auth.is_authenticated():
+            return "Admin only", 401
+
+        return "Nothing here yet"
+        
