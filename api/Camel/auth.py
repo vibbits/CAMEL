@@ -19,8 +19,8 @@ def db_connect(config):
     return db
 
 def is_authenticated():    
-    if 'Authorization' in request.headers:
-        token = request.headers['Authorization']
+    if 'AuthToken' in request.headers:
+        token = request.headers['AuthToken']
     else:
         return False
     

@@ -14,7 +14,7 @@ app.controller('AppController', function($scope, $rootScope, $location, $route, 
         
     $scope.logout = function(){
 	AuthService.logout().then(function(){
-	    $rootScope.broadcast(AUTH_EVENTS.logoutSuccess);
+	    $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
 	    $location.path('/');
 	});
     };

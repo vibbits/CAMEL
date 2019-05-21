@@ -52,18 +52,25 @@ def authenticate():
     token = start_session()
     msg = "Authentication successful"
     response = make_response(msg)
-    response.headers['Authorization'] = token
+    response.headers['AuthToken'] = token
     return response
 
 @application.route('/logout')
 def logout():
-    if 'Authorization' in request.headers:
-        token = request.headers['Authorization']
+    if 'AuthToken' in request.headers:        
+        token = request.headers['AuthToken']
+        print(token)
+        
+        db = db_connect()        
+        c = db.cursor()
+        sql = "SELECT * FROM `sessions` WHERE `token` = %(token)s"
+        c.execute(sql, {'token': token})
+        rows = c.fetchall()
+        if len(rows) < 1:
+            return "Invalid Auth token", 401
 
         ## Delete current token and clean up expired tokens.
         sql = "DELETE FROM `sessions` WHERE `token` = %(token)s OR `created` < NOW() - INTERVAL 1 DAY"
-        db = db_connect()
-        c = db.cursor()
         c.execute(sql, {'token': token})
         db.commit()
         c.close()    
@@ -71,7 +78,6 @@ def logout():
         return "Logged out"
     else:        
         return "Not logged in", 401
-
 
 
 if __name__ == '__main__':

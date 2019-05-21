@@ -2,11 +2,12 @@ angular.module('CAMEL')
     .factory('AuthService', function ($http, Session){
 	var authService = {};
 	
-	authService.login = function(){
+	authService.login = function(){	    
 	    return $http
 		.head('auth')
 		.then(function(res){
-		    token = res.headers('Authorization');
+		    token = res.headers('AuthToken');
+		    $http.defaults.headers.common.AuthToken = token;
 		    Session.create(token);
 		    return token;
 		});
@@ -16,7 +17,8 @@ angular.module('CAMEL')
 	    return $http
 		.head('auth/logout')
 		.then(function(res){
-		    Session.destroy();		    
+		    $http.defaults.headers.common.AuthorToken = undefined;
+		    Session.destroy();
 		});
 	};
 	
