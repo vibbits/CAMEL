@@ -59,7 +59,6 @@ def authenticate():
 def logout():
     if 'AuthToken' in request.headers:        
         token = request.headers['AuthToken']
-        print(token)
         
         db = db_connect()        
         c = db.cursor()
