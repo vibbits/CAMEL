@@ -86,7 +86,6 @@ CREATE TABLE `fields` (
   `unit` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `type_column` enum('value_VARCHAR','value_TEXT','value_INT','value_DOUBLE','value_BOOL') COLLATE utf8_unicode_ci DEFAULT NULL,
-  `options` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Comma separated list of options',
   `link` tinyint(1) NOT NULL DEFAULT 0,
   `required` tinyint(1) NOT NULL DEFAULT 0,
   `group` tinyint(1) DEFAULT 0,
@@ -127,6 +126,7 @@ DROP TABLE IF EXISTS `sessions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sessions` (
   `token` varchar(255) DEFAULT NULL,
+  `created` datetime DEFAULT current_timestamp(),
   UNIQUE KEY `token` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -140,4 +140,4 @@ CREATE TABLE `sessions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-15 16:33:28
+-- Dump completed on 2019-05-21 17:23:46
