@@ -14,7 +14,6 @@ config = cp.ConfigParser()
 package_path = os.path.dirname(os.path.abspath(__file__))
 app_path = os.path.dirname(package_path)
 config_path = os.path.join(app_path, 'camel.conf')
-print(config_path)
 config.read(config_path)
 
 
