@@ -1,10 +1,29 @@
 from flask_restful import request, reqparse
 from MySQLdb.cursors import DictCursor
+from flask_restful import reqparse
 from Camel import CamelResource
+from Camel import auth
 
 class FieldList(CamelResource):
+
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+
+        ##POST arguments
+        self.reqparse.add_argument('title', required = True, type = str, location = 'json')
+        self.reqparse.add_argument('unit', required = True, type = str, location = 'json')
+        self.reqparse.add_argument('description', required = True, type = str, location = 'json')
+        self.reqparse.add_argument('type_column', required = True, type = str, location = 'json')
+        self.reqparse.add_argument('link', required = True, type = int, location = 'json')
+        self.reqparse.add_argument('required', required = True, type = int, location = 'json')
+        self.reqparse.add_argument('group', required = True, type = int, location = 'json')
+        self.reqparse.add_argument('weight', required = True, type = int, location = 'json')
+        self.reqparse.add_argument('group_id', required = True, type = int, location = 'json')
+
+        super(FieldList, self).__init__()
+        
     def retrieveFieldData(self):
-        sql = ("SELECT `id`, `title`, `unit`, `description`, `type_column`, `options`, `link`, `required`, `weight`, `group`, `group_id` "
+        sql = ("SELECT `id`, `title`, `unit`, `description`, `type_column`, `link`, `required`, `weight`, `group`, `group_id` "
                "FROM `fields` "
                "ORDER BY `weight`")
 
@@ -17,9 +36,25 @@ class FieldList(CamelResource):
     def get(self):        
         rows = self.retrieveFieldData()
         return rows
+
+
+    def post(self):
+        if not auth.is_authenticated():
+            return "Admin only", 401
         
-class Field(CamelResource):
+        sql = ("INSERT INTO `fields` (`title`, `unit`, `description`, `type_column`, `link`, `required`, `weight`, `group`, `group_id`) "
+               "VALUES (%(title)s, %(unit)s, %(description)s, %(type_column)s, %(link)s, %(required)s, %(weight)s, %(group)s, %(group_id)s)")
+
+        args = self.reqparse.parse_args()
+        c = self.db.cursor()
+        c.execute(sql, args)
+        self.db.commit()
+        c.close()
         
+        return "Success"
+
+    
+class Field(CamelResource):        
     def get(self, id):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('timeline', type = int, help = 'timeline is an optional flag [0|1]')
@@ -69,4 +104,3 @@ class Field(CamelResource):
         c.close()                
                 
         return field_props
-
