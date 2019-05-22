@@ -17,19 +17,19 @@
     </thead>
     <tbody>      
       <tr data-ng-repeat="field in fields.fields">
-	<td><i class="material-icons">drag-handle</i>
+	<td><i class="material-icons">drag_handle</i>
 	</td>
 	<td>
-	  <input value="{{field.title}}">
+	  <input data-ng-model="field.title">
 	</td>
 	<td>
-	  <input value="{{field.unit}}">
+	  <input data-ng-model="field.unit" size="4">
 	</td>
 	<td>
-	  <input value="{{field.description}}">
+	  <input data-ng-model="field.description">
 	</td>
 	<td>
-	  <select value="{{field.type_column}}">
+	  <select data-ng-model="field.type_column">
 	    <option value="value_VARCHAR">STRING</option>
 	    <option value="value_TEXT">TEXT</option>
 	    <option value="value_INT">NUMBER</option>
@@ -37,18 +37,19 @@
 	  </select>
 	</td>
 	<td>
-	  <input value="{{field.link}}" type="checkbox">
+	  <input data-ng-model="field.link" type="checkbox">
 	</td>
 	<td>
-	  <input value="{{field.required}}" type="checkbox">
+	  <input data-ng-model="field.required" type="checkbox">
 	</td>
 	<td>
-	  <input value="{{field.group}}" type="checkbox">
+	  {{field.group}}
+	  <input data-ng-model="field.group" type="checkbox">
 	</td>
 	<td>
-	  <input value="{{field.group_id}}" type="checkbox">
+	  <input data-ng-model="field.group_id" size="2">
 	</td>
-	<td><i class="material-icons">delete</i></td>
+	<td><i class="material-icons pointer">delete</i></td>
       </tr>
     </tbody>
   </table>
