@@ -123,9 +123,33 @@ class Field(CamelResource):
                 
         return field_props
 
-    def put(self):
+    def put(self, id):
         if not auth.is_authenticated():
             return "Admin only", 401
 
-        return "Nothing here yet"
+        sql = "SELECT count(*) FROM `fields` WHERE `id` = %(id)s"
+        c = self.db.cursor()
+        c.execute(sql, {'id': id})
+        res = c.fetchone()
+        c.close()
+        if res[0] != 1:
+            return "No such field"
+
+        args = self.reqparse.parse_args()
+        if request.json:
+            sql = "UPDATE `fields` SET "
+            updates = []
+            for arg_key in request.json:
+                if arg_key in args:
+                    updates.append("`{arg_key}` = %({arg_key})s ".format(arg_key=arg_key))
+            sql+=', '.join(updates)
+            sql+="WHERE id = %(id)s"
+            c = self.db.cursor()
+            tokens = args
+            tokens['id'] = id
+            c.execute(sql, tokens)
+            self.db.commit()
+            c.close()
+            
+        return "Update succesful"
         
