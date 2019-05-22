@@ -153,3 +153,24 @@ class Field(CamelResource):
             
         return "Update succesful"
         
+    def delete(self, id):
+        if not auth.is_authenticated():
+            return "Admin only", 401
+
+        
+        sql = "SELECT count(*) FROM `fields` WHERE `id` = %(id)s"
+        c = self.db.cursor()
+        c.execute(sql, {'id': id})
+        res = c.fetchone()
+        c.close()
+        if res[0] != 1:
+            return "No such field"
+        
+        sql = "DELETE FROM `fields` WHERE `id` = %(id)s"
+        c = self.db.cursor()
+        c.execute(sql, {'id': id})
+        self.db.commit()
+        c.close()
+
+        return "Field deleted"
+    
