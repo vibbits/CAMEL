@@ -1,3 +1,55 @@
-<div class="row mt-5">
+<div class="table-responsive row mt-5">
   <h3>Fields Editor</h3>
+  <table class="table table-striped">
+    <thead class="thead-dark">    
+      <tr>
+	<th></th>
+	<th>Title</th>
+	<th>Unit</th>
+	<th>Description</th>
+	<th>Type</th>
+	<th>Link</th>
+	<th>Required</th>
+	<th>Group</th>
+	<th>Group ID</th>
+	<th></th>	
+      </tr>
+    </thead>
+    <tbody>      
+      <tr data-ng-repeat="field in fields.fields">
+	<td><i class="material-icons">drag-handle</i>
+	</td>
+	<td>
+	  <input value="{{field.title}}">
+	</td>
+	<td>
+	  <input value="{{field.unit}}">
+	</td>
+	<td>
+	  <input value="{{field.description}}">
+	</td>
+	<td>
+	  <select value="{{field.type_column}}">
+	    <option value="value_VARCHAR">STRING</option>
+	    <option value="value_TEXT">TEXT</option>
+	    <option value="value_INT">NUMBER</option>
+	    <option value="value_BOOL">BOOLEAN</option>
+	  </select>
+	</td>
+	<td>
+	  <input value="{{field.link}}" type="checkbox">
+	</td>
+	<td>
+	  <input value="{{field.required}}" type="checkbox">
+	</td>
+	<td>
+	  <input value="{{field.group}}" type="checkbox">
+	</td>
+	<td>
+	  <input value="{{field.group_id}}" type="checkbox">
+	</td>
+	<td><i class="material-icons">delete</i></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
