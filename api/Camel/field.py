@@ -172,5 +172,5 @@ class Field(CamelResource):
         self.db.commit()
         c.close()
 
-        return "Field deleted"
+        return "Field deleted", 204
     
