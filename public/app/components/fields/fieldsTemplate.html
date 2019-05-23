@@ -1,9 +1,14 @@
-<div class="table-responsive row mt-5">
-  <h3>Fields Editor</h3>
+<h3>Fields Editor</h3>
+<div class="row mt-5">
+  <span class="pointer"><i class="material-icons align-middle">add_circle_outline</i>
+    Add row</span>
+</div>
+<div class="table-responsive row mt-3">
   <table class="table table-striped">
     <thead class="thead-dark">    
       <tr>
 	<th></th>
+	<th>id</th>
 	<th>Title</th>
 	<th>Unit</th>
 	<th>Description</th>
@@ -17,8 +22,8 @@
     </thead>
     <tbody>      
       <tr data-ng-repeat="field in fields.fields">
-	<td><i class="material-icons">drag_handle</i>
-	</td>
+	<td><i class="material-icons">drag_handle</i></td>
+	<td>{{field.id}}</td>
 	<td>
 	  <input data-ng-model="field.title">
 	</td>
