@@ -38,6 +38,7 @@ angular.module('CAMEL')
 	});	
 	$rootScope.$on(AUTH_EVENTS.notAuthenticated, function(event, next){
 	    console.log("Not Authenticated Event");
+	    $location.path('/');
 	    AuthService.login().then(function(token){
 		$rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
 		$location.path(next.$$route.originalPath);
