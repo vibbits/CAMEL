@@ -44,9 +44,7 @@ angular.module("CAMEL")
 	    for (f in ctrl.fields){
 		field = ctrl.fields[f];
 		if (field.changed){
-		    console.log(field);
 		    field.$update();
-		    console.log(field);
 		}
 	    }
 	}
