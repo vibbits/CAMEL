@@ -22,17 +22,25 @@ angular.module("CAMEL")
 	};
 
 	ctrl.removeRow = function(field){
-	    if (!field.hasOwnProperty('id')){
-		//new fields can simply be removed
-		var index = ctrl.fields.indexOf(field);
-		if (index !== -1){
-		    ctrl.fields.splice(index, 1);
-		}
-	    } else {
+	    var doublecheck = false;
+	    if (field.hasOwnProperty('id')){	
 		//deleting an existing field causes all data
 		//to be removed!
 		alert("Are you sure?");
-		
+		double_check = true;
+		if (double_check){
+		    field.$delete();		    
+		} else {
+		    return;
+		}
+	    } 
+	    var index = ctrl.fields.indexOf(field);
+	    if (index !== -1){
+		ctrl.fields.splice(index, 1);		
 	    }
+	};
+
+	ctrl.saveChanges = function(){
+	    console.log(ctrl.fields);
 	}
     });

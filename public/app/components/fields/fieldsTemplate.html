@@ -1,64 +1,66 @@
 <h3>Fields Editor</h3>
 <div class="table-responsive row mt-3">
-  <table class="table table-striped">
-    <thead class="thead-dark">    
-      <tr>
-	<th></th>
-	<th>id</th>
-	<th>Title</th>
-	<th>Unit</th>
-	<th>Description</th>
-	<th>Type</th>
-	<th>Link</th>
-	<th>Required</th>
-	<th>Group</th>
-	<th>Group ID</th>
-	<th></th>	
-      </tr>
-    </thead>
-    <tbody>      
-      <tr data-ng-repeat="field in fields.fields">
-	<td><i class="material-icons">drag_handle</i></td>
-	<td>{{field.id}}</td>
-	<td>
-	  <input data-ng-model="field.title">
-	</td>
-	<td>
-	  <input data-ng-model="field.unit" size="4">
-	</td>
-	<td>
-	  <input data-ng-model="field.description">
-	</td>
-	<td>
-	  <select data-ng-model="field.type_column">
-	    <option value="value_VARCHAR">STRING</option>
-	    <option value="value_TEXT">TEXT</option>
-	    <option value="value_INT">NUMBER</option>
-	    <option value="value_DOUBLE">DOUBLE</option>
-	    <option value="value_BOOL">BOOLEAN</option>
-	  </select>
-	</td>
-	<td>
-	  <input data-ng-model="field.link" type="checkbox" data-ng-true-value="1" data-ng-false-value="0">
-	</td>
-	<td>
-	  <input data-ng-model="field.required" type="checkbox" data-ng-true-value="1" data-ng-false-value="0">
-	</td>
-	<td>
-	  <input data-ng-model="field.group" type="checkbox" data-ng-true-value="1" data-ng-false-value="0">
-	</td>
-	<td>
-	  <input data-ng-model="field.group_id" size="2">
-	</td>
-	<td><i class="material-icons pointer" data-ng-click="fields.removeRow(field)">delete</i></td>
-      </tr>
-    </tbody>
-  </table>
+  <form name="fieldUpdateForm">    
+    <table class="table table-striped">
+      <thead class="thead-dark">    
+	<tr>
+	  <th></th>
+	  <th>id</th>
+	  <th>Title</th>
+	  <th>Unit</th>
+	  <th>Description</th>
+	  <th>Type</th>
+	  <th>Link</th>
+	  <th>Required</th>
+	  <th>Group</th>
+	  <th>Group ID</th>
+	  <th></th>	
+	</tr>
+      </thead>
+      <tbody>      
+	<tr data-ng-repeat="field in fields.fields">
+	  <td><i class="material-icons">drag_handle</i></td>
+	  <td>{{field.id}}</td>
+	  <td>
+	    <input data-ng-model="field.title" data-ng-change="field.changed=true">
+	  </td>
+	  <td>
+	    <input data-ng-model="field.unit" size="4">
+	  </td>
+	  <td>
+	    <input data-ng-model="field.description">
+	  </td>
+	  <td>
+	    <select data-ng-model="field.type_column">
+	      <option value="value_VARCHAR">STRING</option>
+	      <option value="value_TEXT">TEXT</option>
+	      <option value="value_INT">NUMBER</option>
+	      <option value="value_DOUBLE">DOUBLE</option>
+	      <option value="value_BOOL">BOOLEAN</option>
+	    </select>
+	  </td>
+	  <td>
+	    <input data-ng-model="field.link" type="checkbox" data-ng-true-value="1" data-ng-false-value="0">
+	  </td>
+	  <td>
+	    <input data-ng-model="field.required" type="checkbox" data-ng-true-value="1" data-ng-false-value="0">
+	  </td>
+	  <td>
+	    <input data-ng-model="field.group" type="checkbox" data-ng-true-value="1" data-ng-false-value="0">
+	  </td>
+	  <td>
+	    <input data-ng-model="field.group_id" size="2">
+	  </td>
+	  <td><i class="material-icons pointer" data-ng-click="fields.removeRow(field)">delete</i></td>
+	</tr>
+      </tbody>
+    </table>
+  </form>
 </div>
 <div class="row mt-2">
   <span class="pointer" data-ng-click="fields.newRow()"><i class="material-icons align-middle">add_circle_outline</i>
     Add row</span>
 </div>
 <div class="row mt-2">
-  <input type="button" value="Save all changes">
+  <input type="button" value="Save all changes" data-ng-click="fields.saveChanges()">
 </div>
