@@ -25,13 +25,13 @@
 	    <input data-ng-model="field.title" data-ng-change="field.changed=true">
 	  </td>
 	  <td>
-	    <input data-ng-model="field.unit" size="4">
+	    <input data-ng-model="field.unit" size="4" data-ng-change="field.changed=true">
 	  </td>
 	  <td>
-	    <input data-ng-model="field.description">
+	    <input data-ng-model="field.description" data-ng-change="field.changed=true">
 	  </td>
 	  <td>
-	    <select data-ng-model="field.type_column">
+	    <select data-ng-model="field.type_column" data-ng-change="field.changed=true">
 	      <option value="value_VARCHAR">STRING</option>
 	      <option value="value_TEXT">TEXT</option>
 	      <option value="value_INT">NUMBER</option>
@@ -40,16 +40,22 @@
 	    </select>
 	  </td>
 	  <td>
-	    <input data-ng-model="field.link" type="checkbox" data-ng-true-value="1" data-ng-false-value="0">
+	    <input data-ng-model="field.link" type="checkbox"
+		   data-ng-true-value="1" data-ng-false-value="0"
+		   data-ng-change="field.changed=true">
 	  </td>
 	  <td>
-	    <input data-ng-model="field.required" type="checkbox" data-ng-true-value="1" data-ng-false-value="0">
+	    <input data-ng-model="field.required"
+		   type="checkbox" data-ng-true-value="1" data-ng-false-value="0"
+		   data-ng-change="field.changed=true">
 	  </td>
 	  <td>
-	    <input data-ng-model="field.group" type="checkbox" data-ng-true-value="1" data-ng-false-value="0">
+	    <input data-ng-model="field.group" type="checkbox"
+		   data-ng-true-value="1" data-ng-false-value="0"
+		   data-ng-change="field.changed=true">
 	  </td>
 	  <td>
-	    <input data-ng-model="field.group_id" size="2">
+	    <input data-ng-model="field.group_id" size="2" data-ng-change="field.changed=true">
 	  </td>
 	  <td><i class="material-icons pointer" data-ng-click="fields.removeRow(field)">delete</i></td>
 	</tr>

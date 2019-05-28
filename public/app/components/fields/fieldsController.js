@@ -41,6 +41,13 @@ angular.module("CAMEL")
 	};
 
 	ctrl.saveChanges = function(){
-	    console.log(ctrl.fields);
+	    for (f in ctrl.fields){
+		field = ctrl.fields[f];
+		if (field.changed){
+		    console.log(field);
+		    field.$update();
+		    console.log(field);
+		}
+	    }
 	}
     });
