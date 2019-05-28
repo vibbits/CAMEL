@@ -25,20 +25,20 @@ angular.module("CAMEL")
 
 	ctrl.removeRow = function(field){
 	    var doublecheck = false;
-	    if (!field.new_field){	
+	    if (!field.new_field){
 		//deleting an existing field causes all data
 		//to be removed!
 		alert("Are you sure?");
 		double_check = true;
 		if (double_check){
-		    field.$delete();		    
+		    field.$delete();
 		} else {
 		    return;
 		}
 	    } 
 	    var index = ctrl.fields.indexOf(field);
 	    if (index !== -1){
-		ctrl.fields.splice(index, 1);		
+		ctrl.fields.splice(index, 1);
 	    }
 	};
 
@@ -46,9 +46,12 @@ angular.module("CAMEL")
 	    for (f in ctrl.fields){
 		field = ctrl.fields[f];
 		if (field.new_field){
-		    Field.save(field);
+		    newField = new Field(field);
+		    ctrl.fields[f] = newField;
+		    newField.$save();
 		} else if (field.changed){
 		    field.$update();
+		    field.changed = false;
 		}
 	    }
 	}
