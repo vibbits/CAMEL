@@ -48,10 +48,11 @@ class FieldList(CamelResource):
         args = self.reqparse.parse_args()
         c = self.db.cursor()
         c.execute(sql, args)
+        newid = c.lastrowid
         self.db.commit()
         c.close()
         
-        return "Success"
+        return {'id': newid}, 201
 
     
 class Field(CamelResource):

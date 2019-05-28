@@ -15,15 +15,17 @@ angular.module("CAMEL")
 		type_column: 'value_VARCHAR',
 		link: 0,
 		required: 0,
+		weight: 9000,
 		group: 0,
-		group_id: null
+		group_id: null,
+		new_field: true
 	    };
 	    ctrl.fields.push(newField);
 	};
 
 	ctrl.removeRow = function(field){
 	    var doublecheck = false;
-	    if (field.hasOwnProperty('id')){	
+	    if (!field.new_field){	
 		//deleting an existing field causes all data
 		//to be removed!
 		alert("Are you sure?");
@@ -43,7 +45,9 @@ angular.module("CAMEL")
 	ctrl.saveChanges = function(){
 	    for (f in ctrl.fields){
 		field = ctrl.fields[f];
-		if (field.changed){
+		if (field.new_field){
+		    Field.save(field);
+		} else if (field.changed){
 		    field.$update();
 		}
 	    }
