@@ -51,8 +51,9 @@ class FieldList(CamelResource):
         newid = c.lastrowid
         self.db.commit()
         c.close()
-        
-        return {'id': newid}, 201
+
+        args['id'] = newid
+        return args, 201
 
     
 class Field(CamelResource):
