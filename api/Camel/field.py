@@ -151,7 +151,7 @@ class Field(CamelResource):
             self.db.commit()
             c.close()
             
-        return "Update succesful"
+        return "Update succesful", 204
         
     def delete(self, id):
         if not auth.is_authenticated():
