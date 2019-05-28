@@ -1,8 +1,4 @@
 <h3>Fields Editor</h3>
-<div class="row mt-5">
-  <span class="pointer"><i class="material-icons align-middle">add_circle_outline</i>
-    Add row</span>
-</div>
 <div class="table-responsive row mt-3">
   <table class="table table-striped">
     <thead class="thead-dark">    
@@ -38,6 +34,7 @@
 	    <option value="value_VARCHAR">STRING</option>
 	    <option value="value_TEXT">TEXT</option>
 	    <option value="value_INT">NUMBER</option>
+	    <option value="value_DOUBLE">DOUBLE</option>
 	    <option value="value_BOOL">BOOLEAN</option>
 	  </select>
 	</td>
@@ -53,8 +50,15 @@
 	<td>
 	  <input data-ng-model="field.group_id" size="2">
 	</td>
-	<td><i class="material-icons pointer">delete</i></td>
+	<td><i class="material-icons pointer" data-ng-click="fields.removeRow(field)">delete</i></td>
       </tr>
     </tbody>
   </table>
+</div>
+<div class="row mt-2">
+  <span class="pointer" data-ng-click="fields.newRow()"><i class="material-icons align-middle">add_circle_outline</i>
+    Add row</span>
+</div>
+<div class="row mt-2">
+  <input type="button" value="Save all changes">
 </div>
