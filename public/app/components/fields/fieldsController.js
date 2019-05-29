@@ -35,17 +35,36 @@ angular.module("CAMEL")
 		} else {
 		    return;
 		}
-	    } 
-	    var index = ctrl.fields.indexOf(field);
-	    if (index !== -1){
-		ctrl.fields.splice(index, 1);
 	    }
+
+	    var toDelete = [field];
+	    //remove dependend fields
+	    if (field.group){
+		var gid = field.id;
+		for (var f in ctrl.fields){
+		    var subField = ctrl.fields[f];
+		    if (subField.hasOwnProperty('group_id')){
+			if(subField.group_id == gid){
+			    toDelete.push(subField);
+			}
+		    }		    
+		}
+	    }
+
+	    for (var f in toDelete){
+		var delField = toDelete[f];
+		var index = ctrl.fields.indexOf(delField);
+		if (index !== -1){
+		    ctrl.fields.splice(index, 1);
+		}
+	    }
+	    
 	    State.refresh();
 	};
 
 	ctrl.saveChanges = function(){
-	    for (f in ctrl.fields){
-		field = ctrl.fields[f];
+	    for (var f in ctrl.fields){
+		var field = ctrl.fields[f];
 		if (field.new_field){
 		    newField = new Field(field);
 		    ctrl.fields[f] = newField;
