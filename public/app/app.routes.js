@@ -22,6 +22,16 @@ angular.module('CAMEL')
 		controllerAs: 'fields',
 		data: {'protected': true}
 	    })
+	    .when('/expedit', {
+		templateUrl:  'app/components/expedit/expeditTemplate.html',
+		controller: 'ExpeditController',
+		controllerAs: 'expedit'
+	    })
+	    .when('/expedit/:id', {
+		templateUrl:  'app/components/expedit/expeditTemplate.html',
+		controller: 'ExpeditController',
+		controllerAs: 'expedit'
+	    })
 	    .otherwise({
 		redirectTo: '/home'
 	    });

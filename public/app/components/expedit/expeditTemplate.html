@@ -1,0 +1,13 @@
+<h3>Edit Experiment</h3>
+
+{{exp}}
+
+<h4>{{exp.name}}</h4>
+
+<form>
+  <div class="formgroup" data-ng-repeat="field in fields" data-ng-if="exp.fields[field.id]">
+    <label>{{field.title}}</label>
+    <input type="text" class="form-control" data-ng-model="exp.fields[field.id]">
+    <small class="form-text text-muted">{{field.description}}</small>
+  </div>
+</form>
