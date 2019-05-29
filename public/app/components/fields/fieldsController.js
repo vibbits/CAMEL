@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .controller('FieldsController', function($scope, Field){
+    .controller('FieldsController', function($scope, Field, State){
 	var ctrl = this;
 	ctrl.loaded = false;
 	
@@ -40,6 +40,7 @@ angular.module("CAMEL")
 	    if (index !== -1){
 		ctrl.fields.splice(index, 1);
 	    }
+	    State.refresh();
 	};
 
 	ctrl.saveChanges = function(){
@@ -54,5 +55,7 @@ angular.module("CAMEL")
 		    field.changed = false;
 		}
 	    }
-	}
+	    //Force the ExperimentsController to reload the fields
+	    State.refresh();  
+	};
     });

@@ -22,9 +22,23 @@ app.controller('AppController', function($scope, $rootScope, $location, $route, 
 
 app.factory('State', function(){
     return {
+	//experiment filters
 	expFilter: {},
+	
+	//list of experiment fields
 	expFields: [],
+	
+	//current order column/direction/realm
 	expOrder: {},
-	expRefs: {}
+	
+	//'extra' fields for references
+	expRefs: {},
+	
+	refresh: function(){
+	    this.expFilter = {};
+	    this.expFields = [];
+	    this.expOrder = {};
+	    this.expRefs = {};
+	}
     }
 });
