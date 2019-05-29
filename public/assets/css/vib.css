@@ -672,6 +672,12 @@ table th.fit{
     color: #c5c5c5;
 }
 
+.note{
+    font-size: smaller;
+    color: gray;
+    font-style: italic;
+}
+
 /*experiment page*/
 .field-value{
     background-color: lightgrey;
@@ -696,4 +702,10 @@ ul.no-list-style{
 }
 ul.no-list-style li{
     list-style-type: none;
+}
+
+
+/*field edit page*/
+tr.changed{
+    background: #ff681e !important;
 }

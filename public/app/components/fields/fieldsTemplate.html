@@ -18,7 +18,7 @@
 	</tr>
       </thead>
       <tbody>      
-	<tr data-ng-repeat="field in fields.fields">
+	<tr data-ng-class="{'changed': field.changed || field.new_field}" data-ng-repeat="field in fields.fields">
 	  <td><i class="material-icons">drag_handle</i></td>
 	  <td>{{field.id}}</td>
 	  <td>
@@ -69,5 +69,8 @@
   </span>
 </div>
 <div class="row mt-2">
-  <input type="button" value="Save all changes" data-ng-click="fields.saveChanges()">
+  <div class="col">
+    <input type="button" value="Save all changes" data-ng-click="fields.saveChanges()">
+    <div class="note">(All fields shown in orange will be updated.)</div>
+  </div>
 </div>
