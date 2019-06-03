@@ -1,4 +1,21 @@
 <h3>Edit Experiment</h3>
+
+<div class="row">
+  <div class="card" data-ng-if="!auth.isAuthenticated()">
+    <div class="card-body">
+      <h5 class="card-title">Not logged in</h5>
+      <p>
+	As you are not logged in with <em>Editor privileges</em>, any
+	changes made to this Experiment entry will be saved separately
+	as an edit suggestion to the curators of this database.
+      </p>
+      <p>
+	You can leave your email address if you wish the curators to
+	contact you when reviewing your suggestions.
+      </p>
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col">
     <form>
