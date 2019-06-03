@@ -1,8 +1,19 @@
 
 <h3>Edit Experiment</h3>
 <h4>{{exp.name}}</h4>
-<h5>Fields</h5>
-
+<div class="row">
+  <div class="col">
+    <form>
+      <label for="field-select">Add field: </label>
+      <select id="field-select">
+	<option
+	  value="{{field.id}}"
+	  data-ng-repeat="field in fields">{{field.title}}</option>
+      </select>
+      <i class="material-icons align-middle pointer">add_circle</i>
+    </form>
+  </div>
+</div>
 <div class="row">
   <div class="col">
     <form>
@@ -108,7 +119,7 @@
 	  <small class="form-text text-muted">Remarks concerning this submission.</small>
 	</div>
       </fieldset>
-      <input type="button" value="Submit all changes">
+      <button type="submit" class="btn btn-primary">Submit all changes</button>
     </form>
   </div>
 </div>
