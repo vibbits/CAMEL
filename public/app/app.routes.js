@@ -6,6 +6,16 @@ angular.module('CAMEL')
 		controller: 'HomeController',
 		controllerAs: 'home'
 	    })
+	    .when('/experiment/add', {
+		templateUrl:  'app/components/expedit/expeditTemplate.html',
+		controller: 'ExpeditController',
+		controllerAs: 'expedit'
+	    })
+	    .when('/experiment/edit/:id', {
+		templateUrl:  'app/components/expedit/expeditTemplate.html',
+		controller: 'ExpeditController',
+		controllerAs: 'expedit'
+	    })
 	    .when('/experiment/:id', {
 		templateUrl:  'app/components/experiment/experimentTemplate.html',
 		controller: 'ExperimentController',
@@ -21,16 +31,6 @@ angular.module('CAMEL')
 		controller: 'FieldsController',
 		controllerAs: 'fields',
 		data: {'protected': true}
-	    })
-	    .when('/expedit', {
-		templateUrl:  'app/components/expedit/expeditTemplate.html',
-		controller: 'ExpeditController',
-		controllerAs: 'expedit'
-	    })
-	    .when('/expedit/:id', {
-		templateUrl:  'app/components/expedit/expeditTemplate.html',
-		controller: 'ExpeditController',
-		controllerAs: 'expedit'
 	    })
 	    .otherwise({
 		redirectTo: '/home'
