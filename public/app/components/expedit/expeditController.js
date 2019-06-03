@@ -10,7 +10,5 @@ angular.module("CAMEL")
 
 	$scope.exp = Experiment.get($routeParams, function(){
 	    ctrl.experimentLoaded = true;
-	});
-
-	
+	});	
     });
