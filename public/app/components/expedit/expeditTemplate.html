@@ -1,39 +1,90 @@
+
 <h3>Edit Experiment</h3>
-
-{{exp}}
-<hr>
-{{fields}}
-
 <h4>{{exp.name}}</h4>
+<h5>Fields</h5>
 
-<form>
-  <div class="formgroup" data-ng-repeat="field in fields" data-ng-if="exp.fields.hasOwnProperty(field.id)">
-    <label>{{field.title}}</label>
-    <div data-ng-switch="field.type_column">
-      <div data-ng-switch-when="value_VARCHAR">
-	<div data-ng-repeat="field_value in exp.fields[field.id]">
-	  <input type="text" class="form-control" data-ng-model="field_value">
+<div class="row">
+  <div class="col">
+    <form>
+      <div data-ng-repeat="field in fields" data-ng-if="exp.fields.hasOwnProperty(field.id)">
+	<div data-ng-switch="field.type_column">
+	  <div class="form-group" data-ng-switch-when="value_VARCHAR">	
+	    <label>{{field.title}}</label>	  
+	    <input type="text" class="form-control"
+		   data-ng-repeat="field_value in exp.fields[field.id]"
+		   data-ng-model="field_value">	
+	    <small class="form-text text-muted">{{field.description}}</small>
+	  </div>
+	  <div class="form-group" data-ng-switch-when="value_TEXT">
+	    <label>{{field.title}}</label>
+	    <textarea class="form-control" data-ng-model="exp.fields[field.id][0]"></textarea>
+	    <small class="form-text text-muted">{{field.description}}</small>
+	  </div>
+	  <div class="form-group" data-ng-switch-when="value_INT">
+	    <label>{{field.title}}</label>
+	    <input type="text" class="form-control"
+		   data-ng-repeat="field_value in exp.fields[field.id]"
+		   data-ng-model="field_value">
+	    <small class="form-text text-muted">{{field.description}}</small>
+	  </div>
+	  <div class="form-check" data-ng-switch-when="value_BOOL">
+	    <input type="checkbox" class="form-check-input"
+		   data-ng-true-value="1" data-ng-false-value="0"
+		   data-ng-model="exp.fields[field.id]">
+	    <label class="form-check-label">{{field.title}}</label>
+	    <small class="form-text text-muted">{{field.description}}</small>
+	  </div>
+	  <div class="form-group" data-ng-switch-when="value_DOUBLE">
+	    <label>{{field.title}}</label>
+	    <input type="text" class="form-control"
+		   data-ng-repeat="field_value in exp.fields[field.id]"
+		   data-ng-model="field_value">
+	    <small class="form-text text-muted">{{field.description}}</small>
+	  </div>
 	</div>
       </div>
-      <div data-ng-switch-when="value_TEXT">
-	<textarea class="form-control" data-ng-model="exp.fields[field.id][0]"></textarea>
-      </div>
-      <div data-ng-switch-when="value_INT">
-	<div data-ng-repeat="field_value in exp.fields[field.id]">
-	  <input type="text" class="form-control" data-ng-model="field_value">
-	</div>
-      </div>
-      <div data-ng-switch-when="value_BOOL">
-	<input type="checkbox" class="form-control"
-	       data-ng-true-value="1" data-ng-false-value="0"
-	       data-ng-model="exp.fields[field.id]">
-      </div>
-      <div data-ng-switch-when="value_DOUBLE">
-	<div data-ng-repeat="field_value in exp.fields[field.id]">
-	  <input type="text" class="form-control" data-ng-model="field_value">
-	</div>
-      </div>
-    </div>
-    <small class="form-text text-muted">{{field.description}}</small>
+    </form>
   </div>
-</form>
+</div>
+<div class="row">
+  <div class="col">
+    <h5>References</h5>
+    <form>
+      <fieldset class="form-group" data-ng-repeat="ref in exp.references">
+	<div class="form-group">
+	  <label>Title</label>
+	  <input type="text" class="form-control" data-ng-model="ref.title">
+	</div>      
+	<div class="form-group">
+	  <label>Authors</label>
+	  <input type="text" class="form-control" data-ng-model="ref.authors">
+	  <small class="form-text text-muted">Comma-separated list of authors (Lastname FN, ...)</small>
+	</div>
+	<div class="form-row">
+	  <div class="col form-group">
+	    <label>Year</label>
+	    <input type="text" class="form-control" data-ng-model="ref.year">
+	  </div>
+	  <div class="col form-group">
+	    <label>Journal</label>
+	    <input type="text" class="form-control" data-ng-model="ref.journal">
+	  </div>
+	  <div class="col form-group">
+	    <label>Pages</label>
+	    <input type="text" class="form-control" data-ng-model="ref.pages">
+	    <small class="form-text text-muted">Free text field representing volume, pages,...</small>
+	  </div>
+	</div>	
+	<div class="form-group">
+	  <label>PubMed ID</label>
+	  <input type="text" class="form-control" data-ng-model="ref.pubmed_id">
+	</div>
+	<div class="form-group">
+	  <label>URL</label>
+	  <input type="text" class="form-control" data-ng-model="ref.url">
+	  <small class="form-text text-muted">DOI- or direct link to paper</small>
+	</div>    
+      </fieldset>
+    </form>
+  </div>
+</div>
