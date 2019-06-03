@@ -78,7 +78,8 @@ angular.module("CAMEL")
 		    //non-existent fields are at the end of the list
 		    //existing fields are arrays: order by the first item
 		    if (exp1.value.fields.hasOwnProperty(scope.orderParams.key)){
-			field1 = exp1.value.fields[scope.orderParams.key][0];
+			allValues1 = Object.values(exp1.value.fields[scope.orderParams.key]);
+			field1 = allValues1[0];
 			if (scope.orderParams.type == 'value_VARCHAR' || scope.orderParams.type == 'value_TEXT'){
 			    field1 = field1.toString().toLowerCase();
 			}
@@ -86,7 +87,8 @@ angular.module("CAMEL")
 			return 1;
 		    }
 		    if (exp2.value.fields.hasOwnProperty(scope.orderParams.key)){
-			field2 = exp2.value.fields[scope.orderParams.key][0];
+			allValues2 = Object.values(exp2.value.fields[scope.orderParams.key]);
+			field2 = allValues2[0];
 			if (scope.orderParams.type == 'value_VARCHAR' || scope.orderParams.type == 'value_TEXT'){
 			    field2 = field2.toString().toLowerCase();
 			}

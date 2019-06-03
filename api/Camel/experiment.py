@@ -16,11 +16,12 @@ def _compose_query(where_base = [], where_field = [], where_ref = []):
     :param where_ref: list of WHERE statements for references_fields sub_query
     '''
     base = ("SELECT e.`id` AS `experiment_id`, e.`name`, "
-           "f.`id` AS `field_id`, f.`title` AS `field_title`, f.`weight`, "
-           "ef.`value_INT`, ef.`value_VARCHAR`, ef.`value_DOUBLE`, ef.`value_BOOL`, ef.`value_TEXT` "
-           "FROM `experiments` e "
-           "LEFT JOIN `experiments_fields` ef ON e.`id` = ef.`experiment_id` "
-           "LEFT JOIN `fields` f ON ef.`field_id` = f.`id` ")
+            "f.`id` AS `field_id`, f.`title` AS `field_title`, f.`weight`, "
+            "ef.`id` as value_id, "
+            "ef.`value_INT`, ef.`value_VARCHAR`, ef.`value_DOUBLE`, ef.`value_BOOL`, ef.`value_TEXT` "
+            "FROM `experiments` e "
+            "LEFT JOIN `experiments_fields` ef ON e.`id` = ef.`experiment_id` "
+            "LEFT JOIN `fields` f ON ef.`field_id` = f.`id` ")
 
     field_filter = ("e.`id` IN (SELECT ef_filter.`experiment_id` "
                          "FROM `experiments_fields` ef_filter "
@@ -75,9 +76,10 @@ def _compact(res, field_types, db):
         field_value = entry['value_'+field_type]
             
         if field_id not in summary[experiment_id]['fields']:
-            summary[experiment_id]['fields'][field_id] = []
+            summary[experiment_id]['fields'][field_id] = {}
 
-        summary[experiment_id]['fields'][field_id].append(field_value)
+        value_id = entry['value_id']
+        summary[experiment_id]['fields'][field_id][value_id] = field_value
 
     ##generate a list from gathered summary results and add the references to each entry
     result = []

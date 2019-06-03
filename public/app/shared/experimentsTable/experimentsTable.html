@@ -32,8 +32,8 @@
 	  <div data-ng-switch="field.type_column">
 	    <div data-ng-switch-when="value_BOOL">
 	      <div data-ng-if="experiment.fields[field.id]">
-		<i class="material-icons">
-		  {{experiment.fields[field.id]==1? 'check_circle':'not_interested'}}
+		<i class="material-icons" data-ng-repeat="check in experiment.fields[field.id]">
+		  {{check==1? 'check_circle':'not_interested'}}
 		</i>
 	      </div>
 	    </div>
@@ -46,7 +46,9 @@
 		</ul>
 	      </div>
 	      <div data-ng-if="!field.link">
-		{{experiment.fields[field.id].join('; ')}}
+		<div data-ng-repeat="value in experiment.fields[field.id]">
+		  {{value}}
+		</div>
 	      </div>
 	    </div>
 	    <div data-ng-switch-default>

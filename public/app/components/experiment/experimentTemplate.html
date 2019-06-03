@@ -13,8 +13,8 @@
 	  <td>
 	    <div data-ng-switch="field.type_column">
 	      <div data-ng-switch-when="value_BOOL">
-		<i class="material-icons">
-		  {{exp.fields[field.id]==1? 'check_circle':'not_interested'}}
+		<i class="material-icons" data-ng-repeat="check in exp.fields[field.id]">
+		  {{check==1? 'check_circle':'not_interested'}}
 		</i>
 	      </div>
 	      <div data-ng-switch-when="value_VARCHAR">

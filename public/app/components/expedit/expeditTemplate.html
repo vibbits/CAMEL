@@ -34,7 +34,10 @@
 	  </div>
 	  <div class="form-group" data-ng-switch-when="value_TEXT">
 	    <label for="{{field.id}}">{{field.title}}</label>
-	    <textarea id="{{field.id}}" class="form-control" data-ng-model="exp.fields[field.id][0]"></textarea>
+	    <textarea id="{{field.id}}" class="form-control"
+		      data-ng-model="field_value"
+		      data-ng-repeat="field_value in exp.fields[field.id]">
+	    </textarea>
 	    <small class="form-text text-muted">{{field.description}}</small>
 	  </div>
 	  <div class="form-group" data-ng-switch-when="value_INT">
@@ -49,7 +52,8 @@
 	    <input type="checkbox" class="form-check-input"
 		   id="{{field.id}}"
 		   data-ng-true-value="1" data-ng-false-value="0"
-		   data-ng-model="exp.fields[field.id]">
+		   data-ng-model="field_value"
+		   data-ng-repeat="field_value in exp.fields[field.id]">
 	    <label for="{{field.id}}" class="form-check-label">{{field.title}}</label>
 	    <small class="form-text text-muted">{{field.description}}</small>
 	  </div>
