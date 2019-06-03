@@ -92,3 +92,23 @@
     </form>
   </div>
 </div>
+<div class="row" data-ng-if="!auth.isAuthenticated()">
+  <div class="col">
+    <form>
+      <fieldset class="form-group">
+	<legend>Contact</legend>
+	<div class="form-group">
+	  <label for="email">E-mail</label>
+	  <input type="email" id="email" class="form-control" data-ng-model="">
+	  <small class="form-text text-muted">Allow us to contact you.</small>
+	</div>
+	<div class="form-group">
+	  <label for="comments">Comments</label>
+	  <textarea type="email" id="comments" class="form-control" data-ng-model=""></textarea>
+	  <small class="form-text text-muted">Remarks concerning this submission.</small>
+	</div>
+      </fieldset>
+      <input type="button" value="Submit all changes">
+    </form>
+  </div>
+</div>
