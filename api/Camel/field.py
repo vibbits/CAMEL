@@ -71,7 +71,7 @@ class Field(CamelResource):
         self.reqparse.add_argument('weight', type = int, location = 'json')
         self.reqparse.add_argument('group_id', type = int, location = 'json')
 
-        ##Optional GET argumkent
+        ##Optional GET argument
         self.reqparse.add_argument('timeline', type = int, help = 'timeline is an optional flag [0|1]', location= 'args')
         
         super(Field, self).__init__()
