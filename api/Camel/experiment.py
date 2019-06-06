@@ -1,4 +1,4 @@
-from flask_restful import request
+from flask_restful import request, reqparse
 from MySQLdb.cursors import DictCursor
 from Camel import CamelResource
 from Camel.field import FieldList
@@ -304,8 +304,21 @@ class ExperimentList(CamelResource):
         result = self.retrieveExperimentData()
         return result
 
+    def post(self):
+        pass
+
 
 class Experiment(CamelResource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+
+        ##PUT arguments
+        self.reqparse.add_argument('name', type = str, location = 'json')
+        self.reqparse.add_argument('fields', type = dict, location = 'json')
+        self.reqparse.add_argument('references', type = list, location = 'json')
+
+        super(Experiment, self).__init__()
+    
     def get(self, id):
         where_base = ["e.`id` = %(id)s"]
         tokens = {'id': id}
@@ -320,3 +333,80 @@ class Experiment(CamelResource):
         
         return result[0]
     
+
+    def put(self, id):        
+        ## Without authentication, the user can only make
+        ## suggestions, but never overwrite an entry.
+        suggestion = not is_authenticated()
+
+        args = self.reqparse.parse_args()
+
+        cursor = self.db.cursor()
+        if args['name']:
+            name = args['name']
+            sql = "UPDATE `experiments` SET `name` = %(name)s WHERE `id` = %(id)s"
+            cursor.execute(sql, {'id': id, 'name': name})
+                           
+        if args['fields']:
+            field_types = _map_field_types()
+            
+            fields = args['fields']
+            for field_id, values in fields.items():
+                field_type = field_types[int(field_id)]
+                for value_id, value in values.items():
+                    id_parts = value_id.split('_') 
+                    if len(id_parts) == 2 and id_parts[0] == 'new':
+                        ##Insert new value
+                        sql = ("INSERT INTO `experiments_fields` "
+                               "(`experiment_id`, `field_id`, `value_{type_col}`) "
+                               "VALUES (%(exp_id)s, %(field_id)s, %(val)s) ").format(type_col = field_type)
+                        cursor.execute(sql, {'exp_id': id, 'field_id': field_id, 'val': value})
+                    else:
+                        if value is not None:
+                            ##Update existing value
+                            sql = "UPDATE `experiments_fields` SET `value_{type_col}` = %(value)s WHERE `id`=%(val_id)s".format(type_col=field_type)
+                            cursor.execute(sql, {'val_id': value_id, 'value': value})
+                        else:
+                            ##Delete value
+                            sql = "DELETE FROM `experiments_fields` WHERE `id` = %(val_id)s"
+                            cursor.execute(sql, {'val_id': value_id})
+
+        if args['references']:
+            for ref in args['references']:                    
+                if 'action' not in ref:
+                    ##Update existing reference
+                    sql = ("UPDATE `references` SET "
+                           "`title`=%(title)s, `authors`=%(authors)s, "
+                           "`journal`=%(journal)s, `year` = %(year)s, `pages` = %(pages)s, "
+                           "`pubmed_id`=%(pubmed_id)s, `url`=%(url)s "
+                           "WHERE `id` = %(id)s")
+                    cursor.execute(sql, ref)
+                else:
+                    action = ref['action']                    
+                    if action == 'link':
+                        ##Link an existing reference to this experiment
+                        sql = "INSERT INTO `experiments_references` (`experiment_id`, `reference_id`) VALUES (%(exp_id)s, %(ref_id)s)"
+                        cursor.execute(sql, {'exp_id': id, 'ref_id': ref['id']})
+                    elif action == 'new':
+                        ##Add new reference
+                        sql = ("INSERT INTO `references` "
+                               "(`title`, `authors`, `journal`, `year`, `pages`, `pubmed_id`, `url`) "
+                               "VALUES (%(title)s, %(authors)s, %(journal)s, %(year)s, %(pages)s, %(pubmed_id)s, %(url)s) ")
+                        cursor.execute(sql, ref)
+                        ref_id = cursor.lastrowid
+                        sql = "INSERT INTO `experiments_references` (`experiment_id`, `reference_id`) VALUES (%(exp_id)s, %(ref_id)s)"
+                        cursor.execute(sql, {'exp_id': id, 'ref_id': ref_id})
+                    elif action == 'unlink':
+                        ##Delete the link between reference and experiment without remove the reference
+                        ##If no more links exists, the reference will be deleted
+                        ##TODO: check if cascading allows this!
+                        sql = "DELETE FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s and `reference_id` = %(ref_id)s"
+                        cursor.execute(sql, {'exp_id': id, 'ref_id': ref['id']})
+                        ##TODO: remove orphan reference
+                        
+                    
+        
+        self.db.commit()
+        cursor.close()
+        
+        return "UPDATED", 204
