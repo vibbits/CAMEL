@@ -27,7 +27,7 @@ CREATE TABLE `experiments` (
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=707 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9001 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +51,7 @@ CREATE TABLE `experiments_fields` (
   KEY `fk_field_id` (`field_id`),
   CONSTRAINT `fk_experiment_id` FOREIGN KEY (`experiment_id`) REFERENCES `experiments` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_field_id` FOREIGN KEY (`field_id`) REFERENCES `fields` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=112281 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=112285 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,9 +69,9 @@ CREATE TABLE `experiments_references` (
   UNIQUE KEY `uniq_exp_ref` (`experiment_id`,`reference_id`),
   KEY `fk_ref_experiment_id` (`experiment_id`),
   KEY `fk_reference_id` (`reference_id`),
-  CONSTRAINT `fk_ref_experiment_id` FOREIGN KEY (`experiment_id`) REFERENCES `experiments` (`id`),
-  CONSTRAINT `fk_reference_id` FOREIGN KEY (`reference_id`) REFERENCES `references` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5957 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  CONSTRAINT `fk_ref_experiment_id` FOREIGN KEY (`experiment_id`) REFERENCES `experiments` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_reference_id` FOREIGN KEY (`reference_id`) REFERENCES `references` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5963 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,7 +115,7 @@ CREATE TABLE `references` (
   `pubmed_id` int(11) DEFAULT NULL,
   `url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11955 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=90003 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,4 +141,4 @@ CREATE TABLE `sessions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-06-07 15:56:58
+-- Dump completed on 2019-06-07 18:25:59
