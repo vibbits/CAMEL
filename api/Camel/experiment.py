@@ -337,16 +337,23 @@ class Experiment(CamelResource):
     def put(self, id):        
         ## Without authentication, the user can only make
         ## suggestions, but never overwrite an entry.
-        suggestion = not is_authenticated()
+        ##suggestion = not is_authenticated()
 
+        ##TODO implement the suggestion idea
+        if not is_authenticated():
+            return "Admin only", 401
+        
         args = self.reqparse.parse_args()
 
         cursor = self.db.cursor()
+
+        ##Experiment properties
         if args['name']:
             name = args['name']
             sql = "UPDATE `experiments` SET `name` = %(name)s WHERE `id` = %(id)s"
             cursor.execute(sql, {'id': id, 'name': name})
-                           
+
+        ##Fields
         if args['fields']:
             field_types = _map_field_types()
             
@@ -371,9 +378,22 @@ class Experiment(CamelResource):
                             sql = "DELETE FROM `experiments_fields` WHERE `id` = %(val_id)s"
                             cursor.execute(sql, {'val_id': value_id})
 
+        ##References
+        sql = "SELECT `reference_id` FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s"
+        cursor.execute(sql, {'exp_id': id})
+        ref_links = cursor.fetchall()
+        ref_links = [r[0] for r in ref_links]
+        
         if args['references']:
-            for ref in args['references']:                    
-                if 'action' not in ref:
+            for ref in args['references']:
+                if 'id' not in ref:                                        
+                    ##Add new reference
+                    sql = ("INSERT INTO `references` "
+                           "(`title`, `authors`, `journal`, `year`, `pages`, `pubmed_id`, `url`) "
+                           "VALUES (%(title)s, %(authors)s, %(journal)s, %(year)s, %(pages)s, %(pubmed_id)s, %(url)s) ")
+                    cursor.execute(sql, ref)
+                    ref['id'] = cursor.lastrowid
+                else:
                     ##Update existing reference
                     sql = ("UPDATE `references` SET "
                            "`title`=%(title)s, `authors`=%(authors)s, "
@@ -381,31 +401,22 @@ class Experiment(CamelResource):
                            "`pubmed_id`=%(pubmed_id)s, `url`=%(url)s "
                            "WHERE `id` = %(id)s")
                     cursor.execute(sql, ref)
-                else:
-                    action = ref['action']                    
-                    if action == 'link':
-                        ##Link an existing reference to this experiment
-                        sql = "INSERT INTO `experiments_references` (`experiment_id`, `reference_id`) VALUES (%(exp_id)s, %(ref_id)s)"
-                        cursor.execute(sql, {'exp_id': id, 'ref_id': ref['id']})
-                    elif action == 'new':
-                        ##Add new reference
-                        sql = ("INSERT INTO `references` "
-                               "(`title`, `authors`, `journal`, `year`, `pages`, `pubmed_id`, `url`) "
-                               "VALUES (%(title)s, %(authors)s, %(journal)s, %(year)s, %(pages)s, %(pubmed_id)s, %(url)s) ")
-                        cursor.execute(sql, ref)
-                        ref_id = cursor.lastrowid
-                        sql = "INSERT INTO `experiments_references` (`experiment_id`, `reference_id`) VALUES (%(exp_id)s, %(ref_id)s)"
-                        cursor.execute(sql, {'exp_id': id, 'ref_id': ref_id})
-                    elif action == 'unlink':
-                        ##Delete the link between reference and experiment without remove the reference
-                        ##If no more links exists, the reference will be deleted
-                        ##TODO: check if cascading allows this!
-                        sql = "DELETE FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s and `reference_id` = %(ref_id)s"
-                        cursor.execute(sql, {'exp_id': id, 'ref_id': ref['id']})
-                        ##TODO: remove orphan reference
-                        
                     
-        
+
+                ##insert a link between experiment and reference if it's not there yet.
+                if ref['id'] not in ref_links:
+                    sql = "INSERT INTO `experiments_references` (`experiment_id`, `reference_id`) VALUES (%(exp_id)s, %(ref_id)s)"
+                    cursor.execute(sql, {'exp_id': id, 'ref_id': ref['id']})
+                else:
+                    ref_links.remove(ref['id'])
+
+
+                ##Remove links in the database that are not mentioned in this request anymore
+                ##Explicit reference removal could be done with a dedicated Reference API
+                for ref_id in ref_links:
+                    sql = "DELETE FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s and `reference_id` = %(ref_id)s"
+                    cursor.execute(sql, {'exp_id': id, 'ref_id': ref_id})
+                
         self.db.commit()
         cursor.close()
         
