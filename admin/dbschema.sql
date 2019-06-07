@@ -66,6 +66,7 @@ CREATE TABLE `experiments_references` (
   `experiment_id` int(11) DEFAULT NULL,
   `reference_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_exp_ref` (`experiment_id`,`reference_id`),
   KEY `fk_ref_experiment_id` (`experiment_id`),
   KEY `fk_reference_id` (`reference_id`),
   CONSTRAINT `fk_ref_experiment_id` FOREIGN KEY (`experiment_id`) REFERENCES `experiments` (`id`),
@@ -140,4 +141,4 @@ CREATE TABLE `sessions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-29 15:21:37
+-- Dump completed on 2019-06-07 15:56:58
