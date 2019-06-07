@@ -421,3 +421,15 @@ class Experiment(CamelResource):
         cursor.close()
         
         return "UPDATED", 204
+
+    def delete(self, id):
+        if not is_authenticated():
+            return "Admin only", 401
+
+        cursor = self.db.cursor()
+        sql = "DELETE FROM `experiments` WHERE `id` = %(id)s"
+        cursor.execute(sql, {'id': id})
+        self.db.commit()
+        cursor.close()
+        
+        return "DELETED", 204
