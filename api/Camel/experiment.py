@@ -121,6 +121,16 @@ def _map_field_types():
 
             
 class ExperimentList(CamelResource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+
+        ##POST arguments
+        self.reqparse.add_argument('name', required = True, type = str, location = 'json')
+        self.reqparse.add_argument('fields', type = dict, location = 'json')
+        self.reqparse.add_argument('references', type = list, location = 'json')
+
+        super(ExperimentList, self).__init__()
+    
     def _add_field_filters(self, field_id, field_type, value):
         if field_type == 'VARCHAR' or field_type == 'TEXT':
             filter_query = ("(ef_filter.`field_id` = %(FieldID_{field_id})s AND ef_filter.`value_{field_type}` "
@@ -305,7 +315,10 @@ class ExperimentList(CamelResource):
         return result
 
     def post(self):
-        pass
+        if not is_authenticated():
+            return "Admin only", 401
+
+        return "POSTED", 204
 
 
 class Experiment(CamelResource):
