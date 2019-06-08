@@ -343,8 +343,11 @@ class Experiment(CamelResource):
         c.close()
         field_types = _map_field_types()
         result = _compact(res, field_types, self.db)
-        
-        return result[0]
+
+        if len(result) > 0:
+            return result[0]
+        else:
+            return {}
     
 
     def put(self, id):        
