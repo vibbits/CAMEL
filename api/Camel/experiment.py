@@ -318,7 +318,18 @@ class ExperimentList(CamelResource):
         if not is_authenticated():
             return "Admin only", 401
 
-        return "POSTED", 204
+        args = self.reqparse.parse_args()
+
+        exp_name = args['name']
+
+        sql = "INSERT INTO `experiments` (`name`) VALUES (%(exp_name)s)"
+        cursor = self.db.cursor()
+        cursor.execute(sql, {'exp_name': exp_name})
+        exp_id = cursor.lastrowid
+        self.db.commit()
+        cursor.close()
+        
+        return "POSTED {}".format(exp_id), 204
 
 
 class Experiment(CamelResource):
