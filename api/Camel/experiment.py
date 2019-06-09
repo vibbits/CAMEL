@@ -119,6 +119,70 @@ def _map_field_types():
     return field_types
 
 
+def _edit_fields(exp_id, fields, field_types, db):
+    cursor = db.cursor()
+    for field_id, values in fields.items():
+        field_type = field_types[int(field_id)]
+        for value_id, value in values.items():
+            id_parts = value_id.split('_') 
+            if len(id_parts) == 2 and id_parts[0] == 'new':
+                ##Insert new value
+                sql = ("INSERT INTO `experiments_fields` "
+                       "(`experiment_id`, `field_id`, `value_{type_col}`) "
+                       "VALUES (%(exp_id)s, %(field_id)s, %(val)s) ").format(type_col = field_type)
+                cursor.execute(sql, {'exp_id': exp_id, 'field_id': field_id, 'val': value})
+            else:
+                if value is not None:
+                    ##Update existing value
+                    sql = "UPDATE `experiments_fields` SET `value_{type_col}` = %(value)s WHERE `id`=%(val_id)s".format(type_col=field_type)
+                    cursor.execute(sql, {'val_id': value_id, 'value': value})
+                else:
+                    ##Delete value
+                    sql = "DELETE FROM `experiments_fields` WHERE `id` = %(val_id)s"
+                    cursor.execute(sql, {'val_id': value_id})
+    cursor.close()
+
+def _edit_references(exp_id, refs, db):
+    cursor = db.cursor
+    
+    sql = "SELECT `reference_id` FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s"
+    cursor.execute(sql, {'exp_id': exp_id})
+    ref_links = cursor.fetchall()
+    ref_links = [r[0] for r in ref_links]
+
+    for ref in args['references']:
+        if 'id' not in ref:                                        
+            ##Add new reference
+            sql = ("INSERT INTO `references` "
+                   "(`title`, `authors`, `journal`, `year`, `pages`, `pubmed_id`, `url`) "
+                   "VALUES (%(title)s, %(authors)s, %(journal)s, %(year)s, %(pages)s, %(pubmed_id)s, %(url)s) ")
+            cursor.execute(sql, ref)
+            ref['id'] = cursor.lastrowid
+        else:
+            ##Update existing reference
+            sql = ("UPDATE `references` SET "
+                   "`title`=%(title)s, `authors`=%(authors)s, "
+                   "`journal`=%(journal)s, `year` = %(year)s, `pages` = %(pages)s, "
+                   "`pubmed_id`=%(pubmed_id)s, `url`=%(url)s "
+                   "WHERE `id` = %(id)s")
+            cursor.execute(sql, ref)
+
+
+        ##insert a link between experiment and reference if it's not there yet.
+        if ref['id'] not in ref_links:
+            sql = "INSERT INTO `experiments_references` (`experiment_id`, `reference_id`) VALUES (%(exp_id)s, %(ref_id)s)"
+            cursor.execute(sql, {'exp_id': id, 'ref_id': ref['id']})
+        else:
+            ref_links.remove(ref['id'])
+
+        ##Remove links in the database that are not mentioned in this request anymore
+        ##Explicit reference removal could be done with a dedicated Reference API
+        for ref_id in ref_links:
+            sql = "DELETE FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s and `reference_id` = %(ref_id)s"
+            cursor.execute(sql, {'exp_id': id, 'ref_id': ref_id})
+    
+    cursor.close()
+
             
 class ExperimentList(CamelResource):
     def __init__(self):
@@ -322,12 +386,23 @@ class ExperimentList(CamelResource):
 
         exp_name = args['name']
 
+        ##Experiment
         sql = "INSERT INTO `experiments` (`name`) VALUES (%(exp_name)s)"
         cursor = self.db.cursor()
         cursor.execute(sql, {'exp_name': exp_name})
         exp_id = cursor.lastrowid
-        self.db.commit()
         cursor.close()
+
+        ##Fields
+        if args['fields']:
+            field_types = _map_field_types()
+            _edit_fields(exp_id, args['fields'], field_types, self.db)
+                    
+        ##References
+        if args['references']:
+            _edit_references(exp_id, args['references'], db)
+                            
+        self.db.commit()
         
         return "POSTED {}".format(exp_id), 204
 
@@ -366,86 +441,31 @@ class Experiment(CamelResource):
         ## suggestions, but never overwrite an entry.
         ##suggestion = not is_authenticated()
 
-        ##TODO implement the suggestion idea
+        ##TODO implement the suggestion idea        
         if not is_authenticated():
             return "Admin only", 401
+
         
         args = self.reqparse.parse_args()
 
-        cursor = self.db.cursor()
-
         ##Experiment properties
         if args['name']:
+            cursor = self.db.cursor()
             name = args['name']
             sql = "UPDATE `experiments` SET `name` = %(name)s WHERE `id` = %(id)s"
             cursor.execute(sql, {'id': id, 'name': name})
+            cursor.close()
 
         ##Fields
         if args['fields']:
             field_types = _map_field_types()
-            
-            fields = args['fields']
-            for field_id, values in fields.items():
-                field_type = field_types[int(field_id)]
-                for value_id, value in values.items():
-                    id_parts = value_id.split('_') 
-                    if len(id_parts) == 2 and id_parts[0] == 'new':
-                        ##Insert new value
-                        sql = ("INSERT INTO `experiments_fields` "
-                               "(`experiment_id`, `field_id`, `value_{type_col}`) "
-                               "VALUES (%(exp_id)s, %(field_id)s, %(val)s) ").format(type_col = field_type)
-                        cursor.execute(sql, {'exp_id': id, 'field_id': field_id, 'val': value})
-                    else:
-                        if value is not None:
-                            ##Update existing value
-                            sql = "UPDATE `experiments_fields` SET `value_{type_col}` = %(value)s WHERE `id`=%(val_id)s".format(type_col=field_type)
-                            cursor.execute(sql, {'val_id': value_id, 'value': value})
-                        else:
-                            ##Delete value
-                            sql = "DELETE FROM `experiments_fields` WHERE `id` = %(val_id)s"
-                            cursor.execute(sql, {'val_id': value_id})
-
-        ##References
-        sql = "SELECT `reference_id` FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s"
-        cursor.execute(sql, {'exp_id': id})
-        ref_links = cursor.fetchall()
-        ref_links = [r[0] for r in ref_links]
-        
-        if args['references']:
-            for ref in args['references']:
-                if 'id' not in ref:                                        
-                    ##Add new reference
-                    sql = ("INSERT INTO `references` "
-                           "(`title`, `authors`, `journal`, `year`, `pages`, `pubmed_id`, `url`) "
-                           "VALUES (%(title)s, %(authors)s, %(journal)s, %(year)s, %(pages)s, %(pubmed_id)s, %(url)s) ")
-                    cursor.execute(sql, ref)
-                    ref['id'] = cursor.lastrowid
-                else:
-                    ##Update existing reference
-                    sql = ("UPDATE `references` SET "
-                           "`title`=%(title)s, `authors`=%(authors)s, "
-                           "`journal`=%(journal)s, `year` = %(year)s, `pages` = %(pages)s, "
-                           "`pubmed_id`=%(pubmed_id)s, `url`=%(url)s "
-                           "WHERE `id` = %(id)s")
-                    cursor.execute(sql, ref)
+            _edit_fields(id, args['fields'], field_types, self.db)
                     
-
-                ##insert a link between experiment and reference if it's not there yet.
-                if ref['id'] not in ref_links:
-                    sql = "INSERT INTO `experiments_references` (`experiment_id`, `reference_id`) VALUES (%(exp_id)s, %(ref_id)s)"
-                    cursor.execute(sql, {'exp_id': id, 'ref_id': ref['id']})
-                else:
-                    ref_links.remove(ref['id'])
-
-
-                ##Remove links in the database that are not mentioned in this request anymore
-                ##Explicit reference removal could be done with a dedicated Reference API
-                for ref_id in ref_links:
-                    sql = "DELETE FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s and `reference_id` = %(ref_id)s"
-                    cursor.execute(sql, {'exp_id': id, 'ref_id': ref_id})
-                
+        ##References
+        if args['references']:
+            _edit_references(id, args['references'], db)
+                            
         self.db.commit()
-        cursor.close()
         
         return "UPDATED", 204
 
