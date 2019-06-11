@@ -403,8 +403,10 @@ class ExperimentList(CamelResource):
             _edit_references(exp_id, args['references'], db)
                             
         self.db.commit()
-        
-        return "POSTED {}".format(exp_id), 204
+
+        created = request.json
+        created['id'] = exp_id
+        return created, 201
 
 
 class Experiment(CamelResource):

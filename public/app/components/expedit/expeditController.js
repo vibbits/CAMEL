@@ -55,11 +55,15 @@ angular.module("CAMEL")
 	};
 
 	ctrl.submit_changes = function(){
-	    console.log($scope.exp);
 	    if (ctrl.new_experiment){
-	    	$scope.exp.$save();
+	    	$scope.exp.$save().then(function(){
+		    $location.path('/experiment/'+$scope.exp.id);
+		});
 	    } else {
-	    	$scope.exp.$update();
+	    	$scope.exp.$update().then(function(){
+		    $location.path('/experiment/'+$scope.exp.id);
+		});
 	    }
-	};		
+
+	};
     });
