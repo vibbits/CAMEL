@@ -67,9 +67,17 @@ angular.module("CAMEL")
 
 	};
 
+	ctrl.cancel = function(){
+	    if (ctrl.new_experiment){
+		$location.path('/experiments');
+	    } else {
+		$location.path('/experiment/'+$scope.exp.id);
+	    }
+	};
+	
 	ctrl.delete = function(){
 	    $scope.exp.$delete().then(function(){
 		$location.path('/experiments');
 	    });
-	}
+	};
     });
