@@ -150,8 +150,8 @@ def _edit_references(exp_id, refs, db):
     ref_links = cursor.fetchall()
     ref_links = [r[0] for r in ref_links]
 
-    for ref in refs:
-        if 'id' not in ref:                                        
+    for ref in refs:        
+        if str(ref['id'])[:4] == 'new_':                                    
             ##Add new reference
             sql = ("INSERT INTO `references` "
                    "(`title`, `authors`, `journal`, `year`, `pages`, `pubmed_id`, `url`) "
@@ -171,7 +171,7 @@ def _edit_references(exp_id, refs, db):
         ##insert a link between experiment and reference if it's not there yet.
         if ref['id'] not in ref_links:
             sql = "INSERT INTO `experiments_references` (`experiment_id`, `reference_id`) VALUES (%(exp_id)s, %(ref_id)s)"
-            cursor.execute(sql, {'exp_id': id, 'ref_id': ref['id']})
+            cursor.execute(sql, {'exp_id': exp_id, 'ref_id': ref['id']})
         else:
             ref_links.remove(ref['id'])
 
@@ -179,7 +179,7 @@ def _edit_references(exp_id, refs, db):
         ##Explicit reference removal could be done with a dedicated Reference API
         for ref_id in ref_links:
             sql = "DELETE FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s and `reference_id` = %(ref_id)s"
-            cursor.execute(sql, {'exp_id': id, 'ref_id': ref_id})
+            cursor.execute(sql, {'exp_id': exp_id, 'ref_id': ref_id})
     
     cursor.close()
 
