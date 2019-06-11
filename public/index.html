@@ -39,15 +39,22 @@
     </header>
     <data-ng-view></data-ng-view>
     <footer class="row mt-3 mb-5">
-      <div class="pointer text-right col" data-ng-if="!auth.isAuthenticated()" data-ng-click='login()'>Admin Login (KU Leuven)</div>
-      <div class="col text-right" data-ng-if="auth.isAuthenticated()">
-	<div class="pointer"  data-ng-click='logout()'>
-	  Log out
-	</div>
-	<div>
-	  <a data-ng-href="#!/fields">Field editor</a>
-	</div>
-      </div>						
+      <div class="pointer text-right col" data-ng-if="!auth.isAuthenticated()" data-ng-click='login()'>
+	Admin Login (KU Leuven)
+      </div>
+      <nav class="col text-right" data-ng-if="auth.isAuthenticated()">
+	<ul>
+	  <li class="pointer" data-ng-click='logout()'>
+	    Log out
+	  </li>
+	  <li>
+	    <a data-ng-href="#!/fields">Field editor</a>
+	  </li>
+	  <li>
+	    <a data-ng-href="#!/experiment/add">Add new experiment</a>
+	  </li>
+	</ul>
+      </nav>						
     </footer>
   </div>
 </body>
