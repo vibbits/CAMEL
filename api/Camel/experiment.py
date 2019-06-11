@@ -143,14 +143,14 @@ def _edit_fields(exp_id, fields, field_types, db):
     cursor.close()
 
 def _edit_references(exp_id, refs, db):
-    cursor = db.cursor
+    cursor = db.cursor()
     
     sql = "SELECT `reference_id` FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s"
     cursor.execute(sql, {'exp_id': exp_id})
     ref_links = cursor.fetchall()
     ref_links = [r[0] for r in ref_links]
 
-    for ref in args['references']:
+    for ref in refs:
         if 'id' not in ref:                                        
             ##Add new reference
             sql = ("INSERT INTO `references` "
@@ -465,7 +465,7 @@ class Experiment(CamelResource):
                     
         ##References
         if args['references']:
-            _edit_references(id, args['references'], db)
+            _edit_references(id, args['references'], self.db)
                             
         self.db.commit()
         
