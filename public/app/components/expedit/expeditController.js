@@ -54,6 +54,20 @@ angular.module("CAMEL")
 	    }
 	};
 
+	ctrl.add_reference = function(){
+	    var new_ref = {
+		'id': 'new_'+ctrl.new_incr++,
+		'title': '',
+		'authors': '',
+		'journal': '',
+		'year': '',
+		'pages': '',
+		'pubmed_id': '',
+		'url': ''		
+	    };
+	    $scope.exp.references.push(new_ref);
+	}
+
 	ctrl.submit_changes = function(){
 	    if (ctrl.new_experiment){
 	    	$scope.exp.$save().then(function(){
