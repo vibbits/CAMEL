@@ -433,7 +433,7 @@ class Experiment(CamelResource):
         if len(result) > 0:
             return result[0]
         else:
-            return {}
+            return 'Unknown Experiment ID', 400
     
 
     def put(self, id):        
