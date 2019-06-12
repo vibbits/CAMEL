@@ -90,6 +90,19 @@
 <div class="row">
   <div class="col">
     <h5>References <i class="material-icons align-middle pointer" data-ng-click="expedit.add_reference()">add_circle</i></h5>
+
+    <form>
+      <label for="ref-select">Add existing reference: </label>
+      <select id="ref-select" data-ng-model="ref_selected_index">
+	<option
+	  data-ng-repeat="ref in references"
+	  value="{{$index}}">
+	  {{ref.year}} - {{ref.title}}
+	</option>
+      </select>
+      <i class="material-icons align-middle pointer" data-ng-click="expedit.load_reference()">add_circle</i>
+    </form>
+    
     <form>
       <fieldset class="form-group" data-ng-repeat="ref in exp.references">
 	<div class="form-group">

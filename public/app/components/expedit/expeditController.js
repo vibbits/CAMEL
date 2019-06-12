@@ -1,8 +1,11 @@
 angular.module("CAMEL")
-    .controller('ExpeditController', function($scope, $location, $routeParams, Experiment, Field){
+    .controller('ExpeditController', function($scope, $location, $routeParams,
+					      Experiment, Field, Reference){
 	var ctrl = this;
 	ctrl.fieldsLoaded = false;
+	ctrl.refsLoaded = false;
 	ctrl.experimentLoaded = false;
+	
 	ctrl.new_experiment = true;
 	
 	ctrl.new_incr = 0;
@@ -20,6 +23,10 @@ angular.module("CAMEL")
 		    ctrl.type_map[field.id] = field.type_column.split('_')[1];
 		}
 	    }
+	});
+
+	$scope.references = Reference.query(function(){
+	    ctrl.refsLoaded = true;
 	});
 
 	if ($location.$$path.startsWith('/experiment/edit/')
@@ -54,6 +61,21 @@ angular.module("CAMEL")
 	    }
 	};
 
+	ctrl.load_reference = function(){
+	    var ref_index = $scope.ref_selected_index;
+	    var add_ref = $scope.references[ref_index];
+	    var already_loaded = false;
+	    for (r in $scope.exp.references){
+		var ref = $scope.exp.references[r];		
+		if (ref.hasOwnProperty('id') && ref['id'] == add_ref['id']){
+		    already_loaded = true;
+		}
+	    }
+	    if (!already_loaded){
+		$scope.exp.references.push(add_ref);
+	    }
+	}
+	
 	ctrl.add_reference = function(){
 	    var new_ref = {
 		'id': 'new_'+ctrl.new_incr++,
