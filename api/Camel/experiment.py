@@ -182,11 +182,11 @@ def _edit_references(exp_id, refs, db):
         else:
             ref_links.remove(ref['id'])
 
-        ##Remove links in the database that are not mentioned in this request anymore
-        ##Explicit reference removal could be done with a dedicated Reference API
-        for ref_id in ref_links:
-            sql = "DELETE FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s and `reference_id` = %(ref_id)s"
-            cursor.execute(sql, {'exp_id': exp_id, 'ref_id': ref_id})
+    ##Remove links in the database that are not mentioned in this request anymore
+    ##Explicit reference removal could be done with a dedicated Reference API 
+   for ref_id in ref_links:
+        sql = "DELETE FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s and `reference_id` = %(ref_id)s"
+        cursor.execute(sql, {'exp_id': exp_id, 'ref_id': ref_id})
     
     cursor.close()
 
