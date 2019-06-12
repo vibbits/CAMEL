@@ -371,7 +371,7 @@ class ExperimentList(CamelResource):
             for field in fields:
                 field_id = field['id']
                 if field_id in exp['fields']:
-                    field_values = exp['fields'][field_id]                
+                    field_values = list(exp['fields'][field_id].values())
                     row.append('\n'.join([str(f) if f is not None else '' for f in field_values]))
                 else:
                     row.append('')                    
