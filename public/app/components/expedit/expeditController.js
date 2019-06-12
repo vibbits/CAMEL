@@ -90,6 +90,28 @@ angular.module("CAMEL")
 	    $scope.exp.references.push(new_ref);
 	}
 
+	ctrl.remove_reference = function(){
+	    //TODO
+	};
+	
+	ctrl.remove_value = function(fieldId, valueId){
+	    var field = $scope.exp.fields[fieldId];
+	    delete field[valueId];
+
+	    //count remaining value pairs
+	    var count = 0;
+	    for (var k in field){
+		if (field.hasOwnProperty(k)){
+		    count++;
+		}
+	    }	    
+	    //remove 'empty' field
+	    if (count === 0){		
+		delete $scope.exp.fields[fieldId];
+	    }
+	}
+
+	
 	ctrl.submit_changes = function(){
 	    if (ctrl.new_experiment){
 	    	$scope.exp.$save().then(function(){
