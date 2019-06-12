@@ -120,6 +120,10 @@ def _map_field_types():
 
 
 def _edit_fields(exp_id, fields, field_types, db):
+    '''
+    Loop over the submitted field dictionary (field id => field data) 
+    and insert/update/delete as needed.
+    '''
     cursor = db.cursor()
     for field_id, values in fields.items():
         field_type = field_types[int(field_id)]
@@ -143,6 +147,9 @@ def _edit_fields(exp_id, fields, field_types, db):
     cursor.close()
 
 def _edit_references(exp_id, refs, db):
+    '''
+    Loop over the list of submitted references and insert/update/delete as needed. 
+    '''
     cursor = db.cursor()
     
     sql = "SELECT `reference_id` FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s"
