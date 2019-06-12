@@ -136,11 +136,11 @@ def _edit_fields(exp_id, fields, field_types, db):
                        "VALUES (%(exp_id)s, %(field_id)s, %(val)s) ").format(type_col = field_type)
                 cursor.execute(sql, {'exp_id': exp_id, 'field_id': field_id, 'val': value})
             else:
-                if value is not None:
+                if type(value) is not dict:
                     ##Update existing value
                     sql = "UPDATE `experiments_fields` SET `value_{type_col}` = %(value)s WHERE `id`=%(val_id)s".format(type_col=field_type)
                     cursor.execute(sql, {'val_id': value_id, 'value': value})
-                else:
+                elif 'action' in value and value['action'] == 'delete':
                     ##Delete value
                     sql = "DELETE FROM `experiments_fields` WHERE `id` = %(val_id)s"
                     cursor.execute(sql, {'val_id': value_id})

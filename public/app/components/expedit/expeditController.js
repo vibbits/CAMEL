@@ -93,11 +93,20 @@ angular.module("CAMEL")
 	ctrl.remove_reference = function(){
 	    //TODO
 	};
+
+	ctrl.isValue = function(value){
+	    return typeof(value) != 'object';
+	}
 	
 	ctrl.remove_value = function(fieldId, valueId){
 	    var field = $scope.exp.fields[fieldId];
-	    delete field[valueId];
-
+	    if (valueId.startsWith("new_")){
+		//delete newly created values
+		delete field[valueId];
+	    } else {
+		//mark existing values as to be deleted
+		field[valueId] = {'action': 'delete'};
+	    }
 	    //count remaining value pairs
 	    var count = 0;
 	    for (var k in field){

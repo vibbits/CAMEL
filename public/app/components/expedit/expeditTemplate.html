@@ -43,7 +43,7 @@
 	<div data-ng-switch="field.type_column">
 	  <div class="form-group" data-ng-switch-when="value_VARCHAR">
 	    <label for="{{field.id}}">{{field.title}}</label>
-	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]">
+	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
 	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
 		<span aria-hidden="true">&times;</span>
 	      </button>
@@ -55,7 +55,7 @@
 	  </div>
 	  <div class="form-group" data-ng-switch-when="value_TEXT">
 	    <label for="{{field.id}}">{{field.title}}</label>
-	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]">
+	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
 	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
 		<span aria-hidden="true">&times;</span>
 	      </button>
@@ -67,7 +67,7 @@
 	  </div>
 	  <div class="form-group" data-ng-switch-when="value_INT">
 	    <label for="{{field.id}}">{{field.title}}</label>
-	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]">
+	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
 	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
 		<span aria-hidden="true">&times;</span>
 	      </button>
@@ -78,7 +78,7 @@
 	    <small class="form-text text-muted">{{field.description}}</small>
 	  </div>
 	  <div class="form-check" data-ng-switch-when="value_BOOL">
-	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]">
+	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
 	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
 		<span aria-hidden="true">&times;</span>
 	      </button>
@@ -92,7 +92,7 @@
 	  </div>
 	  <div class="form-group" data-ng-switch-when="value_DOUBLE">
 	    <label for="{{field.id}}">{{field.title}}</label>
-	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]">
+	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
 	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
 		<span aria-hidden="true">&times;</span>
 	      </button>
