@@ -8,4 +8,7 @@ angular.module("CAMEL")
     return $resource("api/field/:id", {id: '@id'}, {
 	update: {method: 'PUT'}
     });
+})
+.factory("Reference", function ReferenceFactory($resource) {
+    return $resource("api/reference/:id", {id: '@id'});
 });
