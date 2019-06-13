@@ -156,13 +156,13 @@ legend
     margin-left: 0px;
 }
 
-footer div.well
+footer div.card
 {
     color: #fff;
     background-color: #1b2944 !important;
 }
 
-header.well
+header.card
 {
     color: #fff;
     background-color: #1b2944 !important;
@@ -229,9 +229,10 @@ a .material-icons
     color: #ff681e !important;
 }
 
-footer .well a
+/*hide admin link*/
+footer .card a
 {
-    color: #1b2944;
+    color: #1b2944 !important;
 }
 
 nav
@@ -300,11 +301,13 @@ h5
     margin-top: -5px !important;
 }
 
-div.well
+/*
+div.card
 {
     color: #3abbba;
     background-color: #1b2944 !important;
 }
+*/
 
 .card-header {
     padding-top: 15px !important;

@@ -36,25 +36,53 @@
       <a href="#">
 	<img src="assets/img/BannerCamel.png" class="img-fluid" alt="banner"/>
       </a>
+
+      
+      <nav class="navbar navbar-inverse navbar-static-top" data-ng-if="auth.isAuthenticated()">
+	<div class="navbar-header">	
+	  <ul class="nav navbar-nav">
+	    <li><button class="btn btn-primary" data-ng-class="{'btn-raised active': true}" data-ng-click="logout()">Log out</button></li>
+	    <li>
+	      <a data-ng-href="#!/fields">Field editor</a>
+	    </li>
+	    <li>
+	      <a data-ng-href="#!/experiment/add">Add new experiment</a>
+	    </li>
+	  </ul>
+	</div>
+      </nav>
+
     </header>
     <data-ng-view></data-ng-view>
-    <footer class="row mt-3 mb-5">
-      <div class="pointer text-right col" data-ng-if="!auth.isAuthenticated()" data-ng-click='login()'>
-	Admin Login (KU Leuven)
-      </div>
-      <nav class="col text-right" data-ng-if="auth.isAuthenticated()">
-	<ul>
-	  <li class="pointer" data-ng-click='logout()'>
-	    Log out
-	  </li>
-	  <li>
-	    <a data-ng-href="#!/fields">Field editor</a>
-	  </li>
-	  <li>
-	    <a data-ng-href="#!/experiment/add">Add new experiment</a>
-	  </li>
-	</ul>
-      </nav>						
+    <footer>      
+	<div class="row card mt-5 mb-3">
+	  <div class="card-body">
+	    <div class="row h-70">
+              <div class="col-sm-6 col-md-2 text-center">
+		<a href="http://www.ugent.be" target="_blank"><img src="assets/img/ugent.png" alt="UGent"></a>
+              </div>
+              <div class="col-sm-6 col-md-2 text-center my-auto">
+		<a href="http://www.vib.be" target="_blank">
+		  <img src="assets/img/vib_notag_neg_rgb.jpg" alt="VIB"/>
+		</a>
+              </div>
+              <div class="col-sm-12 col-md-3 col-xl-4 text-center my-auto">
+		&copy; VIB Bioinformatics Core 2019<br />
+		<a data-ng-click="login()" class="pointer"><b>Admin</b></a><br />
+              </div>
+              <div class="col-sm-6 col-md-2 text-center my-auto">
+		<a href="http://www.vib.be/en/research/departments/Pages/VIB-KU-Leuven-Center-for-Microbiolgy.aspx" target="_blank">
+		  <img src="assets/img/vib_rf_microbiology_rgb_neg.png" alt="VIB-KU Leuven Center for Microbiology">
+		</a>
+              </div>
+              <div class="col-sm-6 col-md-2 text-center my-auto">
+		<a href="http://www.bits.vib.be" target="_blank">
+		  <img src="assets/img/bits.png" alt="VIB Bioinformatics Core">
+		</a>
+              </div>
+	    </div>
+	  </div>
+	</div>
     </footer>
   </div>
 </body>
