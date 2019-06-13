@@ -94,8 +94,9 @@ angular.module("CAMEL")
 	    $scope.exp.references.push(new_ref);
 	}
 
-	ctrl.remove_reference = function(){
-	    //TODO
+	ctrl.remove_reference = function(ref){
+	    var ref_index = $scope.exp.references.indexOf(ref);
+	    $scope.exp.references.splice(ref_index, 1);	    
 	};
 
 	ctrl.isValue = function(value){

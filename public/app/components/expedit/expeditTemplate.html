@@ -126,10 +126,17 @@
     <form>
       <fieldset class="form-group row mt-3 card" data-ng-repeat="ref in exp.references">
 	<div class="card-body">
+	  <div class="form-row">
+	    <div class="col">	  
+	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_reference(ref)">
+		<span aria-hidden="true">&times;</span>
+	      </button>
+	    </div>
+	  </div>
 	  <div class="form-group">
 	    <label for="title_{{ref.id}}">Title</label>
 	    <input type="text" id="title_{{ref.id}}" class="form-control" data-ng-model="ref.title">
-	  </div>      
+	  </div>	  
 	  <div class="form-group">
 	    <label for="authors_{{ref.id}}">Authors</label>
 	    <input type="text" id="authors_{{ref.id}}" class="form-control" data-ng-model="ref.authors">
