@@ -68,6 +68,8 @@ angular.module("CAMEL")
 	};
 
 	ctrl.load_reference = function(){
+	    if (!$scope.ref_selected_index) return;
+	    
 	    var ref_index = $scope.ref_selected_index;
 	    var add_ref = $scope.references[ref_index];
 	    var already_loaded = false;
