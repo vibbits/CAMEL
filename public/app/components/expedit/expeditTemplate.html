@@ -124,40 +124,42 @@
     </form>
     
     <form>
-      <fieldset class="form-group" data-ng-repeat="ref in exp.references">
-	<div class="form-group">
-	  <label for="title_{{ref.id}}">Title</label>
-	  <input type="text" id="title_{{ref.id}}" class="form-control" data-ng-model="ref.title">
-	</div>      
-	<div class="form-group">
-	  <label for="authors_{{ref.id}}">Authors</label>
-	  <input type="text" id="authors_{{ref.id}}" class="form-control" data-ng-model="ref.authors">
-	  <small class="form-text text-muted">Comma-separated list of authors (Lastname FN, ...)</small>
+      <fieldset class="form-group row mt-3 card" data-ng-repeat="ref in exp.references">
+	<div class="card-body">
+	  <div class="form-group">
+	    <label for="title_{{ref.id}}">Title</label>
+	    <input type="text" id="title_{{ref.id}}" class="form-control" data-ng-model="ref.title">
+	  </div>      
+	  <div class="form-group">
+	    <label for="authors_{{ref.id}}">Authors</label>
+	    <input type="text" id="authors_{{ref.id}}" class="form-control" data-ng-model="ref.authors">
+	    <small class="form-text text-muted">Comma-separated list of authors (Lastname FN, ...)</small>
+	  </div>
+	  <div class="form-row">
+	    <div class="col-md form-group">
+	      <label for="year_{{ref.id}}">Year</label>
+	      <input type="text" id="year_{{ref.id}}" class="form-control" data-ng-model="ref.year">
+	    </div>
+	    <div class="col-md form-group">
+	      <label for="journal_{{ref.id}}">Journal</label>
+	      <input type="text" id="journal_{{ref.id}}" class="form-control" data-ng-model="ref.journal">
+	    </div>
+	    <div class="col-md form-group">
+	      <label for="pages_{{ref.id}}">Pages</label>
+	      <input type="text" id="pages_{{ref.id}}" class="form-control" data-ng-model="ref.pages">
+	      <small class="form-text text-muted">Free text field representing volume, pages,...</small>
+	    </div>
+	  </div>	
+	  <div class="form-group">
+	    <label for="pubmed_{{ref.id}}">PubMed ID</label>
+	    <input type="text" id="pubmed_{{ref.id}}" class="form-control" data-ng-model="ref.pubmed_id">
+	  </div>
+	  <div class="form-group">
+	    <label for="url_{{ref.id}}">URL</label>
+	    <input type="text" id="url_{{ref.id}}" class="form-control" data-ng-model="ref.url">
+	    <small class="form-text text-muted">DOI- or direct link to paper</small>
+	  </div>
 	</div>
-	<div class="form-row">
-	  <div class="col-md form-group">
-	    <label for="year_{{ref.id}}">Year</label>
-	    <input type="text" id="year_{{ref.id}}" class="form-control" data-ng-model="ref.year">
-	  </div>
-	  <div class="col-md form-group">
-	    <label for="journal_{{ref.id}}">Journal</label>
-	    <input type="text" id="journal_{{ref.id}}" class="form-control" data-ng-model="ref.journal">
-	  </div>
-	  <div class="col-md form-group">
-	    <label for="pages_{{ref.id}}">Pages</label>
-	    <input type="text" id="pages_{{ref.id}}" class="form-control" data-ng-model="ref.pages">
-	    <small class="form-text text-muted">Free text field representing volume, pages,...</small>
-	  </div>
-	</div>	
-	<div class="form-group">
-	  <label for="pubmed_{{ref.id}}">PubMed ID</label>
-	  <input type="text" id="pubmed_{{ref.id}}" class="form-control" data-ng-model="ref.pubmed_id">
-	</div>
-	<div class="form-group">
-	  <label for="url_{{ref.id}}">URL</label>
-	  <input type="text" id="url_{{ref.id}}" class="form-control" data-ng-model="ref.url">
-	  <small class="form-text text-muted">DOI- or direct link to paper</small>
-	</div>    
       </fieldset>
     </form>
   </div>
