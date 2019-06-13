@@ -151,21 +151,33 @@ def _edit_references(exp_id, refs, db):
     Loop over the list of submitted references and insert/update/delete as needed. 
     '''
     cursor = db.cursor()
-    
+
     sql = "SELECT `reference_id` FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s"
     cursor.execute(sql, {'exp_id': exp_id})
     ref_links = cursor.fetchall()
     ref_links = [r[0] for r in ref_links]
-
-    for ref in refs:        
-        if str(ref['id'])[:4] == 'new_':                                    
-            ##Add new reference
-            sql = ("INSERT INTO `references` "
-                   "(`title`, `authors`, `journal`, `year`, `pages`, `pubmed_id`, `url`) "
-                   "VALUES (%(title)s, %(authors)s, %(journal)s, %(year)s, %(pages)s, %(pubmed_id)s, %(url)s) ")
-            cursor.execute(sql, ref)
-            ref['id'] = cursor.lastrowid
-        else:
+    
+    for ref in refs:
+        if 'action' in ref:
+            if ref['action'] == 'new':
+                ##Add new reference
+                sql = ("INSERT INTO `references` "
+                       "(`title`, `authors`, `journal`, `year`, `pages`, `pubmed_id`, `url`) "
+                       "VALUES (%(title)s, %(authors)s, %(journal)s, %(year)s, %(pages)s, %(pubmed_id)s, %(url)s) ")
+                cursor.execute(sql, ref)
+                ref['id'] = cursor.lastrowid
+            if ref['action'] == 'delete':
+                sql = "DELETE FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s AND `reference_id` = %(ref_id)s"
+                cursor.execute(sql, {'exp_id': exp_id, 'ref_id': ref['id']})
+                
+                ##check if the reference points at other experiments. If not, delete it completely
+                sql = "SELECT * FROM `experiments_references` WHERE `reference_id` = %(ref_id)s"
+                count = cursor.execute(sql, {'ref_id': ref['id']})
+                if count == 0:
+                    sql = "DELETE FROM `references` WHERE `id` = %(ref_id)s"
+                    cursor.execute(sql, {'ref_id': ref['id']})
+            
+        if 'action' not in ref or ref['action'] == 'update':
             ##Update existing reference
             sql = ("UPDATE `references` SET "
                    "`title`=%(title)s, `authors`=%(authors)s, "
@@ -174,25 +186,10 @@ def _edit_references(exp_id, refs, db):
                    "WHERE `id` = %(id)s")
             cursor.execute(sql, ref)
 
-
         ##insert a link between experiment and reference if it's not there yet.
         if ref['id'] not in ref_links:
             sql = "INSERT INTO `experiments_references` (`experiment_id`, `reference_id`) VALUES (%(exp_id)s, %(ref_id)s)"
             cursor.execute(sql, {'exp_id': exp_id, 'ref_id': ref['id']})
-        else:
-            ref_links.remove(ref['id'])
-
-    ##Remove links in the database that are not mentioned in this request anymore
-    for ref_id in ref_links:
-        sql = "DELETE FROM `experiments_references` WHERE `experiment_id` = %(exp_id)s AND `reference_id` = %(ref_id)s"
-        cursor.execute(sql, {'exp_id': exp_id, 'ref_id': ref_id})
-
-        ##check if the reference points at other experiments. If not, delete it completely
-        sql = "SELECT * FROM `experiments_references` WHERE `reference_id` = %(ref_id)s"
-        count = cursor.execute(sql, {'ref_id': ref_id})
-        if count == 0:
-            sql = "DELETE FROM `references` WHERE `id` = %(ref_id)s"
-            cursor.execute(sql, {'ref_id': ref_id})
             
     
     cursor.close()

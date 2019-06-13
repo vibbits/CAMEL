@@ -80,6 +80,7 @@ angular.module("CAMEL")
 		}
 	    }
 	    if (!already_loaded){
+		add_ref['action'] = 'loaded';
 		$scope.exp.references.push(add_ref);
 	    }
 	}
@@ -93,19 +94,29 @@ angular.module("CAMEL")
 		'year': '',
 		'pages': '',
 		'pubmed_id': '',
-		'url': ''		
+		'url': '',
+		
+		'action': 'new'
 	    };
 	    $scope.exp.references.push(new_ref);
 	}
 
+	ctrl.isActiveReference = function(ref){
+	    return !(ref.hasOwnProperty('action') && ref['action'] == 'delete');
+	};
+	
 	ctrl.remove_reference = function(ref){
-	    var ref_index = $scope.exp.references.indexOf(ref);
-	    $scope.exp.references.splice(ref_index, 1);	    
+	    if (ref.hasOwnProperty('action') && (ref['action'] == 'new' || ref['action'] == 'loaded')){
+		var ref_index = $scope.exp.references.indexOf(ref);
+		$scope.exp.references.splice(ref_index, 1);	    
+	    } else {
+		ref['action'] = 'delete';
+	    }
 	};
 
 	ctrl.isValue = function(value){
 	    return typeof(value) != 'object';
-	}
+	};
 	
 	ctrl.remove_value = function(fieldId, valueId){
 	    var field = $scope.exp.fields[fieldId];

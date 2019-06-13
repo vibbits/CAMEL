@@ -124,7 +124,7 @@
     </form>
     
     <form>
-      <fieldset class="form-group row mt-3 card" data-ng-repeat="ref in exp.references">
+      <fieldset class="form-group row mt-3 card" data-ng-repeat="ref in exp.references" data-ng-if="expedit.isActiveReference(ref)">
 	<div class="card-body">
 	  <div class="form-row">
 	    <div class="col">	  
