@@ -45,6 +45,8 @@ angular.module("CAMEL")
 	}
 
 	ctrl.add_field = function(){
+	    if (!$scope.new_field_selected_id) return;
+	    
 	    var new_id = 'new_' + ctrl.new_incr++;
 	    var field_id = $scope.new_field_selected_id;
 	    var field_type = ctrl.type_map[field_id];
