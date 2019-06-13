@@ -50,7 +50,11 @@ angular.module("CAMEL")
 	    var field_type = ctrl.type_map[field_id];
 	    if (!$scope.exp.fields.hasOwnProperty(field_id)){
 		$scope.exp.fields[field_id] = {};
-		$scope.exp.fields[field_id][new_id] = undefined;
+		if (field_type == 'BOOL'){
+		    $scope.exp.fields[field_id][new_id] = 0;
+		} else {
+		    $scope.exp.fields[field_id][new_id] = undefined;
+		}
 	    } else {
 		//don't allow extra values for TEXT and BOOL
 		if (field_type == 'VARCHAR'
