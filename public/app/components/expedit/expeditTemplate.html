@@ -1,21 +1,20 @@
 <h3>Edit Experiment</h3>
 
-<div class="row">
-  <div class="card" data-ng-if="!auth.isAuthenticated()">
-    <div class="card-body">
-      <h5 class="card-title">Not logged in</h5>
-      <p>
-	As you are not logged in with <em>Editor privileges</em>, any
-	changes made to this Experiment entry will be saved separately
-	as an edit suggestion to the curators of this database.
-      </p>
-      <p>
-	You can leave your email address if you wish the curators to
-	contact you when reviewing your suggestions.
-      </p>
-    </div>
+<div class="card" data-ng-if="!auth.isAuthenticated()">
+  <div class="card-body">
+    <h5 class="card-title">Not logged in</h5>
+    <p>
+      As you are not logged in with <em>Editor privileges</em>, any
+      changes made to this Experiment entry will be saved separately
+      as an edit suggestion to the curators of this database.
+    </p>
+    <p>
+      You can leave your email address if you wish the curators to
+      contact you when reviewing your suggestions.
+    </p>
   </div>
 </div>
+
 <div class="row">
   <div class="col">
     <form>
@@ -23,6 +22,7 @@
     </form>
   </div>
 </div>
+
 <div class="row">
   <div class="col">
     <form>
@@ -36,166 +36,149 @@
     </form>
   </div>
 </div>
-<div class="row">
-  <div class="col">
-    <form>
-      <div data-ng-repeat="field in fields" data-ng-if="exp.fields.hasOwnProperty(field.id)">
-	<div data-ng-switch="field.type_column">
-	  <div class="form-group" data-ng-switch-when="value_VARCHAR">
-	    <label for="{{field.id}}">{{field.title}}</label>
-	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
-	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
-		<span aria-hidden="true">&times;</span>
-	      </button>
-	      <input type="text" class="form-control"
-		     id="{{field.id}}"
-		     data-ng-model="exp.fields[field.id][value_id]">
-	    </div>
-	    <small class="form-text text-muted">{{field.description}}</small>
-	  </div>
-	  <div class="form-group" data-ng-switch-when="value_TEXT">
-	    <label for="{{field.id}}">{{field.title}}</label>
-	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
-	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
-		<span aria-hidden="true">&times;</span>
-	      </button>
-	      <textarea id="{{field.id}}" class="form-control"
-			data-ng-model="exp.fields[field.id][value_id]">
-	      </textarea>
-	    </div>
-	    <small class="form-text text-muted">{{field.description}}</small>
-	  </div>
-	  <div class="form-group" data-ng-switch-when="value_INT">
-	    <label for="{{field.id}}">{{field.title}}</label>
-	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
-	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
-		<span aria-hidden="true">&times;</span>
-	      </button>
-	      <input type="text" class="form-control"
-		     id="{{field.id}}"
-		     data-ng-model="exp.fields[field.id][value_id]">
-	    </div>
-	    <small class="form-text text-muted">{{field.description}}</small>
-	  </div>
-	  <div class="form-check" data-ng-switch-when="value_BOOL">
-	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
-	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
-		<span aria-hidden="true">&times;</span>
-	      </button>
-	      <input type="checkbox" class="form-check-input"
-		     id="{{field.id}}"
-		     data-ng-true-value="1" data-ng-false-value="0"
-		     data-ng-model="exp.fields[field.id][value_id]">
-	      <label for="{{field.id}}" class="form-check-label">{{field.title}}</label>
-	    </div>
-	    <small class="form-text text-muted">{{field.description}}</small>
-	  </div>
-	  <div class="form-group" data-ng-switch-when="value_DOUBLE">
-	    <label for="{{field.id}}">{{field.title}}</label>
-	    <div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
-	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
-		<span aria-hidden="true">&times;</span>
-	      </button>
-	      <input type="text" class="form-control"
-		     id="{{field.id}}"
-		     data-ng-model="exp.fields[field.id][value_id]">
-	    </div>
-	    <small class="form-text text-muted">{{field.description}}</small>
-	  </div>
-	</div>
-      </div>
-    </form>
-  </div>
-</div>
-<div class="row">
-  <div class="col">
-    <h5>References <i class="material-icons align-middle pointer" data-ng-click="expedit.add_reference()">add_circle</i></h5>
 
-    <form>
-      <label for="ref-select">Add existing reference: </label>
-      <select id="ref-select" data-ng-model="ref_selected_index">
-	<option
-	  data-ng-repeat="ref in references"
-	  value="{{$index}}">
-	  {{ref.year}} - {{ref.title}}
-	</option>
-      </select>
-      <i class="material-icons align-middle pointer" data-ng-click="expedit.load_reference()">add_circle</i>
-    </form>
-    
-    <form>
-      <fieldset class="form-group row mt-3 card" data-ng-repeat="ref in exp.references" data-ng-if="expedit.isActiveReference(ref)">
-	<div class="card-body">
-	  <div class="form-row">
-	    <div class="col">	  
-	      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_reference(ref)">
-		<span aria-hidden="true">&times;</span>
-	      </button>
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="title_{{ref.id}}">Title</label>
-	    <input type="text" id="title_{{ref.id}}" class="form-control" data-ng-model="ref.title">
-	  </div>	  
-	  <div class="form-group">
-	    <label for="authors_{{ref.id}}">Authors</label>
-	    <input type="text" id="authors_{{ref.id}}" class="form-control" data-ng-model="ref.authors">
-	    <small class="form-text text-muted">Comma-separated list of authors (Lastname FN, ...)</small>
-	  </div>
-	  <div class="form-row">
-	    <div class="col-md form-group">
-	      <label for="year_{{ref.id}}">Year</label>
-	      <input type="text" id="year_{{ref.id}}" class="form-control" data-ng-model="ref.year">
-	    </div>
-	    <div class="col-md form-group">
-	      <label for="journal_{{ref.id}}">Journal</label>
-	      <input type="text" id="journal_{{ref.id}}" class="form-control" data-ng-model="ref.journal">
-	    </div>
-	    <div class="col-md form-group">
-	      <label for="pages_{{ref.id}}">Pages</label>
-	      <input type="text" id="pages_{{ref.id}}" class="form-control" data-ng-model="ref.pages">
-	      <small class="form-text text-muted">Free text field representing volume, pages,...</small>
-	    </div>
-	  </div>	
-	  <div class="form-group">
-	    <label for="pubmed_{{ref.id}}">PubMed ID</label>
-	    <input type="text" id="pubmed_{{ref.id}}" class="form-control" data-ng-model="ref.pubmed_id">
-	  </div>
-	  <div class="form-group">
-	    <label for="url_{{ref.id}}">URL</label>
-	    <input type="text" id="url_{{ref.id}}" class="form-control" data-ng-model="ref.url">
-	    <small class="form-text text-muted">DOI- or direct link to paper</small>
-	  </div>
+<form>
+  <div data-ng-repeat="field in fields" data-ng-if="exp.fields.hasOwnProperty(field.id)">
+    <div data-ng-switch="field.type_column">
+      <div class="form-group" data-ng-switch-when="value_VARCHAR">
+	<label for="{{field.id}}">{{field.title}}</label>
+	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
+	  <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	  <input type="text" class="form-control"
+		 id="{{field.id}}"
+		 data-ng-model="exp.fields[field.id][value_id]">
 	</div>
-      </fieldset>
-    </form>
+	<small class="form-text text-muted">{{field.description}}</small>
+      </div>
+      <div class="form-group" data-ng-switch-when="value_TEXT">
+	<label for="{{field.id}}">{{field.title}}</label>
+	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
+	  <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	  <textarea id="{{field.id}}" class="form-control"
+		    data-ng-model="exp.fields[field.id][value_id]">
+	  </textarea>
+	</div>
+	<small class="form-text text-muted">{{field.description}}</small>
+      </div>
+      <div class="form-group" data-ng-switch-when="value_INT">
+	<label for="{{field.id}}">{{field.title}}</label>
+	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
+	  <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	  <input type="text" class="form-control"
+		 id="{{field.id}}"
+		 data-ng-model="exp.fields[field.id][value_id]">
+	</div>
+	<small class="form-text text-muted">{{field.description}}</small>
+      </div>
+      <div class="form-check" data-ng-switch-when="value_BOOL">
+	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
+	  <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	  <input type="checkbox" class="form-check-input"
+		 id="{{field.id}}"
+		 data-ng-true-value="1" data-ng-false-value="0"
+		 data-ng-model="exp.fields[field.id][value_id]">
+	  <label for="{{field.id}}" class="form-check-label">{{field.title}}</label>
+	</div>
+	<small class="form-text text-muted">{{field.description}}</small>
+      </div>
+      <div class="form-group" data-ng-switch-when="value_DOUBLE">
+	<label for="{{field.id}}">{{field.title}}</label>
+	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
+	  <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_value(field.id, value_id)">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	  <input type="text" class="form-control"
+		 id="{{field.id}}"
+		 data-ng-model="exp.fields[field.id][value_id]">
+	</div>
+	<small class="form-text text-muted">{{field.description}}</small>
+      </div>
+    </div>
   </div>
-</div>
-<div class="row" data-ng-if="!auth.isAuthenticated()">
-  <div class="col">
-    <form>
-      <fieldset class="form-group">
-	<legend>Contact</legend>
-	<div class="form-group">
-	  <label for="email">E-mail</label>
-	  <input type="email" id="email" class="form-control" data-ng-model="guest_email">
-	  <small class="form-text text-muted">Allow us to contact you.</small>
+</form>
+
+
+<h5>References <i class="material-icons align-middle pointer" data-ng-click="expedit.add_reference()">add_circle</i></h5>
+
+<form>
+  <label for="ref-select">Add existing reference: </label>
+  <select id="ref-select" data-ng-model="ref_selected_index">
+    <option
+      data-ng-repeat="ref in references"
+      value="{{$index}}">
+      {{ref.year}} - {{ref.title}}
+    </option>
+  </select>
+  <i class="material-icons align-middle pointer" data-ng-click="expedit.load_reference()">add_circle</i>
+</form>
+
+<form>
+  <fieldset class="form-group mt-3 card" data-ng-repeat="ref in exp.references" data-ng-if="expedit.isActiveReference(ref)">
+    <div class="card-body">
+      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_reference(ref)">
+	<span aria-hidden="true">&times;</span>
+      </button>
+      <div class="form-group">
+	<label for="title_{{ref.id}}">Title</label>
+	<input type="text" id="title_{{ref.id}}" class="form-control" data-ng-model="ref.title">
+      </div>	  
+      <div class="form-group">
+	<label for="authors_{{ref.id}}">Authors</label>
+	<input type="text" id="authors_{{ref.id}}" class="form-control" data-ng-model="ref.authors">
+	<small class="form-text text-muted">Comma-separated list of authors (Lastname FN, ...)</small>
+      </div>
+      <div class="form-row">
+	<div class="col-md form-group">
+	  <label for="year_{{ref.id}}">Year</label>
+	  <input type="text" id="year_{{ref.id}}" class="form-control" data-ng-model="ref.year">
 	</div>
-	<div class="form-group">
-	  <label for="comments">Comments</label>
-	  <textarea type="email" id="comments" class="form-control" data-ng-model="guest_comments"></textarea>
-	  <small class="form-text text-muted">Remarks concerning this submission.</small>
+	<div class="col-md form-group">
+	  <label for="journal_{{ref.id}}">Journal</label>
+	  <input type="text" id="journal_{{ref.id}}" class="form-control" data-ng-model="ref.journal">
 	</div>
-      </fieldset>
-    </form>
-  </div>
-</div>
-<div class="row">
-  <button type="submit" class="btn btn-primary" data-ng-click="expedit.submit_changes()">Submit all changes</button>
-</div>
-<div class="row">
-  <button type="submit" class="btn btn-secondary" data-ng-click="expedit.cancel()">Cancel</button>
-</div>
-<div class="row">
-  <button type="submit" class="btn btn-secondary" data-ng-click="expedit.delete()">DELETE</button>
-</div>
+	<div class="col-md form-group">
+	  <label for="pages_{{ref.id}}">Pages</label>
+	  <input type="text" id="pages_{{ref.id}}" class="form-control" data-ng-model="ref.pages">
+	  <small class="form-text text-muted">Free text field representing volume, pages,...</small>
+	</div>
+      </div>	
+      <div class="form-group">
+	<label for="pubmed_{{ref.id}}">PubMed ID</label>
+	<input type="text" id="pubmed_{{ref.id}}" class="form-control" data-ng-model="ref.pubmed_id">
+      </div>
+      <div class="form-group">
+	<label for="url_{{ref.id}}">URL</label>
+	<input type="text" id="url_{{ref.id}}" class="form-control" data-ng-model="ref.url">
+	<small class="form-text text-muted">DOI- or direct link to paper</small>
+      </div>
+    </div>
+  </fieldset>
+</form>
+
+<form data-ng-if="!auth.isAuthenticated()">
+  <fieldset class="form-group">
+    <legend>Contact</legend>
+    <div class="form-group">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" class="form-control" data-ng-model="guest_email">
+      <small class="form-text text-muted">Allow us to contact you.</small>
+    </div>
+    <div class="form-group">
+      <label for="comments">Comments</label>
+      <textarea type="email" id="comments" class="form-control" data-ng-model="guest_comments"></textarea>
+      <small class="form-text text-muted">Remarks concerning this submission.</small>
+    </div>
+  </fieldset>
+</form>
+
+<div><button type="submit" class="btn btn-primary" data-ng-click="expedit.submit_changes()">Submit all changes</button></div>
+<div><button type="submit" class="btn btn-secondary" data-ng-click="expedit.cancel()">Cancel</button></div>
+<div><button type="submit" class="btn btn-secondary" data-ng-click="expedit.delete()">DELETE</button></div>

@@ -1,35 +1,37 @@
-<div class="row mt-3">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">CAMEL</h5>
-      <p class="card-text">
-	This database is part of the following review:<br>
-	Bram Van den Bergh, Toon Swings, Maarten Fauvart & Jan Michiels (2018) Experimental design,
-	population dynamics and diversity in microbial experimental evolution. <a href="http://mmbr.asm.org/">Microbiology and Molecular Biology Reviews</a> (MMBR).
-      </p>
-      <p class="card-text">
-	Please cite this review when you use the database.
-      </p>
-    </div>
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">CAMEL</h5>
+    <p class="card-text">
+      This database is part of the following review:<br>
+      Bram Van den Bergh, Toon Swings, Maarten Fauvart & Jan Michiels (2018) Experimental design,
+      population dynamics and diversity in microbial experimental evolution. <a href="http://mmbr.asm.org/">Microbiology and Molecular Biology Reviews</a> (MMBR).
+    </p>
+    <p class="card-text">
+      Please cite this review when you use the database.
+    </p>
   </div>
 </div>
+
+<a class="btn btn-primary btn-lg btn-block" role="button" href="#!/experiments">
+  Browse the {{home.experiment_count}} Experiments
+</a>
+
 <div class="row mt-3">
-  <a class="btn btn-primary btn-lg btn-block" role="button" href="#!/experiments">
-    Browse the {{home.experiment_count}} Experiments
-  </a>
-</div>
-<div class="row mt-3">
-  <div class="card col-md-5">
-    <div class="card-body">
-      <h5 class="card-title">Most used Species</h5>
-      <count-chart field-title="Species" col-nr="8"></count-chart>      
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-body">
+	<h5 class="card-title">Most used Species</h5>
+	<count-chart field-title="Species" col-nr="8"></count-chart>      
+      </div>
     </div>
   </div>
-  <div class="col-md-1"></div>
-  <div class="card col-md-6">
-    <div class="card-body">
-      <h5 class="card-title">Sequencing Technology over time</h5>
-      <time-chart field-title="WGS Technology"></time-chart>
+  <div class="col-md-1"><!--spacer --></div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+	<h5 class="card-title">Sequencing Technology over time</h5>
+	<time-chart field-title="WGS Technology"></time-chart>
+      </div>
     </div>
   </div>
 </div>

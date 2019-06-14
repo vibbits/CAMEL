@@ -162,7 +162,7 @@ footer div.card
     background-color: #1b2944 !important;
 }
 
-header.card
+header > .card
 {
     color: #fff;
     background-color: #1b2944 !important;
