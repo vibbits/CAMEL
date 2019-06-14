@@ -18,6 +18,10 @@ app.controller('AppController', function($scope, $rootScope, $location, $route, 
 	    $location.path('/');
 	});
     };
+
+    $scope.navigateTo = function(page){
+	$location.path(page);
+    }
 });
 
 app.factory('State', function(){

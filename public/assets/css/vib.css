@@ -168,7 +168,12 @@ header > .card
     background-color: #1b2944 !important;
 }
 
-header{
+header h1{
+    font-size: 5em;
+}
+
+header h3{
+    color: #ff681e;
 }
 
 header img
