@@ -45,16 +45,36 @@
 	</div>
       </div>
     </header>      
-    <nav class="navbar navbar-inverse navbar-static-top" data-ng-if="auth.isAuthenticated()">
-      <div class="navbar-header">	
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="navbar-header">
+        <button type="button" class="btn btn-primary btn-block btn-raised active navbar-toggle collapsed"
+		data-toggle="collapse"
+		data-target="#camel-navbar-collapse">
+	  <div class="row">
+	    <div class="col"><span class='navbar-toggle-text'>Menu</span></div>
+            <div class="col"><i class="material-icons" aria-hidden="true">menu</i></div>
+	  </div>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse text-center" id="camel-navbar-collapse">	
 	<ul class="nav navbar-nav">
-	  <li><button class="btn btn-primary" data-ng-class="{'btn-raised active': true}" data-ng-click="logout()">Log out</button></li>
-	  <li>
-	    <a data-ng-href="#!/fields">Field editor</a>
-	  </li>
-	  <li>
-	    <a data-ng-href="#!/experiment/add">Add new experiment</a>
-	  </li>
+	  <li><button class="btn btn-primary"
+		      data-ng-class="{'btn-raised active': isCurrent('home')}"
+		      data-ng-click="navigateTo('home')">Home</button></li>
+	  <li><button class="btn btn-primary"
+		      data-ng-class="{'btn-raised active': isCurrent('experiments')}"
+		      data-ng-click="navigateTo('experiments')">Experiments</button></li>
+	  <li><button class="btn btn-primary"
+		      data-ng-class="{'btn-raised active': isCurrent('fields')}"
+		      data-ng-click="navigateTo('fields')"
+		      data-ng-if="auth.isAuthenticated()">Field editor</button></li>
+	  <li><button class="btn btn-primary"
+		      data-ng-class="{'btn-raised active': isCurrent('experiment')}"
+		      data-ng-click="navigateTo('experiment/add')"
+		      data-ng-if="auth.isAuthenticated()">Add new experiment</button></li>
+	  <li><button class="btn btn-primary"
+		      data-ng-click="logout()"
+		      data-ng-if="auth.isAuthenticated()">Log out</button></li>
 	</ul>
       </div>
     </nav>

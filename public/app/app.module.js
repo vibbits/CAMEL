@@ -21,6 +21,11 @@ app.controller('AppController', function($scope, $rootScope, $location, $route, 
 
     $scope.navigateTo = function(page){
 	$location.path(page);
+    };
+
+    $scope.isCurrent = function(path){
+	var loc = $location.path().split("/");
+        return loc[1] == path;
     }
 });
 
