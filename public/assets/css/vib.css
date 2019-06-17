@@ -451,88 +451,25 @@ p img
     float: left;
 }
 
-.navbar-toggle .glyphicon
-{
-    top: 4px;
 
+.navbar-toggle-button{
     float: right;
 }
 
-.navbar .navbar-nav
-{
-    display: inline-block;
-    float: none;
-}
 
 .navbar .navbar-collapse
 {
     text-align: center;
 }
 
-
-
-@media (max-width: 767px)
-{
-    #contra-logo-full
-    {
-        display: none;
-    }
-    #logo
-    {
-        text-align: center;
-    }
+.navbar .nav-item button.active{
+    text-decoration: underline;
 }
 
-@media (min-width: 768px)
-{
-    #contra-logo-collapsed
-    {
-        display: none;
-    }
+.navbar button.btn-primary.active{
+    background-color: transparent !important;
 }
 
-@media (max-width: 991px)
-{
-    #helpNav
-    {
-        display: none;
-    }
-    .navbar-collapse.collapse {
-        display: none !important;
-    }
-    .navbar-collapse.collapse.in {
-        display: block !important;
-    }
-    .navbar-toggle {
-        display: block!important;
-    }
-    .navbar-header, .navbar-nav>li {
-        float: none !important;
-    }
-    .label-floating {
-        margin-top: 20px;
-        height: 80px;
-    }
-    p.help-block {
-        width:  100%;
-    }
-}
-
-@media (min-width: 1800px)
-{
-    .container
-    {
-        width: 1570px;
-    }
-}
-
-@media (max-width: 1199px)
-{
-    #resultsNav
-    {
-        display: none;
-    }
-}
 
 .pointer
 {
@@ -711,3 +648,4 @@ ul.no-list-style li{
 tr.changed{
     background: #ff681e !important;
 }
+
