@@ -64,7 +64,6 @@ class Field(CamelResource):
         self.reqparse.add_argument('title', type = str, location = 'json')
         self.reqparse.add_argument('unit', type = str, location = 'json')
         self.reqparse.add_argument('description', type = str, location = 'json')
-        self.reqparse.add_argument('type_column', type = str, location = 'json')
         self.reqparse.add_argument('link', type = int, location = 'json')
         self.reqparse.add_argument('required', type = int, location = 'json')
         self.reqparse.add_argument('group', type = int, location = 'json')
