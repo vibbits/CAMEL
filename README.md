@@ -28,9 +28,21 @@ Python3 with a `ScriptAlias` pointing at the entry point `camel.wsgi`
 
 ### Frontend
 
-AngularJS application with dependencies on Bootstrap, JQuery and eCharts.
+AngularJS application with dependencies on Bootstrap MD, JQuery and eCharts.
 
 Apache should use `public` as the DocumentRoot for this application.
+
+#### Versions and API's
+ * AngularJS 1.7.6  
+   https://code.angularjs.org/1.7.6/docs/guide
+ * JQuery 3.3.1  
+   https://api.jquery.com/
+ * Popper.js 1.15  
+   https://popper.js.org/
+ * Bootstrap Material Design 4.0.0  
+   https://fezvrasta.github.io/bootstrap-material-design/docs/4.0/getting-started/introduction/
+ * eCharts 4.2.1  
+   https://echarts.apache.org/en/api.html#echarts
 
 ## Hosting
 The development version can be viewed at
