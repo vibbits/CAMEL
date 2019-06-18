@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .controller('ExpeditController', function($scope, $location, $routeParams,
+    .controller('ExpeditController', function($scope, $location, $routeParams, $sce,
 					      Experiment, Field, Reference){
 	var ctrl = this;
 	ctrl.fieldsLoaded = false;
@@ -161,10 +161,30 @@ angular.module("CAMEL")
 		$location.path('/experiment/'+$scope.exp.id);
 	    }
 	};
-	
-	ctrl.delete = function(){
+
+	function deleteExperiment(){
 	    $scope.exp.$delete().then(function(){
+		$('#confirmModal').modal('hide');
 		$location.path('/experiments');
 	    });
+	}
+	
+	var confirmAction;
+	$scope.warningTitle = "Warning";
+	$scope.warningMessage = "Careful there";
+	
+	ctrl.confirm = function(confirmData){
+	    confirmAction(confirmData);
+	    $('#confirmModal').modal('hide');
+	}
+	
+	ctrl.delete = function(){
+	    $scope.warningTitle = "Delete Experiment";
+	    $scope.warningMessage = $sce.trustAsHtml("Deleting an experiment cannot be undone. <br><br>"
+						     +"Linked references will be removed as well, unless they "
+						     +"are still linked to any other experiments.<br><br>"
+						     +"Are you sure?");
+	    confirmAction = deleteExperiment;
+	    $('#confirmModal').modal();
 	};
     });
