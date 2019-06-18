@@ -487,8 +487,25 @@ class Experiment(CamelResource):
             return "Admin only", 401
 
         cursor = self.db.cursor()
+
+        ## Get linked references
+        sql = "SELECT `reference_id` FROM `experiments_references` WHERE `experiment_id` = %(id)s"
+        cursor.execute(sql, {'id': id})
+        refs = cursor.fetchall()
+        ref_id_list = [ref[0] for ref in refs]
+        
         sql = "DELETE FROM `experiments` WHERE `id` = %(id)s"
         cursor.execute(sql, {'id': id})
+
+        ## Delete orphan references
+        for ref_id in ref_id_list:
+            sql = "SELECT * FROM `experiments_references` WHERE `reference_id` = %(ref_id)s"
+            linkCount = cursor.execute(sql, {'ref_id': ref_id})
+
+            if linkCount == 0:
+                sql = "DELETE FROM `references` WHERE `id` = %(ref_id)s"
+                cursor.execute(sql, {'ref_id': ref_id})
+        
         self.db.commit()
         cursor.close()
         
