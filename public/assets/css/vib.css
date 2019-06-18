@@ -644,8 +644,16 @@ ul.no-list-style li{
 }
 
 
+/*experiment edit page*/
+#ref-select option {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 400px;
+    max-width: 400px;
+}
+
 /*field edit page*/
 tr.changed{
     background: #ff681e !important;
 }
-
