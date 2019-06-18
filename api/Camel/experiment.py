@@ -411,7 +411,7 @@ class ExperimentList(CamelResource):
                     
         ##References
         if args['references']:
-            _edit_references(exp_id, args['references'], db)
+            _edit_references(exp_id, args['references'], self.db)
                             
         self.db.commit()
 
