@@ -65,7 +65,7 @@
 	  <i class="material-icons">arrow_back</i>
 	</a>
       </div>
-      <div class="col text-right">
+      <div class="col text-right" data-ng-if="auth.isAuthenticated()">
 	<button class="btn btn-secondary" data-ng-click="experiment.edit()">Edit</button>
       </div>
     </div>
