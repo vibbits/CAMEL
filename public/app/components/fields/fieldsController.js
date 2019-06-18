@@ -1,12 +1,12 @@
 angular.module("CAMEL")
-    .controller('FieldsController', function($scope, Field, State){
+    .controller('FieldsController', function($scope, $sce, Field, State){
 	var ctrl = this;
 	ctrl.loaded = false;
 	
 	ctrl.fields = Field.query(function(){
 	    ctrl.loaded = true;
 	});
-
+	
 	ctrl.newRow = function(){
 	    var newField = {
 		title: '',
@@ -23,22 +23,14 @@ angular.module("CAMEL")
 	    ctrl.fields.push(newField);
 	};
 
-	ctrl.removeRow = function(field){
-	    var doublecheck = false;
-	    if (!field.new_field){
-		//deleting an existing field causes all data
-		//to be removed!
-		alert("Are you sure?");
-		double_check = true;
-		if (double_check){
-		    field.$delete();
-		} else {
-		    return;
-		}
+	
+	function deleteRow(field){
+	    if (!field.new_field){		
+		field.$delete();
 	    }
 
 	    var toDelete = [field];
-	    //remove dependend fields
+	    //remove dependent fields
 	    if (field.group){
 		var gid = field.id;
 		for (var f in ctrl.fields){
@@ -60,6 +52,38 @@ angular.module("CAMEL")
 	    }
 	    
 	    State.refresh();
+	}
+	
+	function changeColType(){
+	    console.log("Change col type");
+	}
+
+	var confirmAction;
+	$scope.warningTitle = "Warning";
+	$scope.warningMessage = "Careful there";
+	
+	ctrl.confirm = function(confirmData){
+	    confirmAction(confirmData);
+	    $('#confirmModal').modal('hide');
+	}
+	
+	ctrl.removeRow = function(field){
+	    if (!field.new_field){
+		$scope.warningTitle = "Delete field";
+		var warningMessage = "Deleting a field cannot be undone. <br>"
+		    + " If this field contains data for any experiments, this data will be lost.";
+		if (field.group){
+		    warningMessage+="<br><br>"
+			+"This field is labeled as a group field, which means all "
+			+"dependent fields will also be deleted together with their data.";
+		}
+	    $scope.warningMessage = $sce.trustAsHtml(warningMessage);
+		$scope.confirmData = field;
+		confirmAction = deleteRow;
+		$('#confirmModal').modal();		
+	    } else {
+		deleteRow(field);
+	    }
 	};
 
 	ctrl.saveChanges = function(){
