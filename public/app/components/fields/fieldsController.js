@@ -77,7 +77,7 @@ angular.module("CAMEL")
 			+"This field is labeled as a group field, which means all "
 			+"dependent fields will also be deleted together with their data.";
 		}
-	    $scope.warningMessage = $sce.trustAsHtml(warningMessage);
+		$scope.warningMessage = $sce.trustAsHtml(warningMessage);
 		$scope.confirmData = field;
 		confirmAction = deleteRow;
 		$('#confirmModal').modal();		
