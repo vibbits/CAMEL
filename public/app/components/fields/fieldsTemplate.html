@@ -31,13 +31,18 @@
 	    <input data-ng-model="field.description" data-ng-change="field.changed=true">
 	  </td>
 	  <td>
-	    <select data-ng-model="field.type_column" data-ng-change="field.changed=true">
-	      <option value="value_VARCHAR">STRING</option>
-	      <option value="value_TEXT">TEXT</option>
-	      <option value="value_INT">NUMBER</option>
-	      <option value="value_DOUBLE">DOUBLE</option>
-	      <option value="value_BOOL">BOOLEAN</option>
-	    </select>
+	    <div data-ng-if="field.new_field">
+	      <select data-ng-model="field.type_column" data-ng-change="field.changed=true">
+		<option value="value_VARCHAR">STRING</option>
+		<option value="value_TEXT">TEXT</option>
+		<option value="value_INT">NUMBER</option>
+		<option value="value_DOUBLE">DOUBLE</option>
+		<option value="value_BOOL">BOOLEAN</option>
+	      </select>
+	    </div>
+	    <div data-ng-if="!field.new_field">
+	      <pre>{{field.type_column.split('_')[1]}}</pre>
+	    </div>
 	  </td>
 	  <td>
 	    <input data-ng-model="field.link" type="checkbox"
