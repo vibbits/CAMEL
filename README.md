@@ -48,3 +48,15 @@ Apache should use `public` as the DocumentRoot for this application.
 The development version can be viewed at
 https://dev.bits.vib.be/CAMEL/
 
+## Authentication
+
+Currently authentication is done by a separate Flask application.
+Visiting the page served by this app, will return a response
+containing a `AuthToken` header. This token is also written to the
+database. The page can be secured by setting authentication rules in
+the `.htaccess` (Basic Auth, Shiboleth, ...).
+
+The AngularJS application should be including the token in the `AuthToken`
+header with every request that should be authenticated by the
+API. Tokens get removed from the database after one day, expiring the
+session.
