@@ -13,27 +13,12 @@ angular.module("CAMEL")
 	
 	$scope.guest_email = "";
 	$scope.guest_comments = "";
-	
-	$scope.fields = Field.query(function(){
-	    ctrl.fieldsLoaded = true;
-	    //type mapping
-	    for (var i in $scope.fields){
-		var field = $scope.fields[i];
-		if (field.hasOwnProperty('id')){
-		    ctrl.type_map[field.id] = field.type_column.split('_')[1];
-		}
-	    }
-	});
-
-	$scope.references = Reference.query(function(){
-	    ctrl.refsLoaded = true;
-	});
 
 	if ($location.$$path.startsWith('/experiment/edit/')
 	    && $routeParams.hasOwnProperty('id')){
+	    ctrl.new_experiment = false;
 	    $scope.exp = Experiment.get($routeParams, function(){
 		ctrl.experimentLoaded = true;
-		ctrl.new_experiment = false;
 	    },function(){
 		console.log("Unknown experiment id");
 		$location.path('/home');
@@ -43,6 +28,28 @@ angular.module("CAMEL")
 	    $scope.exp.fields = {};
 	    $scope.exp.references = [];
 	}
+	
+	$scope.fields = Field.query(function(){
+	    ctrl.fieldsLoaded = true;
+	    //type mapping
+	    for (var i in $scope.fields){
+		var field = $scope.fields[i];
+		if (field.hasOwnProperty('id')){
+		    ctrl.type_map[field.id] = field.type_column.split('_')[1];
+		}
+		if (ctrl.new_experiment
+		    && field.hasOwnProperty('required') && field['required']){
+		    $scope.new_field_selected_id = field['id'];
+		    ctrl.add_field();
+		}
+	    }
+	    $scope.new_field_selected_id = undefined;
+	});
+
+	$scope.references = Reference.query(function(){
+	    ctrl.refsLoaded = true;
+	});
+
 
 	ctrl.add_field = function(){
 	    if (!$scope.new_field_selected_id) return;
