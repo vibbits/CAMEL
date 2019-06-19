@@ -162,7 +162,7 @@ angular.module("CAMEL")
 	    }
 	};
 
-	function deleteExperiment({)
+	function deleteExperiment(){
 	    $('#confirmModal').on('hidden.bs.modal', function(e){
 		$scope.$apply(function() {
 		    $location.path('/experiments');		
