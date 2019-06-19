@@ -162,11 +162,13 @@ angular.module("CAMEL")
 	    }
 	};
 
-	function deleteExperiment(){
-	    $scope.exp.$delete().then(function(){
-		$('#confirmModal').modal('hide');
-		$location.path('/experiments');
-	    });
+	function deleteExperiment({)
+	    $('#confirmModal').on('hidden.bs.modal', function(e){
+		$scope.$apply(function() {
+		    $location.path('/experiments');		
+		});
+	    });	    
+	    $scope.exp.$delete();	    
 	}
 	
 	var confirmAction;
