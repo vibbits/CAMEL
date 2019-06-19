@@ -9,12 +9,14 @@ angular.module('CAMEL')
 	    .when('/experiment/add', {
 		templateUrl:  'app/components/expedit/expeditTemplate.html',
 		controller: 'ExpeditController',
-		controllerAs: 'expedit'
+		controllerAs: 'expedit',
+		data: {'protected': true}
 	    })
 	    .when('/experiment/edit/:id', {
 		templateUrl:  'app/components/expedit/expeditTemplate.html',
 		controller: 'ExpeditController',
-		controllerAs: 'expedit'
+		controllerAs: 'expedit',
+		data: {'protected': true}
 	    })
 	    .when('/experiment/:id', {
 		templateUrl:  'app/components/experiment/experimentTemplate.html',
