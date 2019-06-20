@@ -16,7 +16,7 @@ The `import_data.py` script starts from the original CAMEL data (xlsx
 species, so is at the moment NOT suitable as bulk upload script.
 
 
-[db_scheme]: https://github.com/vibbits/CAMEL/blob/master/admin/db_overview.png
+[db_scheme]: admin/db_overview.png
 
 ### Backend
 
