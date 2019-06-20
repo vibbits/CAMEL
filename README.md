@@ -20,14 +20,12 @@ MySQL
 
 Schema:
 
-![Database schema overview][db_schema]
+![Database schema overview](admin/db_overview.png)
 
 The `import_data.py` script starts from the original CAMEL data (xlsx
 -> csv), but makes a lot of assumptions about existing fields and
 species, so is at the moment NOT suitable as bulk upload script.
 
-
-[db_schema]: admin/db_overview.png
 
 ### Backend
 
