@@ -9,9 +9,14 @@ MySQL
 
 Schema: `admin/dbschema.sql`
 
+![Database scheme overview][db_scheme]
+
 The `import_data.py` script starts from the original CAMEL data (xlsx
 -> csv), but makes a lot of assumptions about existing fields and
 species, so is at the moment NOT suitable as bulk upload script.
+
+
+[db_scheme]: https://github.com/vibbits/CAMEL/blob/master/admin/db_overview.png
 
 ### Backend
 
