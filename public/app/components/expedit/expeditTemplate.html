@@ -17,28 +17,26 @@
 
 <div class="row">
   <div class="col">
-    <form>
+    <form id="nameForm">
       <label for="expname">Name<span class="red">*</span></label>
       <input id="expname" type="text" class="form-control form-control-lg" placeholder="Experiment Name" data-ng-model="exp.name" required>
     </form>
   </div>
 </div>
 
-<div class="row">
+<div class="row mb-3">
   <div class="col">
-    <form>
-      <label for="field-select">Add field: </label>
-      <select id="field-select" data-ng-model="new_field_selected_id">
-	<option
-	  value="{{field.id}}"
-	  data-ng-repeat="field in fields">{{field.title}}</option>
-      </select>
-      <i class="material-icons align-middle pointer" data-ng-click="expedit.add_field()">add_circle</i>
-    </form>
+    <label for="field-select">Add field: </label>
+    <select id="field-select" data-ng-model="new_field_selected_id">
+      <option
+	value="{{field.id}}"
+	data-ng-repeat="field in fields">{{field.title}}</option>
+    </select>
+    <i class="material-icons align-middle pointer" data-ng-click="expedit.add_field()">add_circle</i>
   </div>
 </div>
 
-<form>
+<form id="fieldsForm">
   <div data-ng-repeat="field in fields" data-ng-if="exp.fields.hasOwnProperty(field.id)">
     <div data-ng-switch="field.type_column">
       <div class="form-group" data-ng-switch-when="value_VARCHAR">
@@ -124,19 +122,19 @@
 
 <h3>References <i class="material-icons align-middle pointer" data-ng-click="expedit.add_reference()">add_circle</i></h3>
 
-<form>
-  <label for="ref-select">Add existing reference: </label>
-  <select id="ref-select" data-ng-model="ref_selected_index">
-    <option
-      data-ng-repeat="ref in references"
-      value="{{$index}}">
-      {{ref.year}} - {{ref.title}}
-    </option>
-  </select>
-  <i class="material-icons align-middle pointer" data-ng-click="expedit.load_reference()">add_circle</i>
-</form>
 
-<form>
+<label for="ref-select">Add existing reference: </label>
+<select id="ref-select" data-ng-model="ref_selected_index">
+  <option
+    data-ng-repeat="ref in references"
+    value="{{$index}}">
+    {{ref.year}} - {{ref.title}}
+  </option>
+</select>
+<i class="material-icons align-middle pointer" data-ng-click="expedit.load_reference()">add_circle</i>
+
+
+<form id="refForm">
   <fieldset class="form-group mt-3 card" data-ng-repeat="ref in exp.references" data-ng-if="expedit.isActiveReference(ref)">
     <div class="card-body">
       <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_reference(ref)">
@@ -179,7 +177,7 @@
   </fieldset>
 </form>
 
-<form data-ng-if="!auth.isAuthenticated()">
+<form id="contactForm" data-ng-if="!auth.isAuthenticated()">
   <fieldset class="form-group">
     <legend>Contact</legend>
     <div class="form-group">
