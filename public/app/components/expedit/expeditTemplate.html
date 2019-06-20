@@ -18,7 +18,8 @@
 <div class="row">
   <div class="col">
     <form>
-      <input type="text" class="form-control form-control-lg" placeholder="Experiment Name" data-ng-model="exp.name">
+      <label for="expname">Name<span class="red">*</span></label>
+      <input id="expname" type="text" class="form-control form-control-lg" placeholder="Experiment Name" data-ng-model="exp.name" required>
     </form>
   </div>
 </div>
@@ -118,7 +119,6 @@
       </div>
     </div>
   </div>
-  <small class="form-text red">* : required fields</small>
 </form>
 
 
@@ -143,22 +143,22 @@
 	<span aria-hidden="true">&times;</span>
       </button>
       <div class="form-group">
-	<label for="title_{{ref.id}}">Title</label>
-	<input type="text" id="title_{{ref.id}}" class="form-control" data-ng-model="ref.title">
+	<label for="title_{{ref.id}}">Title<span class="red">*</span></label>
+	<input type="text" id="title_{{ref.id}}" class="form-control" data-ng-model="ref.title" required>
       </div>	  
       <div class="form-group">
-	<label for="authors_{{ref.id}}">Authors</label>
-	<input type="text" id="authors_{{ref.id}}" class="form-control" data-ng-model="ref.authors">
+	<label for="authors_{{ref.id}}">Authors<span class="red">*</span></label>
+	<input type="text" id="authors_{{ref.id}}" class="form-control" data-ng-model="ref.authors" required>
 	<small class="form-text text-muted">Comma-separated list of authors (Lastname FN, ...)</small>
       </div>
       <div class="form-row">
 	<div class="col-md form-group">
-	  <label for="year_{{ref.id}}">Year</label>
-	  <input type="text" id="year_{{ref.id}}" class="form-control" data-ng-model="ref.year">
+	  <label for="year_{{ref.id}}">Year<span class="red">*</span></label>
+	  <input type="text" id="year_{{ref.id}}" class="form-control" data-ng-model="ref.year" required>
 	</div>
 	<div class="col-md form-group">
-	  <label for="journal_{{ref.id}}">Journal</label>
-	  <input type="text" id="journal_{{ref.id}}" class="form-control" data-ng-model="ref.journal">
+	  <label for="journal_{{ref.id}}">Journal<span class="red">*</span></label>
+	  <input type="text" id="journal_{{ref.id}}" class="form-control" data-ng-model="ref.journal" required>
 	</div>
 	<div class="col-md form-group">
 	  <label for="pages_{{ref.id}}">Pages</label>
@@ -184,7 +184,7 @@
     <legend>Contact</legend>
     <div class="form-group">
       <label for="email">E-mail</label>
-      <input type="email" id="email" class="form-control" data-ng-model="guest_email">
+      <input type="email" id="email" class="form-control" data-ng-model="guest_email" required>
       <small class="form-text text-muted">Allow us to contact you.</small>
     </div>
     <div class="form-group">
@@ -194,6 +194,8 @@
     </div>
   </fieldset>
 </form>
+
+<div><small class="form-text red">* : required fields</small></div>
 
 <div><button type="submit" class="btn btn-primary" data-ng-click="expedit.submit_changes()">Submit all changes</button></div>
 <div><button type="submit" class="btn btn-secondary" data-ng-click="expedit.cancel()">Cancel</button></div>
