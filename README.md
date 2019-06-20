@@ -34,7 +34,7 @@ Python3 with a `ScriptAlias` pointing at the entry point `camel.wsgi`
 
 #### API Calls
 All data can be retrieved with simple `get` requests.  
-`push`, `put` and `delete` require an `AuthToken` in the headers, as explained below.
+`post`, `put` and `delete` require an `AuthToken` in the headers, as explained below.
 
 Get all experiment data, or one specific experiment.
 ```
@@ -49,7 +49,7 @@ The experiment list can be filtered by adding one or more parameters.
 ```
 https://dev.bits.vib.be/CAMEL/api/experiment?<field_id>=<filter>
 ```
-Text fields get search for the literal string. Numeric fields use a minimum and maximum value instead.
+Text fields get searched for the literal string. Numeric fields use a minimum and maximum value instead.
 
 eg. get all experiments where the species contains "phage" and the number of lines is between 12 and 20:
 ```
@@ -65,10 +65,13 @@ Get data for one specific field. Id can be both the field_id or the field title.
 ```
 https://dev.bits.vib.be/CAMEL/api/field/<id>
 ```
-Next to the field properties, the JSON also contains a `values` attribute, 
-with a list of the values this field contains in the database, ordered by descending number of occurrences.
-This feature gets extended by adding the `timeline` flag. The values will then be ordered by year, with the number of 
-occurrences that year.
+
+Next to the field properties, the JSON also contains a `values`
+attribute, with a list of the values this field contains in the
+database, ordered by descending number of occurrences.  This feature
+gets extended by adding the `timeline` flag. The values will then be
+ordered by year, with the number of occurrences that year.
+
 ```
 https://dev.bits.vib.be/CAMEL/api/field/<id>?timeline=1
 ```
@@ -77,6 +80,20 @@ A simple list of all references (papers):
 ```
 https://dev.bits.vib.be/CAMEL/api/reference
 ```
+
+## Authentication
+
+Authentication is done by a separate Flask application.  Visiting the
+page served by this app, will return a response containing a
+`AuthToken` header. This token is also written to the database. The
+page can be secured by setting authentication rules in the `.htaccess`
+(Basic Auth, Shiboleth, ...).
+
+The AngularJS application should be including the token in the `AuthToken`
+header with every request that should be authenticated by the
+API. Tokens get removed from the database after one day, expiring the
+session.
+
 
 
 ### Frontend
@@ -101,16 +118,3 @@ Apache should use `public` as the DocumentRoot for this application.
 ## Hosting
 The development version can be viewed at
 https://dev.bits.vib.be/CAMEL/
-
-## Authentication
-
-Currently authentication is done by a separate Flask application.
-Visiting the page served by this app, will return a response
-containing a `AuthToken` header. This token is also written to the
-database. The page can be secured by setting authentication rules in
-the `.htaccess` (Basic Auth, Shiboleth, ...).
-
-The AngularJS application should be including the token in the `AuthToken`
-header with every request that should be authenticated by the
-API. Tokens get removed from the database after one day, expiring the
-session.
