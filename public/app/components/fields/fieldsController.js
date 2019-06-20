@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .controller('FieldsController', function($scope, $sce, Field, State){
+    .controller('FieldsController', function($scope, $location, $sce, Field, State){
 	var ctrl = this;
 	ctrl.loaded = false;
 	
@@ -101,4 +101,9 @@ angular.module("CAMEL")
 	    //Force the ExperimentsController to reload the fields
 	    State.refresh();  
 	};
+
+	ctrl.cancel = function(){
+	    $location.path('home');
+	}
+	
     });

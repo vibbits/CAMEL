@@ -22,7 +22,7 @@
 	  <td><i class="material-icons">drag_handle</i></td>
 	  <td>{{field.id}}</td>
 	  <td>
-	    <input data-ng-model="field.title" data-ng-change="field.changed=true">
+	    <input data-ng-model="field.title" data-ng-change="field.changed=true" required>
 	  </td>
 	  <td>
 	    <input data-ng-model="field.unit" size="4" data-ng-change="field.changed=true">
@@ -77,10 +77,11 @@
 </div>
 <div class="row mt-2">
   <div class="col">
-    <input type="button" value="Save all changes" data-ng-click="fields.saveChanges()">
+    <div><button type="submit" class="btn btn-primary" data-ng-click="fields.saveChanges()">Submit all changes</button></div>
     <div>
       <small class="text-muted">(All fields shown in orange will be updated.)</small>
     </div>
+    <div><button type="submit" class="btn btn-secondary" data-ng-click="fields.cancel()">Cancel</button></div>    
   </div>
 </div>
 
