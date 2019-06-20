@@ -7,16 +7,16 @@ https://www.biw.kuleuven.be/comp2/camel/
 ### Database
 MySQL
 
-Schema: `admin/dbschema.sql`
+Schema:
 
-![Database scheme overview][db_scheme]
+![Database schema overview][db_schema]
 
 The `import_data.py` script starts from the original CAMEL data (xlsx
 -> csv), but makes a lot of assumptions about existing fields and
 species, so is at the moment NOT suitable as bulk upload script.
 
 
-[db_scheme]: admin/db_overview.png
+[db_schema]: admin/db_overview.png
 
 ### Backend
 
@@ -31,9 +31,58 @@ Dependencies:
 Apache webserver needs to have the the `mod_wsgi` module installed for
 Python3 with a `ScriptAlias` pointing at the entry point `camel.wsgi`
 
+
+#### API Calls
+All data can be retrieved with simple `get` requests.  
+`push`, `put` and `delete` require an `AuthToken` in the headers, as explained below.
+
+Get all experiment data, or one specific experiment.
+```
+https://dev.bits.vib.be/CAMEL/api/experiment
+https://dev.bits.vib.be/CAMEL/api/experiment/<id>
+```
+
+The returned JSON is a list of experiments, each with their
+attributes, a list of references and a list of fields, indexed by field_id.
+
+The experiment list can be filtered by adding one or more parameters.
+```
+https://dev.bits.vib.be/CAMEL/api/experiment?<field_id>=<filter>
+```
+Text fields get search for the literal string. Numeric fields use a minimum and maximum value instead.
+
+eg. get all experiments where the species contains "phage" and the number of lines is between 12 and 20:
+```
+https://dev.bits.vib.be/CAMEL/api/experiment?1=phage&min_3=12&max_3=20
+```
+
+Get all field data:
+```
+https://dev.bits.vib.be/CAMEL/api/field
+```
+
+Get data for one specific field. Id can be both the field_id or the field title.
+```
+https://dev.bits.vib.be/CAMEL/api/field/<id>
+```
+Next to the field properties, the JSON also contains a `values` attribute, 
+with a list of the values this field contains in the database, ordered by descending number of occurrences.
+This feature gets extended by adding the `timeline` flag. The values will then be ordered by year, with the number of 
+occurrences that year.
+```
+https://dev.bits.vib.be/CAMEL/api/field/<id>?timeline=1
+```
+
+A simple list of all references (papers):
+```
+https://dev.bits.vib.be/CAMEL/api/reference
+```
+
+
 ### Frontend
 
-AngularJS application with dependencies on Bootstrap MD, JQuery and eCharts.
+AngularJS application with dependencies on Bootstrap MD, JQuery and
+eCharts.
 
 Apache should use `public` as the DocumentRoot for this application.
 
