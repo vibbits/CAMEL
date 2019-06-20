@@ -1,5 +1,16 @@
 ## CAMEL
 
+Compendium of Adaptive Microbial Experiments in the Lab
+
+This database is part of the following review:  
+Bram Van den Bergh,
+Toon Swings, Maarten Fauvart & Jan Michiels (2018) Experimental
+design, population dynamics and diversity in microbial experimental
+evolution. [Microbiology and Molecular Biology Reviews][MMBR] (MMBR).
+
+[MMBR]: http://mmbr.asm.org/
+
+
 This project aims to be an updated, interactive version of:  
 https://www.biw.kuleuven.be/comp2/camel/
 
