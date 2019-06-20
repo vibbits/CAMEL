@@ -657,3 +657,7 @@ ul.no-list-style li{
 tr.changed{
     background: #ff681e !important;
 }
+
+.invalid-feedback.inverse{
+    color: black !important;
+}
