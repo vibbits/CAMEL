@@ -74,6 +74,15 @@ angular.module("CAMEL")
 	    }
 	};
 
+	/**
+	   Checks if there is more than one value left
+	   for this field.
+	 */
+	ctrl.hasFieldValuesLeft = function(field){
+	    field_values = $scope.exp.fields[field.id];
+	    return Object.keys(field_values).length >1;
+	}
+	
 	ctrl.load_reference = function(){
 	    if (!$scope.ref_selected_index) return;
 	    
