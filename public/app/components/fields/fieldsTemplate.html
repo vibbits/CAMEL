@@ -1,6 +1,6 @@
 <h3>Fields Editor</h3>
 <div class="table-responsive mt-3">
-  <form id="fieldUpdateForm" novalidate>    
+  <form name="fieldUpdateForm" class="was-validated" novalidate>    
     <table class="table table-striped">
       <thead class="thead-dark">    
 	<tr>
@@ -22,10 +22,12 @@
 	  <td><i class="material-icons">drag_handle</i></td>
 	  <td>{{field.id}}</td>
 	  <td>
-	    <input class="form-control" data-ng-model="field.title" data-ng-change="field.changed=true" required>
-	    <div class="invalid-feedback inverse">
-              The field needs a (prefably unique and meaningful) title.
-            </div>
+	    <input name="title_{{field.id}}" class="form-control" data-ng-model="field.title" data-ng-change="field.changed=true" required>
+	    <div class="invalid-feedback inverse" data-ng-show="fieldUpdateForm.$submitted || fieldUpdateForm['title_'+field.id].$touched">
+	      <div data-ng-show="fieldUpdateForm['title_'+field.id].$error.required">
+		The field needs a (prefably unique and meaningful) title.
+	      </div>
+	    </div>
 	  </td>
 	  <td>
 	    <input data-ng-model="field.unit" size="4" data-ng-change="field.changed=true">

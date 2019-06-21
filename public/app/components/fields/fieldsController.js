@@ -87,13 +87,11 @@ angular.module("CAMEL")
 	};
 
 	ctrl.saveChanges = function(){
-	    $form = $("#fieldUpdateForm");
-	    if ($form[0].checkValidity() === false){
-		$form.addClass('was-validated');
-		//block form submit
+	    $scope.fieldUpdateForm.$submitted = true;
+	    if($scope.fieldUpdateForm.$invalid){
 		return;
 	    }
-    	    
+	    
 	    for (var f in ctrl.fields){
 		var field = ctrl.fields[f];
 		if (field.new_field){
@@ -107,7 +105,8 @@ angular.module("CAMEL")
 	    }
 	    //Force the ExperimentsController to reload the fields
 	    State.refresh();
-	    $form.removeClass('was-validated');
+	    $scope.fieldUpdateForm.$submitted = false;
+	    $scope.fieldUpdateForm.$pristine = true;
 	};
 
 	ctrl.cancel = function(){
