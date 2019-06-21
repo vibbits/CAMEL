@@ -65,21 +65,21 @@
 	      <span class="form-row" data-ng-switch-when="value_INT">
 		<div class="col">
 		  <label for="filter-min-{{field.id}}">Min:</label>
-		  <input id="filter-min-{{field.id}}" class="form-control" data-ng-model="experiments.filter['min_'+field.id]" data-ng-change="experiments.filterUpdate('min_'+field.id)">
+		  <input type="number" id="filter-min-{{field.id}}" class="form-control" data-ng-model="experiments.filter['min_'+field.id]" data-ng-change="experiments.filterUpdate('min_'+field.id)">
 		</div>
 		<div class="col">
 		  <label for="filter-max-{{field.id}}">Max:</label>
-		  <input id="filter-max-{{field.id}}" class="form-control" data-ng-model="experiments.filter['max_'+field.id]" data-ng-change="experiments.filterUpdate('max_'+field.id)">
+		  <input type="number" id="filter-max-{{field.id}}" class="form-control" data-ng-model="experiments.filter['max_'+field.id]" data-ng-change="experiments.filterUpdate('max_'+field.id)">
 		</div>
 	      </span>
 	      <span class="form-row" data-ng-switch-when="value_DOUBLE">
 		<div class="col">
 		  <label for="filter-min-{{field.id}}">Min:</label>
-		  <input id="filter-min-{{field.id}}" class="form-control" data-ng-model="experiments.filter['min_'+field.id]" data-ng-change="experiments.filterUpdate('min_'+field.id)">
+		  <input type="number" step="0.0000000000001" id="filter-min-{{field.id}}" class="form-control" data-ng-model="experiments.filter['min_'+field.id]" data-ng-change="experiments.filterUpdate('min_'+field.id)">
 		</div>
 		<div class="col">
 		  <label for="filter-max-{{field.id}}">Max:</label>
-		  <input id="filter-max-{{field.id}}" class="form-control" data-ng-model="experiments.filter['max_'+field.id]" data-ng-change="experiments.filterUpdate('max_'+field.id)">
+		  <input type="number" step="0.0000000000001" id="filter-max-{{field.id}}" class="form-control" data-ng-model="experiments.filter['max_'+field.id]" data-ng-change="experiments.filterUpdate('max_'+field.id)">
 		</div>
 	      </span>
 	      <button type="button" class="close" aria-label="Close" data-ng-click="experiments.toggleFilterItem(field)">
