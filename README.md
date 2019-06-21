@@ -117,7 +117,9 @@ session.
 AngularJS application with dependencies on Bootstrap MD, JQuery and
 eCharts.
 
-Apache should use `public` as the DocumentRoot for this application.
+Apache should use `public` as the DocumentRoot for this application.  
+`camel.conf.default` should be copied to `camel.conf` in the same folder, with correct 
+database credentials.
 
 #### Versions and API's
  * AngularJS 1.7.6  
