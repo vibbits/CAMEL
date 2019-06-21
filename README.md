@@ -90,6 +90,13 @@ A simple list of all references (papers):
 https://dev.bits.vib.be/CAMEL/api/reference
 ```
 
+
+To edit the existing content and post new experiments and fields, the
+API also supports POST, PUT and DELETE requests. These require more
+scripting. A demo with Python requests can be found here:  
+[Python edit API demo](admin/import_example.py)
+
+
 ## Authentication
 
 Authentication is done by a separate Flask application.  Visiting the
