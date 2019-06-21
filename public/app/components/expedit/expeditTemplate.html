@@ -17,9 +17,14 @@
 
 <div class="row">
   <div class="col">
-    <form id="nameForm">
+    <form name="nameForm" class="was-validated" novalidate>
       <label for="expname">Name<span class="red">*</span></label>
-      <input id="expname" type="text" class="form-control form-control-lg" placeholder="Experiment Name" data-ng-model="exp.name" required>
+      <input id="expname" name="expName" type="text" class="form-control form-control-lg" placeholder="Experiment Name" data-ng-model="exp.name" required>
+      <div class="invalid-feedback" data-ng-show="nameForm.$submitted || nameForm.expName.$touched">
+	<div data-ng-show="nameForm.expName.$error.required">
+	  Experiment name is required.
+	</div>
+      </div>
     </form>
   </div>
 </div>
@@ -36,7 +41,7 @@
   </div>
 </div>
 
-<form id="fieldsForm">
+<form name="fieldsForm" class="was-validated" novalidate>
   <div data-ng-repeat="field in fields" data-ng-if="exp.fields.hasOwnProperty(field.id)">
     <div data-ng-switch="field.type_column">
       <div class="form-group" data-ng-switch-when="value_VARCHAR">
@@ -48,10 +53,19 @@
 		  data-ng-if="!field.required || expedit.hasFieldValuesLeft(field)">
 	    <span aria-hidden="true">&times;</span>
 	  </button>
-	  <input type="text" class="form-control"
+	  <input type="{{field.link?'url':'text'}}" class="form-control"
 		 id="{{field.id}}"
+		 name="{{field.id}}_{{value_id}}"
 		 data-ng-model="exp.fields[field.id][value_id]"
 		 data-ng-required="field.required">
+	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
+	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
+	      Required field.
+	    </div>
+	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.url">
+	      This should be an absolute URL.
+	    </div>
+	  </div>
 	</div>
 	<small class="form-text text-muted">{{field.description}}</small>
       </div>
@@ -64,9 +78,15 @@
 	    <span aria-hidden="true">&times;</span>
 	  </button>
 	  <textarea id="{{field.id}}" class="form-control"
+		    name="{{field.id}}_{{value_id}}"
 		    data-ng-model="exp.fields[field.id][value_id]"
 		    data-ng-required="field.required">
 	  </textarea>
+	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
+	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
+	      Required field.
+	    </div>
+	  </div>
 	</div>
 	<small class="form-text text-muted">{{field.description}}</small>
       </div>
@@ -78,10 +98,19 @@
 		  data-ng-if="!field.required || expedit.hasFieldValuesLeft(field)">
 	    <span aria-hidden="true">&times;</span>
 	  </button>
-	  <input type="text" class="form-control"
+	  <input type="number" class="form-control"
 		 id="{{field.id}}"
+		 name="{{field.id}}_{{value_id}}"
 		 data-ng-model="exp.fields[field.id][value_id]"
 		 data-ng-required="field.required">
+	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
+	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
+	      Required field.
+	    </div>
+	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.number">
+	      This field should contain an integer.
+	    </div>
+	  </div>
 	</div>
 	<small class="form-text text-muted">{{field.description}}</small>
       </div>
@@ -108,10 +137,19 @@
 		  data-ng-if="!field.required || expedit.hasFieldValuesLeft(field)">
 	    <span aria-hidden="true">&times;</span>
 	  </button>
-	  <input type="text" class="form-control"
+	  <input type="number" step="0.0000000000000001" class="form-control"
 		 id="{{field.id}}"
+		 name="{{field.id}}_{{value_id}}"
 		 data-ng-model="exp.fields[field.id][value_id]"
 		 data-ng-required="field.required">
+	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
+	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
+	      Required field.
+	    </div>
+	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.number">
+	      This field should contain a double.
+	    </div>
+	  </div>
 	</div>
 	<small class="form-text text-muted">{{field.description}}</small>
       </div>
@@ -134,7 +172,7 @@
 <i class="material-icons align-middle pointer" data-ng-click="expedit.load_reference()">add_circle</i>
 
 
-<form id="refForm">
+<form name="refForm" class="was-validated" novalidate>
   <fieldset class="form-group mt-3 card" data-ng-repeat="ref in exp.references" data-ng-if="expedit.isActiveReference(ref)">
     <div class="card-body">
       <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_reference(ref)">
@@ -142,21 +180,44 @@
       </button>
       <div class="form-group">
 	<label for="title_{{ref.id}}">Title<span class="red">*</span></label>
-	<input type="text" id="title_{{ref.id}}" class="form-control" data-ng-model="ref.title" required>
+	<input type="text" id="title_{{ref.id}}" name="title_{{ref.id}}" class="form-control" data-ng-model="ref.title" required>
+	<div class="invalid-feedback" data-ng-show="refForm.$submitted || refForm['title_'+ref.id].$touched">
+	  <div data-ng-show="refForm['title_'+ref.id].$error.required">
+	    Title is required.
+	  </div>
+	</div>
       </div>	  
       <div class="form-group">
 	<label for="authors_{{ref.id}}">Authors<span class="red">*</span></label>
-	<input type="text" id="authors_{{ref.id}}" class="form-control" data-ng-model="ref.authors" required>
+	<input type="text" id="authors_{{ref.id}}" name="authors_{{ref.id}}" class="form-control" data-ng-model="ref.authors" required>
+	<div class="invalid-feedback" data-ng-show="refForm.$submitted || refForm['authors_'+ref.id].$touched">
+	  <div data-ng-show="refForm['authors_'+ref.id].$error.required">
+	    Author list is required.
+	  </div>
+	</div>
 	<small class="form-text text-muted">Comma-separated list of authors (Lastname FN, ...)</small>
       </div>
       <div class="form-row">
 	<div class="col-md form-group">
 	  <label for="year_{{ref.id}}">Year<span class="red">*</span></label>
-	  <input type="text" id="year_{{ref.id}}" class="form-control" data-ng-model="ref.year" required>
+	  <input type="number" id="year_{{ref.id}}" name="year_{{ref.id}}" class="form-control" data-ng-model="ref.year" required>
+	  <div class="invalid-feedback" data-ng-show="refForm.$submitted || refForm['year_'+ref.id].$touched">
+	    <div data-ng-show="refForm['year_'+ref.id].$error.required">
+	      Year is required.
+	    </div>
+	    <div data-ng-show="refForm['year_'+ref.id].$error.number">
+	      Year should be numeric.
+	    </div>
+	  </div>
 	</div>
 	<div class="col-md form-group">
 	  <label for="journal_{{ref.id}}">Journal<span class="red">*</span></label>
-	  <input type="text" id="journal_{{ref.id}}" class="form-control" data-ng-model="ref.journal" required>
+	  <input type="text" id="journal_{{ref.id}}" name="journal_{{ref.id}}" class="form-control" data-ng-model="ref.journal" required>
+	  <div class="invalid-feedback" data-ng-show="refForm.$submitted || refForm['journal_'+ref.id].$touched">
+	    <div data-ng-show="refForm['journal_'+ref.id].$error.required">
+	      Journal is required.
+	    </div>
+	  </div>
 	</div>
 	<div class="col-md form-group">
 	  <label for="pages_{{ref.id}}">Pages</label>
@@ -170,14 +231,19 @@
       </div>
       <div class="form-group">
 	<label for="url_{{ref.id}}">URL</label>
-	<input type="text" id="url_{{ref.id}}" class="form-control" data-ng-model="ref.url">
+	<input type="url" id="url_{{ref.id}}" name="url_{{ref.id}}" class="form-control" data-ng-model="ref.url">
+	<div class="invalid-feedback" data-ng-show="refForm.$submitted || refForm['url_'+ref.id].$touched">
+	  <div data-ng-show="refForm['url_'+ref.id].$error.url">
+	    This should be an absolute URL.
+	  </div>
+	</div>
 	<small class="form-text text-muted">DOI- or direct link to paper</small>
       </div>
     </div>
   </fieldset>
 </form>
 
-<form id="contactForm" data-ng-if="!auth.isAuthenticated()">
+<form name="contactForm" data-ng-if="!auth.isAuthenticated()">
   <fieldset class="form-group">
     <legend>Contact</legend>
     <div class="form-group">

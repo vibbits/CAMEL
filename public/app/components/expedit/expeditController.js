@@ -158,6 +158,15 @@ angular.module("CAMEL")
 
 	
 	ctrl.submit_changes = function(){
+	    $scope.nameForm.$submitted = true;
+	    $scope.fieldsForm.$submitted = true;
+	    $scope.refForm.$submitted = true;
+	    if ($scope.nameForm.$invalid
+		|| $scope.fieldsForm.$invalid
+		|| $scope.refForm.$invalid){
+		return;
+	    }
+	    
 	    if (ctrl.new_experiment){
 	    	$scope.exp.$save().then(function(){
 		    $location.path('/experiment/'+$scope.exp.id);
@@ -167,7 +176,6 @@ angular.module("CAMEL")
 		    $location.path('/experiment/'+$scope.exp.id);
 		});
 	    }
-
 	};
 
 	ctrl.cancel = function(){
