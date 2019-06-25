@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .directive('experimentsTable', function($location, State) {
+    .directive('experimentsTable', function($location, $log, State) {
     return {
         restrict: 'E',
         templateUrl: 'app/shared/experimentsTable/experimentsTable.html',
@@ -9,10 +9,27 @@ angular.module("CAMEL")
 	    refs: '='
         },
 	link: function(scope, elem, attr) {
+	    
 	    scope.showExperiment = function(experiment) {
 		$location.path("/experiment/"+experiment.id);
 	    };
 
+	    //pager settings
+	    scope.totalItems = 20;
+	    scope.currentPage = 1;
+
+	    scope.setPage = function(pageNr){
+		scope.currentPage = pageNr;
+	    }
+
+	    scope.pageChanged = function(){
+		$log.log('Page changed to: ' + $scope.currentPage);
+	    }
+	    
+	    scope.maxSize = 5;
+	    scope.bigTotalItems = 176;
+	    scope.bigCurrentPage = 1;
+	    scope.itemPerPage = 20;
 	    
 	    if (!State.expOrder.hasOwnProperty('key')){
 		scope.orderParams = {};

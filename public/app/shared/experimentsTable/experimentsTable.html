@@ -26,7 +26,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr data-ng-repeat="experiment in experiments | orderBy: experiment:orderParams.desc:fieldComparator" data-ng-click="showExperiment(experiment)" class="pointer">
+      <tr data-ng-repeat="experiment in experiments | orderBy: experiment:orderParams.desc:fieldComparator | limitTo: itemPerPage:(currentPage-1)*itemPerPage" data-ng-click="showExperiment(experiment)" class="pointer">
 	<th scope="row">{{experiment.name}}</th>
 	<td data-ng-repeat="field in fields" data-ng-if="field.show">
 	  <div data-ng-switch="field.type_column">
@@ -69,3 +69,8 @@
     </tbody>
   </table>
 </div>
+<ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage"
+    max-size="maxSize"
+    class="pagination-sm"
+    boundary-link-numbers="true"></ul>
+<pre>Page: {{bigCurrentPage}} / {{numPages}}</pre>
