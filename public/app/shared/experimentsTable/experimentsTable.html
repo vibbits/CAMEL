@@ -1,3 +1,11 @@
+<nav>
+  <span class="pointer" data-ng-click="firstPage()">&lt;&lt;</span>
+  <span class="pointer" data-ng-click="prevPage()">&lt;</span>
+  <span>{{currentPage}}/{{numPages}}</span>
+  <span class="pointer" data-ng-click="nextPage()">&gt;</span>
+  <span class="pointer" data-ng-click="lastPage()">&gt;&gt;</span>
+</nav>
+
 <div class="table-responsive">
   <table id="experiment-table" class="table table-striped table-hover">
     <thead class="thead-dark">
@@ -26,7 +34,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr data-ng-repeat="experiment in experiments | orderBy: experiment:orderParams.desc:fieldComparator | limitTo: itemPerPage:(currentPage-1)*itemPerPage" data-ng-click="showExperiment(experiment)" class="pointer">
+      <tr data-ng-repeat="experiment in experiments | orderBy: experiment:orderParams.desc:fieldComparator | limitTo: itemsPerPage:(currentPage-1)*itemsPerPage" data-ng-click="showExperiment(experiment)" class="pointer">
 	<th scope="row">{{experiment.name}}</th>
 	<td data-ng-repeat="field in fields" data-ng-if="field.show">
 	  <div data-ng-switch="field.type_column">
@@ -69,8 +77,3 @@
     </tbody>
   </table>
 </div>
-<ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage"
-    max-size="maxSize"
-    class="pagination-sm"
-    boundary-link-numbers="true"></ul>
-<pre>Page: {{bigCurrentPage}} / {{numPages}}</pre>

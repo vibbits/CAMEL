@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .directive('experimentsTable', function($location, $log, State) {
+    .directive('experimentsTable', function($location, State) {
     return {
         restrict: 'E',
         templateUrl: 'app/shared/experimentsTable/experimentsTable.html',
@@ -15,21 +15,27 @@ angular.module("CAMEL")
 	    };
 
 	    //pager settings
-	    scope.totalItems = 20;
 	    scope.currentPage = 1;
+	    scope.itemsPerPage = 20;
+	    scope.totalItems = 706;
+	    scope.numPages = Math.ceil(scope.totalItems / scope.itemsPerPage);
 
-	    scope.setPage = function(pageNr){
-		scope.currentPage = pageNr;
-	    }
-
-	    scope.pageChanged = function(){
-		$log.log('Page changed to: ' + $scope.currentPage);
-	    }
-	    
-	    scope.maxSize = 5;
-	    scope.bigTotalItems = 176;
-	    scope.bigCurrentPage = 1;
-	    scope.itemPerPage = 20;
+	    scope.firstPage = function(){
+		scope.currentPage = 1;
+	    };
+	    scope.prevPage = function(){
+		if (scope.currentPage > 1){		    
+		    scope.currentPage -=1;
+		}
+	    };
+	    scope.nextPage = function(){
+		if (scope.currentPage < scope.numPages){		    
+		    scope.currentPage +=1;
+		}
+	    };	    
+	    scope.lastPage = function(){
+		scope.currentPage = scope.numPages;
+	    };
 	    
 	    if (!State.expOrder.hasOwnProperty('key')){
 		scope.orderParams = {};
