@@ -34,22 +34,31 @@ def db_connect():
 
     return db
 
-def start_session():
+def start_session(db):
     import uuid
     token = str(uuid.uuid4())
     sql = "INSERT INTO `sessions` (`token`, `created`) VALUES (%(token)s, NOW())"
-    db = db_connect()
     c = db.cursor()
     c.execute(sql, {'token': token})
     db.commit()
     c.close()    
-    db.close()
     return token
+
+def cleanup_tokens(db):
+    c = db.cursor()
+    sql = "DELETE FROM `sessions` WHERE `created` < NOW() - INTERVAL 1 DAY"
+    c.execute(sql)
+    db.commit()
+    c.close()    
 
 
 @application.route('/')
 def authenticate():
-    token = start_session()
+    db = db_connect()
+    cleanup_tokens(db)
+    token = start_session(db)
+    db.close()
+    
     msg = "Authentication successful"
     response = make_response(msg)
     response.headers['AuthToken'] = token
@@ -60,7 +69,7 @@ def logout():
     if 'AuthToken' in request.headers:        
         token = request.headers['AuthToken']
         
-        db = db_connect()        
+        db = db_connect()
         c = db.cursor()
         sql = "SELECT * FROM `sessions` WHERE `token` = %(token)s"
         c.execute(sql, {'token': token})
@@ -68,11 +77,12 @@ def logout():
         if len(rows) < 1:
             return "Invalid Auth token", 401
 
-        ## Delete current token and clean up expired tokens.
-        sql = "DELETE FROM `sessions` WHERE `token` = %(token)s OR `created` < NOW() - INTERVAL 1 DAY"
+        ## Delete current token
+        sql = "DELETE FROM `sessions` WHERE `token` = %(token)s"
         c.execute(sql, {'token': token})
         db.commit()
-        c.close()    
+        c.close()
+        cleanup_tokens(db)
         db.close()
         return "Logged out"
     else:        
