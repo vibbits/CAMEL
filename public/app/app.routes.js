@@ -6,6 +6,11 @@ angular.module('CAMEL')
 		controller: 'HomeController',
 		controllerAs: 'home'
 	    })
+	    .when('/contact', {
+		templateUrl:  'app/components/contact/contactTemplate.html',
+		controller: 'ContactController',
+		controllerAs: 'contact'
+	    })
 	    .when('/experiment/add', {
 		templateUrl:  'app/components/expedit/expeditTemplate.html',
 		controller: 'ExpeditController',

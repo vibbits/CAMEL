@@ -23,6 +23,7 @@
   <script type="text/javascript" src="app/components/fields/fieldsController.js"></script>
   <script type="text/javascript" src="app/components/expedit/expeditController.js"></script>
   <script type="text/javascript" src="app/shared/experimentsTable/experimentsTable.js"></script>
+  <script type="text/javascript" src="app/components/contact/contactController.js"></script>
   <script type="text/javascript" src="app/shared/countChart/countChart.js"></script>
   <script type="text/javascript" src="app/shared/timeChart/timeChart.js"></script>
   <title>
@@ -56,20 +57,35 @@
       
       <div class="collapse navbar-collapse" id="camel-navbar-collapse">	
 	<ul class="navbar-nav">	 	  
-	  <li class="nav-item"><button class="btn btn-primary "
-	  	      data-ng-class="{'btn-raised active': isCurrent('home')}"
-	  	      data-ng-click="navigateTo('home')">Home</button></li>
-	  <li class="nav-item"><button class="btn btn-primary"
-	  	      data-ng-class="{'btn-raised active': isCurrent('experiments')}"
-	  	      data-ng-click="navigateTo('experiments')">Experiments</button></li>
-	  <li class="nav-item" data-ng-if="auth.isAuthenticated()"><button class="btn btn-primary"
-	  	      data-ng-class="{'btn-raised active': isCurrent('fields')}"
-	  	      data-ng-click="navigateTo('fields')">Field editor</button></li>
-	  <li class="nav-item" data-ng-if="auth.isAuthenticated()"><button class="btn btn-primary"
-	  	      data-ng-class="{'btn-raised active': isCurrent('experiment')}"
-	  	      data-ng-click="navigateTo('experiment/add')">Add new experiment</button></li>
-	  <li class="nav-item" data-ng-if="auth.isAuthenticated()"><button class="btn btn-primary"
-	  	      data-ng-click="logout()">Log out</button></li>
+	  <li class="nav-item">
+	    <button class="btn btn-primary "
+	  	    data-ng-class="{'btn-raised active': isCurrent('home')}"
+	  	    data-ng-click="navigateTo('home')">Home</button>
+	  </li>
+	  <li class="nav-item">
+	    <button class="btn btn-primary"
+	  	    data-ng-class="{'btn-raised active': isCurrent('experiments')}"
+	  	    data-ng-click="navigateTo('experiments')">Experiments</button>
+	  </li>
+	  <li class="nav-item" data-ng-if="auth.isAuthenticated()">
+	    <button class="btn btn-primary"
+	  	    data-ng-class="{'btn-raised active': isCurrent('fields')}"
+	  	    data-ng-click="navigateTo('fields')">Field editor</button>
+	  </li>
+	  <li class="nav-item" data-ng-if="auth.isAuthenticated()">
+	    <button class="btn btn-primary"
+	  	    data-ng-class="{'btn-raised active': isCurrent('experiment')}"
+	  	    data-ng-click="navigateTo('experiment/add')">Add new experiment</button>
+	  </li>
+	  <li class="nav-item">
+	    <button class="btn btn-primary "
+	  	    data-ng-class="{'btn-raised active': isCurrent('contact')}"
+	  	    data-ng-click="navigateTo('contact')">Contact</button>
+	  </li>
+	  <li class="nav-item" data-ng-if="auth.isAuthenticated()">
+	    <button class="btn btn-primary"
+	  	    data-ng-click="logout()">Log out</button>
+	  </li>
 	</ul>
       </div>
     </nav>
