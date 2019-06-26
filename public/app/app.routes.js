@@ -43,7 +43,14 @@ angular.module('CAMEL')
 		redirectTo: '/home'
 	    });
     }])
-    .run(function($rootScope, $location, AUTH_EVENTS, AuthService){
+    .run(function($rootScope, $location, $window, AUTH_EVENTS, AuthService){
+	// initialise google analytics
+	$window.ga('create', 'UA-134601105-1', 'auto');
+	// track pageview on state change
+	$rootScope.$on('$locationChangeStart', function (event) {
+            $window.ga('send', 'pageview', $location.path());
+	});
+	
 	$rootScope.$on('$routeChangeStart', function(event, next){
             if (next.hasOwnProperty('$$route') && next.$$route.hasOwnProperty('data') && next.$$route.data.hasOwnProperty('protected')){
 		var protected = next.$$route.data.protected;
@@ -62,5 +69,5 @@ angular.module('CAMEL')
 	    }, function(){
 		$rootScope.$broadcast(AUTH_EVENTS.loginFailed);
 	    });
-	});
+	});	
     });
