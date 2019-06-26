@@ -44,14 +44,14 @@ app.factory('State', function(){
 	expRefs: {},
 
 	//paging
-	currentPage: 1,
+	paging: {currentPage: 1},
 	
 	refresh: function(){
 	    this.expFilter = {};
 	    this.expFields = [];
 	    this.expOrder = {};
 	    this.expRefs = {};
-	    this.currentPage = 1;
+	    this.paging = {currentPage: 1};
 	}
     }
 });

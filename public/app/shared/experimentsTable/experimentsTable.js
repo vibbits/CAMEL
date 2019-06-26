@@ -15,28 +15,30 @@ angular.module("CAMEL")
 	    };
 
 	    //pager settings
-	    scope.currentPage = 1;
+	    scope.paging = State.paging;
 	    scope.itemsPerPage = 20;
 	    scope.totalItems = 706;
 	    scope.numPages = Math.ceil(scope.totalItems / scope.itemsPerPage);
 
 	    scope.firstPage = function(){
-		scope.currentPage = 1;
+		scope.paging.currentPage = 1;
 	    };
 	    scope.prevPage = function(){
-		if (scope.currentPage > 1){		    
-		    scope.currentPage -=1;
+		if (scope.paging.currentPage > 1){		    
+		    scope.paging.currentPage -=1;
 		}
 	    };
 	    scope.nextPage = function(){
-		if (scope.currentPage < scope.numPages){		    
-		    scope.currentPage +=1;
+		if (scope.paging.currentPage < scope.numPages){		    
+		    scope.paging.currentPage +=1;
 		}
 	    };	    
 	    scope.lastPage = function(){
-		scope.currentPage = scope.numPages;
+		scope.paging.currentPage = scope.numPages;
 	    };
-	    
+
+
+	    //Sort functionality
 	    if (!State.expOrder.hasOwnProperty('key')){
 		scope.orderParams = {};
 		scope.orderParams.key = '';
