@@ -17,9 +17,14 @@ angular.module("CAMEL")
 	    //pager settings
 	    scope.paging = State.paging;
 	    scope.itemsPerPage = 20;
-	    scope.totalItems = 706;
-	    scope.numPages = Math.ceil(scope.totalItems / scope.itemsPerPage);
-
+	    scope.$watch('experiments.length', function(newValue, oldValue, scope){
+		scope.totalItems = scope.experiments.length;
+		scope.numPages = Math.ceil(scope.totalItems / scope.itemsPerPage);
+		if (scope.numPages != 0){
+		    scope.paging.currentPage = Math.min(scope.paging.currentPage, scope.numPages);
+		}
+	    });
+	    	    	    
 	    scope.firstPage = function(){
 		scope.paging.currentPage = 1;
 	    };

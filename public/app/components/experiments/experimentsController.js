@@ -117,6 +117,7 @@ angular.module("CAMEL")
 	ctrl.filter = State.expFilter;
 	ctrl.init_loaded = false;
 	ctrl.exp_count = 0;
+	ctrl.experiments = [];
 	ctrl.query();
 
 	ctrl.export = function(){
