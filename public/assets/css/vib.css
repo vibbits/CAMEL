@@ -643,6 +643,13 @@ ul.no-list-style li{
     list-style-type: none;
 }
 
+.page-item .page-index{
+    z-index: 1;
+    color: white;
+    background-color: black;
+    border-color: black;
+    cursor: default !important; 
+}
 
 /*experiment edit page*/
 #ref-select option {
