@@ -1,9 +1,33 @@
-<nav>
-  <span class="pointer" data-ng-click="firstPage()">&lt;&lt;</span>
-  <span class="pointer" data-ng-click="prevPage()">&lt;</span>
-  <span>{{currentPage}}/{{numPages}}</span>
-  <span class="pointer" data-ng-click="nextPage()">&gt;</span>
-  <span class="pointer" data-ng-click="lastPage()">&gt;&gt;</span>
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" data-ng-class="{disabled: currentPage==1}" data-ng-click="firstPage()">
+      <a class="page-link" aria-label="First Page">
+	<i class="material-icons" aria-hidden="true">first_page</i>
+	<span class="sr-only">First Page</span>
+      </a>
+    </li>
+    <li class="page-item" data-ng-class="{disabled: currentPage==1}" data-ng-click="prevPage()">
+      <a class="page-link" aria-label="Previous Page">
+	<i class="material-icons" aria-hidden="true">keyboard_arrow_left</i>
+	<span class="sr-only">Previous</span>
+      </a>
+    </li>
+    <li class="page-item active">
+      <span class="page-link">{{currentPage}}/{{numPages}}</span>
+    </li>
+    <li class="page-item" data-ng-class="{disabled: currentPage==numPages}" data-ng-click="nextPage()">
+      <a class="page-link" aria-label="Next Page">
+	<i class="material-icons" aria-hidden="true">keyboard_arrow_right</i>
+	<span class="sr-only">Next</span>
+      </a>
+    </li>
+    <li class="page-item" data-ng-class="{disabled: currentPage==numPages}" data-ng-click="lastPage()">
+      <a class="page-link" aria-label="Last Page">
+	<i class="material-icons" aria-hidden="true">last_page</i>
+	<span class="sr-only">Last Page</span>
+      </a>
+    </li>
+  </ul>
 </nav>
 
 <div class="table-responsive">
