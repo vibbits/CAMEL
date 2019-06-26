@@ -1,4 +1,4 @@
-var app = angular.module('CAMEL', ['ngResource','ngRoute', 'ngSanitize', 'ngAnimate', 'ui.bootstrap']);
+var app = angular.module('CAMEL', ['ngResource','ngRoute', 'ngSanitize']);
 app.controller('AppController', function($scope, $rootScope, $location, $route, $document,
 					 AUTH_EVENTS, AuthService) {
     
