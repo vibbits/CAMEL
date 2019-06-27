@@ -2,19 +2,21 @@ angular.module("CAMEL")
     .controller('FieldsController', function($scope, $location, $sce, Field, State){
 	var ctrl = this;
 	ctrl.loaded = false;
+	ctrl.reordered = false;
 	
 	ctrl.fields = Field.query(function(){
 	    ctrl.loaded = true;
 
-	    var fieldDragging = null;
+	    var indexDragging = 0;
 	    $("#fieldstable").sortable({
-		update: function(event, ui) { 
-		    fieldDragging.weight = ui.item.index()+1;
-		    console.log(fieldDragging);
+		update: function(event, ui) {
+		    newIndex = ui.item.index();
+		    spliceItem = ctrl.fields.splice(indexDragging, 1)[0];
+		    ctrl.fields.splice(newIndex, 0, spliceItem);
+		    ctrl.reordered = true;
 		},
 		start: function(event, ui) {		    
-		    fieldDragging = ctrl.fields[ui.item.index()];
-		    console.log(fieldDragging.title);
+		    indexDragging = ui.item.index();
 		}
 	    });
 	    $("#fieldstable").disableSelection();
@@ -108,18 +110,24 @@ angular.module("CAMEL")
 	    }
 	    
 	    for (var f in ctrl.fields){
-		var field = ctrl.fields[f];
-		if (field.new_field){
-		    newField = new Field(field);
-		    ctrl.fields[f] = newField;
-		    newField.$save();
-		} else if (field.changed){
-		    field.$update();
-		    field.changed = false;
+		if (ctrl.fields.hasOwnProperty(f)){
+		    var field = ctrl.fields[f];
+		    if (field.new_field){
+			newField = new Field(field);
+			ctrl.fields[f] = newField;
+			ctrl.weight = f+1;
+			newField.$save();
+		    } else if (field.hasOwnProperty('weight')
+			       && (field.changed || ctrl.reordered)){
+			field.weight = f+1;
+			field.$update();
+			field.changed = false;
+		    }		    
 		}
 	    }
 	    //Force the ExperimentsController to reload the fields
 	    State.refresh();
+	    ctrl.reordered = false;
 	    $scope.fieldUpdateForm.$submitted = false;
 	    $scope.fieldUpdateForm.$pristine = true;
 	};

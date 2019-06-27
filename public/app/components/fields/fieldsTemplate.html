@@ -85,6 +85,7 @@
     <div><button type="submit" class="btn btn-primary" data-ng-click="fields.saveChanges()">Submit all changes</button></div>
     <div>
       <small class="text-muted">(All fields shown in orange will be updated.)</small>
+      <small class="text-muted" data-ng-show="fields.reordered">(Field order has changed)</small>
     </div>
     <div><button type="submit" class="btn btn-secondary" data-ng-click="fields.cancel()">Cancel</button></div>    
   </div>
