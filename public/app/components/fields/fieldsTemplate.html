@@ -17,8 +17,8 @@
 	  <th></th>	
 	</tr>
       </thead>
-      <tbody>      
-	<tr data-ng-class="{'changed': field.changed || field.new_field}" data-ng-repeat="field in fields.fields">
+      <tbody id="fieldstable">      
+	<tr class="ui-state-default" data-ng-class="{'changed': field.changed || field.new_field}" data-ng-repeat="field in fields.fields">
 	  <td><i class="material-icons">drag_handle</i></td>
 	  <td>{{field.id}}</td>
 	  <td>

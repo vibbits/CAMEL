@@ -5,7 +5,22 @@ angular.module("CAMEL")
 	
 	ctrl.fields = Field.query(function(){
 	    ctrl.loaded = true;
+
+	    var fieldDragging = null;
+	    $("#fieldstable").sortable({
+		update: function(event, ui) { 
+		    fieldDragging.weight = ui.item.index()+1;
+		    console.log(fieldDragging);
+		},
+		start: function(event, ui) {		    
+		    fieldDragging = ctrl.fields[ui.item.index()];
+		    console.log(fieldDragging.title);
+		}
+	    });
+	    $("#fieldstable").disableSelection();
 	});
+
+
 	
 	ctrl.newRow = function(){
 	    var newField = {
