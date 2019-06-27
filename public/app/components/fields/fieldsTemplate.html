@@ -19,7 +19,7 @@
       </thead>
       <tbody id="fieldstable">      
 	<tr class="ui-state-default" data-ng-class="{'changed': field.changed || field.new_field}" data-ng-repeat="field in fields.fields">
-	  <td><i class="material-icons">drag_handle</i></td>
+	  <td><i class="material-icons pointer">drag_handle</i></td>
 	  <td>{{field.id}}</td>
 	  <td>
 	    <input name="title_{{field.id}}" class="form-control" data-ng-model="field.title" data-ng-change="field.changed=true" required>
@@ -85,7 +85,6 @@
     <div><button type="submit" class="btn btn-primary" data-ng-click="fields.saveChanges()">Submit all changes</button></div>
     <div>
       <small class="text-muted">(All fields shown in orange will be updated.)</small>
-      <small class="text-muted" data-ng-show="fields.reordered">(Field order has changed)</small>
     </div>
     <div><button type="submit" class="btn btn-secondary" data-ng-click="fields.cancel()">Cancel</button></div>    
   </div>

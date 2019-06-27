@@ -13,15 +13,14 @@ angular.module("CAMEL")
 		    newIndex = ui.item.index();
 		    spliceItem = ctrl.fields.splice(indexDragging, 1)[0];
 		    ctrl.fields.splice(newIndex, 0, spliceItem);
-		    ctrl.reordered = true;
 		},
 		start: function(event, ui) {		    
 		    indexDragging = ui.item.index();
+		    ctrl.reordered = true;		    
 		}
 	    });
 	    $("#fieldstable").disableSelection();
 	});
-
 
 	
 	ctrl.newRow = function(){
@@ -114,8 +113,8 @@ angular.module("CAMEL")
 		    var field = ctrl.fields[f];
 		    if (field.new_field){
 			newField = new Field(field);
+			newField.weight = f+1;
 			ctrl.fields[f] = newField;
-			ctrl.weight = f+1;
 			newField.$save();
 		    } else if (field.hasOwnProperty('weight')
 			       && (field.changed || ctrl.reordered)){
