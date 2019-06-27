@@ -28,6 +28,12 @@ angular.module("CAMEL")
 		    field: 'journal',
 		    show: false,
 		    filter: false
+		},
+		pubmed_id: {
+		    header: 'Pubmed ID',
+		    field: 'pubmed_id',
+		    show: false,
+		    filter: false
 		}
 	    }
 	    State.expRefs = ctrl.refs;

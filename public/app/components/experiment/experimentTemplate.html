@@ -52,6 +52,7 @@
 		<div class="paper-reference">
 		  {{ref.authors}}, <em>{{ref.title}}</em> ({{ref.year}}) {{ref.journal}}, {{ref.pages}}
 		  <span data-ng-if="ref.url">(<a href="{{ref.url}}" target="_blank">article</a>)</span>
+		  <span data-ng-if="ref.pubmed_id">(<a href="https://www.ncbi.nlm.nih.gov/pubmed/?term={{ref.pubmed_id}}" target="_blank">pubmed</a>)</span>
 		</div>
 	      </li>
 	    </ul>
