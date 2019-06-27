@@ -107,9 +107,9 @@ angular.module("CAMEL")
 		'title': '',
 		'authors': '',
 		'journal': '',
-		'year': '',
+		'year': null,
 		'pages': '',
-		'pubmed_id': '',
+		'pubmed_id': null,
 		'url': '',
 		
 		'action': 'new'

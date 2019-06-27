@@ -227,7 +227,12 @@
       </div>	
       <div class="form-group">
 	<label for="pubmed_{{ref.id}}">PubMed ID</label>
-	<input type="text" id="pubmed_{{ref.id}}" class="form-control" data-ng-model="ref.pubmed_id">
+	<input type="number" id="pubmed_{{ref.id}}" name="pubmed_{{ref.id}}" class="form-control" data-ng-model="ref.pubmed_id">
+	<div class="invalid-feedback" data-ng-show="refForm.$submitted || refForm['pubmed_'+ref.id].$touched">
+	  <div data-ng-show="refForm['pubmed_'+ref.id].$error.number">
+	    Pubmed ID should be numeric.
+	  </div>
+	</div>
       </div>
       <div class="form-group">
 	<label for="url_{{ref.id}}">URL</label>
