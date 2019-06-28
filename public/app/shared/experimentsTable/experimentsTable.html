@@ -69,6 +69,10 @@
 		</i>
 	      </div>
 	    </div>
+	    <div data-ng-switch-when="value_ATTACH">
+	      <i class="material-icons" data-ng-show="experiment.fields.hasOwnProperty(field.id)">check_circle</i>
+	      <i class="material-icons" data-ng-show="!experiment.fields.hasOwnProperty(field.id)">not_interested</i>
+	    </div>
 	    <div data-ng-switch-when="value_VARCHAR">
 	      <div data-ng-if="field.link">
 		<ul class="link-list">

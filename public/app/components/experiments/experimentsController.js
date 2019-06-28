@@ -74,6 +74,7 @@ angular.module("CAMEL")
 		    case 'value_VARCHAR':
 		    case 'value_TEXT':
 		    case 'value_BOOL':
+		    case 'value_ATTACH':
 			delete ctrl.filter[field.id];
 			break;
 		    case 'value_INT':

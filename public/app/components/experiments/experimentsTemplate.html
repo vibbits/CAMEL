@@ -62,6 +62,9 @@
 	      <span data-ng-switch-when="value_BOOL">
 		<input id="filter-{{field.id}}" type="checkbox" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.filterUpdate(field.id)">
 	      </span>
+	      <span data-ng-switch-when="value_ATTACH">
+		<input id="filter-{{field.id}}" type="checkbox" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.filterUpdate(field.id)">
+	      </span>
 	      <span class="form-row" data-ng-switch-when="value_INT">
 		<div class="col">
 		  <label for="filter-min-{{field.id}}">Min:</label>

@@ -153,6 +153,28 @@
 	</div>
 	<small class="form-text text-muted">{{field.description}}</small>
       </div>
+      <div class="form-group" data-ng-switch-when="value_ATTACH">
+	<label for="{{field.id}}">{{field.title}}<span class="red" data-ng-if="field.required">*</span>
+	</label>
+	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
+	  <button type="button" class="close" aria-label="Close"
+		  data-ng-click="expedit.remove_value(field.id, value_id)"
+		  data-ng-if="!field.required || expedit.hasFieldValuesLeft(field)">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	  <input type="file" class="form-control"
+		 id="{{field.id}}"
+		 name="{{field.id}}_{{value_id}}"
+		 data-ng-model="exp.fields[field.id][value_id]"
+		 data-ng-required="field.required">
+	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
+	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
+	      Required field.
+	    </div>
+	  </div>
+	</div>
+	<small class="form-text text-muted">{{field.description}}</small>
+      </div>
     </div>
   </div>
 </form>
