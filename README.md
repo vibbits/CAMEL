@@ -126,6 +126,8 @@ database credentials.
    https://code.angularjs.org/1.7.6/docs/guide
  * JQuery 3.3.1  
    https://api.jquery.com/
+ * JQuery UI 1.12.1 (Custom)  
+   https://api.jqueryui.com/
  * Popper.js 1.15  
    https://popper.js.org/
  * Bootstrap Material Design 4.0.0  
