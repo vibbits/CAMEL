@@ -6,11 +6,12 @@ angular.module("CAMEL")
 	    scope: {
 		fieldTitle: '@',
 		colNr: '@',
-		chartHeight: '@?'
+		chartHeight: '@?',
+		customGrid: '=?'
 	    },
 	    link: function(scope, elem, attr){
 		//set default chart height
-		if (!this.hasOwnProperty('chartHeight')){
+		if (!scope.hasOwnProperty('chartHeight')){
 		    scope.chartHeight = "500px";
 		}
 
@@ -22,8 +23,8 @@ angular.module("CAMEL")
 		    
 		    topValues = counts.map(x => x.value);
 		    topCounts = counts.map(x => x.number);
-	    	    
-		    speciesChart.setOption({
+
+		    options = {
 			tooltip: {},
 			xAxis: {
 			    data: topValues,
@@ -39,7 +40,13 @@ angular.module("CAMEL")
 			    type: 'bar',
 			    data: topCounts
 			}]
-		    });		    
+		    };
+		    
+		    if (scope.hasOwnProperty('customGrid')){
+			options.grid = scope.customGrid;		    
+		    }
+		    
+		    speciesChart.setOption(options);
 		});
 	    }
 	}
