@@ -13,10 +13,12 @@ angular.module("CAMEL")
 		    newIndex = ui.item.index();
 		    spliceItem = ctrl.fields.splice(indexDragging, 1)[0];
 		    ctrl.fields.splice(newIndex, 0, spliceItem);
+		    spliceItem.changed=true;
+		    $scope.$apply();
 		},
-		start: function(event, ui) {		    
+		start: function(event, ui) {
 		    indexDragging = ui.item.index();
-		    ctrl.reordered = true;		    
+		    ctrl.reordered = true;
 		}
 	    });
 	    $("#fieldstable").disableSelection();
@@ -109,12 +111,12 @@ angular.module("CAMEL")
 		    var field = ctrl.fields[f];
 		    if (field.new_field){
 			newField = new Field(field);
-			newField.weight = f+1;
+			newField.weight = Number(f)+1;
 			ctrl.fields[f] = newField;
 			newField.$save();
 		    } else if (field.hasOwnProperty('weight')
 			       && (field.changed || ctrl.reordered)){
-			field.weight = f+1;
+			field.weight = Number(f)+1;
 			field.$update();
 			field.changed = false;
 		    }		    
