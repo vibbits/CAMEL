@@ -46,6 +46,7 @@ CREATE TABLE `experiments_fields` (
   `value_INT` bigint(20) DEFAULT NULL,
   `value_DOUBLE` double DEFAULT NULL,
   `value_BOOL` tinyint(1) DEFAULT NULL,
+  `value_ATTACH` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_experiment_id` (`experiment_id`),
   KEY `fk_field_id` (`field_id`),
@@ -86,7 +87,7 @@ CREATE TABLE `fields` (
   `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `unit` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `type_column` enum('value_VARCHAR','value_TEXT','value_INT','value_DOUBLE','value_BOOL') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `type_column` enum('value_VARCHAR','value_TEXT','value_INT','value_DOUBLE','value_BOOL','value_ATTACH') COLLATE utf8_unicode_ci DEFAULT NULL,
   `link` tinyint(1) NOT NULL DEFAULT 0,
   `required` tinyint(1) NOT NULL DEFAULT 0,
   `group` tinyint(1) DEFAULT 0,
@@ -95,7 +96,7 @@ CREATE TABLE `fields` (
   PRIMARY KEY (`id`),
   KEY `fk_group_id` (`group_id`),
   CONSTRAINT `fk_group_id` FOREIGN KEY (`group_id`) REFERENCES `fields` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,4 +142,4 @@ CREATE TABLE `sessions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-06-27 13:14:00
+-- Dump completed on 2019-06-28 16:12:12
