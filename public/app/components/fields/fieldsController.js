@@ -70,10 +70,6 @@ angular.module("CAMEL")
 	    State.refresh();
 	}
 	
-	function changeColType(){
-	    console.log("Change col type");
-	}
-
 	var confirmAction;
 	$scope.warningTitle = "Warning";
 	$scope.warningMessage = "Careful there";
