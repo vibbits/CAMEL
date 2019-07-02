@@ -1,6 +1,25 @@
-angular.module("CAMEL")
-    .controller('ExpeditController', function($scope, $location, $routeParams, $sce,
-					      Experiment, Field, Reference){
+var camelApp = angular.module("CAMEL");
+
+camelApp.service('attUpload',['$http',function($http){
+    this.uploadFileToUrl = function(file, url){
+        var fd = new FormData();
+        fd.append('file', file);
+        
+        $http.post(url, fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+	    .success(function() {
+		console.log("upload success");
+            })
+	    .error(function() {
+		console.log("upload error");
+            });
+    };
+}]);
+
+camelApp.controller('ExpeditController', function($scope, $location, $routeParams, $sce,
+						  attUpload, Experiment, Field, Reference){
 	var ctrl = this;
 	ctrl.fieldsLoaded = false;
 	ctrl.refsLoaded = false;
@@ -178,7 +197,12 @@ angular.module("CAMEL")
 	    }
 	};
 
-	ctrl.cancel = function(){
+        ctrl.uploadAttachment = function(filePath){
+	    console.dir(filePath);
+	    console.dir($scope.exp);
+	} 
+    
+        ctrl.cancel = function(){
 	    if (ctrl.new_experiment){
 		$location.path('/experiments');
 	    } else {

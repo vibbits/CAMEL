@@ -167,6 +167,7 @@
 		 name="{{field.id}}_{{value_id}}"
 		 data-ng-model="exp.fields[field.id][value_id]"
 		 data-ng-required="field.required">
+	  <span class="btn btn-secondary pointer" data-ng-click="expedit.uploadAttachment(exp.fields[field.id][value_id])">Upload</span>
 	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
 	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
 	      Required field.
