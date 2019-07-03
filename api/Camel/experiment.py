@@ -370,7 +370,7 @@ class ExperimentList(CamelResource):
             row.append('\n'.join([str(y) for y in years]))
             row.append('\n'.join([p if p is not None else '' for p in pages]))
             row.append('\n'.join([u if u is not None else '' for u in urls]))
-            row.append('\n'.join([p if p is not None else '' for p in pubmed_ids]))
+            row.append('\n'.join([str(p) if p is not None else '' for p in pubmed_ids]))
 
             for field in fields:
                 field_id = field['id']
