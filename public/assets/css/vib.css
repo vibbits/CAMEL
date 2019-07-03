@@ -594,6 +594,11 @@ table th.fit{
     white-space: nowrap;
 }
 
+/*Home page*/
+.acronym{
+    font-weight: bold;
+}
+
 /*experiment overview page*/
 #field-selector{
     height: 15em;
