@@ -1,20 +1,22 @@
 var camelApp = angular.module("CAMEL");
 
 camelApp.service('attUpload',['$http',function($http){
-    this.uploadFileToUrl = function(file, url){
+    this.uploadFileToUrl = function(file, expId, fieldId, valueId){
+	console.log(file);
+	url = "/upload/"+expId+'/'+fieldId+'/'+valueId;
         var fd = new FormData();
         fd.append('file', file);
         
         $http.post(url, fd, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
-        })
-	    .success(function() {
-		console.log("upload success");
-            })
-	    .error(function() {
-		console.log("upload error");
-            });
+        });
+	    // .success(function() {
+	    // 	console.log("upload success");
+            // })
+	    // .error(function() {
+	    // 	console.log("upload error");
+            // });
     };
 }]);
 
@@ -196,10 +198,13 @@ camelApp.controller('ExpeditController', function($scope, $location, $routeParam
 		});
 	    }
 	};
-
-        ctrl.uploadAttachment = function(filePath){
-	    console.dir(filePath);
-	    console.dir($scope.exp);
+    
+        ctrl.uploadAttachment = function(fieldId, valueId){
+	    var $inputField = $('input[name="'+ fieldId+'_'+valueId  +'"]');
+	    var files = $inputField[0].files
+	    if (files.length == 1){
+		attUpload.uploadFileToUrl(files[0], "another problem", fieldId, valueId);
+	    }
 	} 
     
         ctrl.cancel = function(){
