@@ -13,7 +13,7 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	$scope.guest_email = "";
 	$scope.guest_comments = "";
 
-        $scope.attachment = new Attachment();
+        $scope.attachments = {};
     
 	if ($location.$$path.startsWith('/experiment/edit/')
 	    && $routeParams.hasOwnProperty('id')){
@@ -69,9 +69,16 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 		//don't allow extra values for TEXT and BOOL
 		if (field_type == 'VARCHAR'
 		    || field_type == 'INT'
-		    || field_type == 'DOUBLE') {
+		    || field_type == 'DOUBLE'
+		    || field_type == 'ATTACH') {
 		    $scope.exp.fields[field_id][new_id] = undefined;
 		}
+	    }
+	    if (field_type == 'ATTACH'){
+		if (!$scope.attachments.hasOwnProperty(field_id)){
+		    $scope.attachments[field_id] = {};
+		}
+		$scope.attachments[field_id][new_id] = new Attachment();
 	    }
 	};
 
@@ -137,9 +144,14 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	
 	ctrl.remove_value = function(fieldId, valueId){
 	    var field = $scope.exp.fields[fieldId];
+	    var field_type = ctrl.type_map[fieldId];
+	    
 	    if (valueId.startsWith("new_")){
 		//delete newly created values
 		delete field[valueId];
+		if (field_type == 'ATTACH'){
+		    delete $scope.attachments[fieldId][valueId];
+		}
 	    } else {
 		//mark existing values as to be deleted
 		field[valueId] = {'action': 'delete'};
@@ -182,11 +194,12 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
         ctrl.uploadAttachment = function(fieldId, valueId){
 	    //create and push actual file
 	    //add meta data to the experiment	    
-	    console.log($scope.attachment);
-	    $scope.attachment.field_id = fieldId;
-	    $scope.attachment.value_id = valueId;
-	    $scope.attachment.$save();
-	} 
+	    var att = $scope.attachments[fieldId][valueId];
+	    var uuid = "UNIQUEID";
+	    att.uuid = uuid;
+	    $scope.exp.fields[fieldId][valueId] = uuid;
+	    att.$save();
+	};
     
         ctrl.cancel = function(){
 	    if (ctrl.new_experiment){

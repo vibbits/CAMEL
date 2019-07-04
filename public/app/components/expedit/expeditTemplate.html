@@ -165,7 +165,7 @@
 	  <input type="file" class="form-control"
 		 id="{{field.id}}"
 		 name="{{field.id}}_{{value_id}}"
-		 files-model="attachment.file"
+		 files-model="attachments[field.id][value_id].file"
 		 data-ng-required="field.required">
 	  <span class="btn btn-secondary pointer" data-ng-click="expedit.uploadAttachment(field.id, value_id)">Upload</span>
 	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">

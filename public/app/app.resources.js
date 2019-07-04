@@ -17,7 +17,6 @@ angular.module("CAMEL")
 	save: {
 	    method: 'POST',
 	    transformRequest: function(data) {
-		console.log("Optimus Prime");
 		if (data === undefined)
 		    return data;
 
