@@ -190,14 +190,18 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 		});
 	    }
 	};
+
+        ctrl.generateUUID = function(){
+	    return "UNIQUE";
+        };
     
         ctrl.uploadAttachment = function(fieldId, valueId){
 	    //create and push actual file
 	    //add meta data to the experiment	    
 	    var att = $scope.attachments[fieldId][valueId];
-	    var uuid = "UNIQUEID";
+	    var uuid = ctrl.generateUUID();
 	    att.uuid = uuid;
-	    $scope.exp.fields[fieldId][valueId] = uuid;
+	    $scope.exp.fields[fieldId][valueId] = uuid + '__' + att.file[0].name;
 	    att.$save();
 	};
     
