@@ -1,27 +1,5 @@
-var camelApp = angular.module("CAMEL");
-
-camelApp.service('attUpload',['$http',function($http){
-    this.uploadFileToUrl = function(file, expId, fieldId, valueId){
-	console.log(file);
-	url = "/upload/"+expId+'/'+fieldId+'/'+valueId;
-        var fd = new FormData();
-        fd.append('file', file);
-        
-        $http.post(url, fd, {
-            transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
-        });
-	    // .success(function() {
-	    // 	console.log("upload success");
-            // })
-	    // .error(function() {
-	    // 	console.log("upload error");
-            // });
-    };
-}]);
-
-camelApp.controller('ExpeditController', function($scope, $location, $routeParams, $sce,
-						  attUpload, Experiment, Field, Reference){
+angular.module("CAMEL").controller('ExpeditController', function($scope, $location, $routeParams, $sce,
+								 Experiment, Field, Reference, Attachment){
 	var ctrl = this;
 	ctrl.fieldsLoaded = false;
 	ctrl.refsLoaded = false;
@@ -35,6 +13,8 @@ camelApp.controller('ExpeditController', function($scope, $location, $routeParam
 	$scope.guest_email = "";
 	$scope.guest_comments = "";
 
+        $scope.attachment = new Attachment();
+    
 	if ($location.$$path.startsWith('/experiment/edit/')
 	    && $routeParams.hasOwnProperty('id')){
 	    ctrl.new_experiment = false;
@@ -200,11 +180,12 @@ camelApp.controller('ExpeditController', function($scope, $location, $routeParam
 	};
     
         ctrl.uploadAttachment = function(fieldId, valueId){
-	    var $inputField = $('input[name="'+ fieldId+'_'+valueId  +'"]');
-	    var files = $inputField[0].files
-	    if (files.length == 1){
-		attUpload.uploadFileToUrl(files[0], "another problem", fieldId, valueId);
-	    }
+	    //create and push actual file
+	    //add meta data to the experiment	    
+	    console.log($scope.attachment);
+	    $scope.attachment.field_id = fieldId;
+	    $scope.attachment.value_id = valueId;
+	    $scope.attachment.$save();
 	} 
     
         ctrl.cancel = function(){
