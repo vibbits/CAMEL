@@ -11,4 +11,35 @@ angular.module("CAMEL")
 })
 .factory("Reference", function ReferenceFactory($resource) {
     return $resource("api/reference/:id", {id: '@id'});
+})
+.factory("Attachment", function AttachmentFactory($resource){
+    return $resource("api/attachment/:uuid", {uuid: '@uuid'}, {
+	save: {
+	    method: 'POST',
+	    transformRequest: function(data) {
+		console.log("Optimus Prime");
+		if (data === undefined)
+		    return data;
+
+		var fd = new FormData();
+		angular.forEach(data, function(value, key) {
+		    if (value instanceof FileList) {
+			if (value.length == 1) {
+			    fd.append(key, value[0]);
+			} else {
+			    angular.forEach(value, function(file, index) {
+				fd.append(key + '_' + index, file);
+			    });
+			}
+		    } else {
+			fd.append(key, value);
+		    }
+		});
+		return fd;
+	    },
+	    headers: {
+		'Content-Type': undefined
+	    }
+	}
+    });
 });
