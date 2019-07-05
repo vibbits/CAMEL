@@ -1,10 +1,15 @@
 from flask_restful import request, reqparse
 from MySQLdb.cursors import DictCursor
+from pathlib import Path
+
 from Camel import CamelResource
 from Camel.field import FieldList
 from Camel.auth import is_authenticated
+from Camel import config
+
 
 import io
+import shutil
 import csv
 
 def _compose_query(where_base = [], where_field = [], where_ref = []):
@@ -119,6 +124,23 @@ def _map_field_types():
     return field_types
 
 
+def _put_file(uuid, exp_id, field_id, filename):
+    '''
+    Move tmp file with uuid to its download location with 
+    original filename.
+    '''
+    upload_conf = config['uploads']
+    tmp_path = Path(upload_conf['TMP'])
+    tmp_file = tmp_path.joinpath(uuid)
+        
+    target_path = Path(upload_conf['PATH'])
+    target_full_path = target_path.joinpath(str(exp_id), str(field_id))
+    target_full_path.mkdir(parents=True, exist_ok=True)
+    target_file = target_full_path.joinpath(filename)
+    
+    shutil.move(str(tmp_file), str(target_file))
+    
+
 def _edit_fields(exp_id, fields, field_types, db):
     '''
     Loop over the submitted field dictionary (field id => field data) 
@@ -129,12 +151,20 @@ def _edit_fields(exp_id, fields, field_types, db):
         field_type = field_types[int(field_id)]
         for value_id, value in values.items():
             id_parts = value_id.split('_') 
-            if len(id_parts) == 2 and id_parts[0] == 'new':
+            if len(id_parts) == 2 and id_parts[0] == 'new':                
                 ##Insert new value
+                ##uploaded attachments need to store the tmp uuid
+                if field_type == 'ATTACH':
+                    uuid = value['uuid']
+                    value = value['filename']
+                
                 sql = ("INSERT INTO `experiments_fields` "
                        "(`experiment_id`, `field_id`, `value_{type_col}`) "
                        "VALUES (%(exp_id)s, %(field_id)s, %(val)s) ").format(type_col = field_type)
                 cursor.execute(sql, {'exp_id': exp_id, 'field_id': field_id, 'val': value})
+
+                if field_type == 'ATTACH':
+                    _put_file(uuid, exp_id, field_id, value)
             else:
                 if type(value) is not dict:
                     ##Update existing value
