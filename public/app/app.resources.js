@@ -13,7 +13,7 @@ angular.module("CAMEL")
     return $resource("api/reference/:id", {id: '@id'});
 })
 .factory("Attachment", function AttachmentFactory($resource){
-    return $resource("api/attachment/:uuid", {uuid: '@uuid'}, {
+    return $resource("api/attachment/", {}, {
 	save: {
 	    method: 'POST',
 	    transformRequest: function(data) {

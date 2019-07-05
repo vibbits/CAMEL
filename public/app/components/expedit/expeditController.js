@@ -13,6 +13,7 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
     $scope.guest_email = "";
     $scope.guest_comments = "";
 
+    $scope.download_url = "uploads"
     $scope.attachments = {};
     
     if ($location.$$path.startsWith('/experiment/edit/')
@@ -190,19 +191,14 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	    });
 	}
     };
-
-    ctrl.generateUUID = function(){
-	return "UNIQUE";
-    };
     
     ctrl.uploadAttachment = function(fieldId, valueId){
-	//create and push actual file
-	//add meta data to the experiment	    
 	var att = $scope.attachments[fieldId][valueId];
-	var uuid = ctrl.generateUUID();
-	att.uuid = uuid;
-	$scope.exp.fields[fieldId][valueId] = uuid + '__' + att.file[0].name;
-	att.$save();
+	var filename = att.file[0].name;
+	att.$save().then(function(){
+	    uuid = att.uuid;
+	    $scope.exp.fields[fieldId][valueId] = {'filename': filename, 'uuid': uuid};
+	});
     };
     
     ctrl.cancel = function(){
