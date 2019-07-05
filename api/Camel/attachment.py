@@ -25,7 +25,6 @@ class Attachment(CamelResource):
         uploadedFile = request.files['file']
         uuid = str(uuid4())
         target = str(self.tmp_uploads.joinpath(uuid))
-        print(target)
         uploadedFile.save(target)
 
         return {'uuid': uuid}
