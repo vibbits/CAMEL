@@ -40,6 +40,7 @@ class CamelResource(Resource):
 from Camel.experiment import Experiment, ExperimentList
 from Camel.field import Field, FieldList
 from Camel.reference import Reference, ReferenceList
+from Camel.attachment import Attachment
 
 ## Init Flask App
 app = Flask(__name__)
@@ -52,6 +53,7 @@ api.add_resource(FieldList, '/field')
 api.add_resource(Field, '/field/<string:id>')
 api.add_resource(ReferenceList, '/reference')
 api.add_resource(Reference, '/reference/<int:id>')
+api.add_resource(Attachment, '/attachment')
 
 ## Export
 

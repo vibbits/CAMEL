@@ -3,3 +3,7 @@ HOST =
 NAME = 
 USER = 
 PASSWORD = 
+
+[uploads]
+PATH =
+TMP =
