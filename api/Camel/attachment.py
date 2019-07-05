@@ -23,7 +23,9 @@ class Attachment(CamelResource):
             return "Admin only", 401
 
         uploadedFile = request.files['file']
-        target = str(self.tmp_uploads.joinpath(str(uuid4())))
+        uuid = str(uuid4())
+        target = str(self.tmp_uploads.joinpath(uuid))
         print(target)
         uploadedFile.save(target)
-        
+
+        return {'uuid': uuid}
