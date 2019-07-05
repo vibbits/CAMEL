@@ -4,4 +4,4 @@ __pycache__
 auth/.htpasswd
 
 /public/uploads/*
-!/public/uploads/empty
+!/public/uploads/.keep
