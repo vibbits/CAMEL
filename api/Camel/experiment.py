@@ -12,7 +12,7 @@ import io
 import shutil
 import csv
 
-def _compose_query(where_base = [], where_field = [], where_ref = []):
+def _compose_query(where_base = [], where_field = [], not_field = [], where_ref = []):
     '''
     Compose the SQL query to fetch a filtered list of experiments
 
@@ -31,6 +31,10 @@ def _compose_query(where_base = [], where_field = [], where_ref = []):
     field_filter = ("e.`id` IN (SELECT ef_filter.`experiment_id` "
                          "FROM `experiments_fields` ef_filter "
                          "WHERE {} ) ")
+    
+    not_field_filter = ("e.`id` NOT IN (SELECT ef_filter.`experiment_id` "
+                         "FROM `experiments_fields` ef_filter "
+                         "WHERE {} ) ")
 
     ref_filter = ("e.`id` IN (SELECT er_filter.`experiment_id` "
                   "FROM `experiments_references` er_filter "
@@ -45,6 +49,10 @@ def _compose_query(where_base = [], where_field = [], where_ref = []):
     for wf in where_field:
         wf_sql = field_filter.format(wf)
         where.append(wf_sql)
+
+    for nf in not_field:
+        nf_sql = not_field_filter.format(nf)
+        where.append(nf_sql)
         
     for wr in where_ref:
         wr_sql = ref_filter.format(wr)
@@ -268,6 +276,17 @@ class ExperimentList(CamelResource):
             self.tokens["FieldID_{}".format(field_id)] = field_id
             self.tokens["FieldValue_{}".format(field_id)] = bool_value
             self.where_field.append(filter_query)
+
+        elif field_type == 'ATTACH':
+            filter_query = ("(ef_filter.`field_id` = %(FieldID_{field_id})s "
+                            "AND ef_filter.`value_ATTACH` IS NOT NULL) ").format(field_id=field_id)
+            self.tokens["FieldID_{}".format(field_id)] = field_id
+            
+            if value=='true':
+                self.where_field.append(filter_query)
+            else:
+                self.not_field.append(filter_query)
+
         
     def _add_ref_filters(self, field_id, value):
         ref_parts = field_id.split('_', 1)
@@ -302,6 +321,7 @@ class ExperimentList(CamelResource):
 
         ##Field filters
         self.where_field = []
+        self.not_field = []
         self.where_ref = []
         field_types = _map_field_types()
         
@@ -333,7 +353,7 @@ class ExperimentList(CamelResource):
 
                 
         c = self.db.cursor(DictCursor)
-        sql = _compose_query(self.where_base, self.where_field, self.where_ref)
+        sql = _compose_query(self.where_base, self.where_field, self.not_field, self.where_ref)
 
         c.execute(sql, self.tokens)
         res = c.fetchall()
