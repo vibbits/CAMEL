@@ -145,7 +145,15 @@ def _put_file(uuid, exp_id, field_id, filename):
     target_full_path = target_path.joinpath(str(exp_id), str(field_id))
     target_full_path.mkdir(parents=True, exist_ok=True)
     target_file = target_full_path.joinpath(filename)
-    
+
+    postfix = 0
+    while target_file.exists():
+        postfix +=1
+        new_name = '_'.join((target_file.name, str(postfix)))
+        ##TODO: keep extension
+        ##TODO: get new filename in db
+        target_file = target_file.parent.joinpath(new_name)
+        
     shutil.move(str(tmp_file), str(target_file))
 
 def _del_file(exp_id, field_id, filename):
