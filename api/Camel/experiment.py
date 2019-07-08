@@ -23,7 +23,7 @@ def _compose_query(where_base = [], where_field = [], where_ref = []):
     base = ("SELECT e.`id` AS `experiment_id`, e.`name`, "
             "f.`id` AS `field_id`, f.`title` AS `field_title`, f.`weight`, "
             "ef.`id` as value_id, "
-            "ef.`value_INT`, ef.`value_VARCHAR`, ef.`value_DOUBLE`, ef.`value_BOOL`, ef.`value_TEXT` "
+            "ef.`value_INT`, ef.`value_VARCHAR`, ef.`value_DOUBLE`, ef.`value_BOOL`, ef.`value_TEXT`, ef.`value_ATTACH` "
             "FROM `experiments` e "
             "LEFT JOIN `experiments_fields` ef ON e.`id` = ef.`experiment_id` "
             "LEFT JOIN `fields` f ON ef.`field_id` = f.`id` ")
