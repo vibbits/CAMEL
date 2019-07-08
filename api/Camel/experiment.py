@@ -147,7 +147,15 @@ def _put_file(uuid, exp_id, field_id, filename):
     target_file = target_full_path.joinpath(filename)
     
     shutil.move(str(tmp_file), str(target_file))
-    
+
+def _del_file(exp_id, field_id, filename):
+    '''
+    Remove file
+    '''
+    upload_conf = config['uploads']
+    target_path = Path(upload_conf['PATH'])
+    target_file = target_path.joinpath(str(exp_id), str(field_id), filename)
+    target_file.unlink()
 
 def _edit_fields(exp_id, fields, field_types, db):
     '''
@@ -180,6 +188,11 @@ def _edit_fields(exp_id, fields, field_types, db):
                     cursor.execute(sql, {'val_id': value_id, 'value': value})
                 elif 'action' in value and value['action'] == 'delete':
                     ##Delete value
+                    if field_type == 'ATTACH':
+                        sql = "SELECT `value_ATTACH` as filename FROM `experiments_fields` WHERE `id` = %(val_id)s"
+                        cursor.execute(sql, {'val_id': value_id})
+                        row = cursor.fetchone()
+                        _del_file(exp_id, field_id, row[0])
                     sql = "DELETE FROM `experiments_fields` WHERE `id` = %(val_id)s"
                     cursor.execute(sql, {'val_id': value_id})
     cursor.close()
