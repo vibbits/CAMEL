@@ -2,6 +2,7 @@ angular.module("CAMEL")
     .controller('ExperimentController', function($scope, $location, $timeout, $routeParams, $route, $http, Experiment, Field) {
 	var ctrl = this;
 	
+	$scope.download_url = "uploads"
 	$scope.exp = Experiment.get($routeParams,
 				    function(){
 					//experiment loaded

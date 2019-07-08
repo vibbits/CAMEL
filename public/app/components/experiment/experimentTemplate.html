@@ -36,6 +36,11 @@
 		  {{value}}
 		</div>
 	      </div>
+	      <div data-ng-switch-when="value_ATTACH">
+		<div data-ng-repeat="value in exp.fields[field.id]">
+		  <a href="{{download_url}}/{{exp.id}}/{{field.id}}/{{value}}" target="_blank">{{value}}</a>
+		</div>
+	      </div>
 	      <div data-ng-switch-default>
 		<span class="field-value" data-ng-repeat="value in exp.fields[field.id]">
 		  {{value}}
