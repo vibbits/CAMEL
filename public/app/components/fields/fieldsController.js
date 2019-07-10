@@ -91,6 +91,10 @@ angular.module("CAMEL")
 			+"This field is labeled as a group field, which means all "
 			+"dependent fields will also be deleted together with their data.";
 		}
+		if (field.type_column == 'value_ATTACH'){
+		    warningMessage+="<br><br>"
+		        +"All attachments of this field type will be deleted."
+		}
 		$scope.warningMessage = $sce.trustAsHtml(warningMessage);
 		$scope.confirmData = field;
 		confirmAction = deleteRow;

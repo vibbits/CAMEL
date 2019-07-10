@@ -1,8 +1,13 @@
 from flask_restful import request, reqparse
 from MySQLdb.cursors import DictCursor
 from flask_restful import reqparse
+
+from pathlib import Path
+import shutil
+
 from Camel import CamelResource
 from Camel import auth
+from Camel import config
 
 class FieldList(CamelResource):
 
@@ -158,18 +163,34 @@ class Field(CamelResource):
         if not auth.is_authenticated():
             return "Admin only", 401
 
-        
-        sql = "SELECT count(*) FROM `fields` WHERE `id` = %(id)s"
+        ## Does field exist?
+        sql = "SELECT `id`, `type_column` FROM `fields` WHERE `id` = %(id)s"
         c = self.db.cursor()
         c.execute(sql, {'id': id})
-        res = c.fetchone()
-        c.close()
-        if res[0] != 1:
+        res = c.fetchall()
+
+        if len(res) != 1:
             return "No such field"
-        
+        else:
+            type_column = res[0][1]
+                
+        ## Clean up ATTACH field
+        if type_column == 'value_ATTACH':
+            upload_conf = config['uploads']            
+            upload_path = Path(upload_conf['PATH'])
+            sql = "SELECT `experiment_id` FROM `experiments_fields` WHERE `field_id` = %(id)s"
+            c.execute(sql, {'id': id})
+            res = c.fetchall()
+            for row in res:
+                exp_id = row[0]
+                attachment_dir = upload_path.joinpath(str(exp_id), str(id))
+                shutil.rmtree(attachment_dir)
+
+        ## Delete from db
         sql = "DELETE FROM `fields` WHERE `id` = %(id)s"
-        c = self.db.cursor()
+
         c.execute(sql, {'id': id})
+
         self.db.commit()
         c.close()
 
