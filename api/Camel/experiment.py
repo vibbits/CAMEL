@@ -579,7 +579,13 @@ class Experiment(CamelResource):
             if linkCount == 0:
                 sql = "DELETE FROM `references` WHERE `id` = %(ref_id)s"
                 cursor.execute(sql, {'ref_id': ref_id})
-        
+
+        ## Delete attachments
+        upload_conf = config['uploads']
+        target_path = Path(upload_conf['PATH'])
+        target_exp_path = target_path.joinpath(str(id))
+        shutil.rmtree(target_exp_path)
+                
         self.db.commit()
         cursor.close()
         

@@ -229,7 +229,8 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
     
     ctrl.delete = function(){
 	$scope.warningTitle = "Delete Experiment";
-	$scope.warningMessage = $sce.trustAsHtml("Deleting an experiment cannot be undone. <br><br>"
+	$scope.warningMessage = $sce.trustAsHtml("Deleting an experiment cannot be undone. "
+						 +"All data, including uploaded attachments will be removed.<br><br>"
 						 +"Linked references will be removed as well, unless they "
 						 +"are still linked to any other experiments.<br><br>"
 						 +"Are you sure?");
