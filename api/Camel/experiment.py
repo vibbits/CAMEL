@@ -136,6 +136,8 @@ def _put_file(uuid, exp_id, field_id, filename):
     '''
     Move tmp file with uuid to its download location with 
     original filename.
+
+    :return: final filename, including possible postfix
     '''
     upload_conf = config['uploads']
     tmp_path = Path(upload_conf['TMP'])
@@ -147,14 +149,16 @@ def _put_file(uuid, exp_id, field_id, filename):
     target_file = target_full_path.joinpath(filename)
 
     postfix = 0
+    stem = target_file.stem.split('.')[0]
     while target_file.exists():
         postfix +=1
-        new_name = '_'.join((target_file.name, str(postfix)))
-        ##TODO: keep extension
-        ##TODO: get new filename in db
+        postfixed = stem + '_'  + str(postfix)
+        new_name = postfixed + ''.join(target_file.suffixes)
         target_file = target_file.parent.joinpath(new_name)
         
     shutil.move(str(tmp_file), str(target_file))
+
+    return target_file.name
 
 def _del_file(exp_id, field_id, filename):
     '''
@@ -181,14 +185,13 @@ def _edit_fields(exp_id, fields, field_types, db):
                 if field_type == 'ATTACH':
                     uuid = value['uuid']
                     value = value['filename']
+                    value = _put_file(uuid, exp_id, field_id, value)
                 
                 sql = ("INSERT INTO `experiments_fields` "
                        "(`experiment_id`, `field_id`, `value_{type_col}`) "
                        "VALUES (%(exp_id)s, %(field_id)s, %(val)s) ").format(type_col = field_type)
                 cursor.execute(sql, {'exp_id': exp_id, 'field_id': field_id, 'val': value})
 
-                if field_type == 'ATTACH':
-                    _put_file(uuid, exp_id, field_id, value)
             else:
                 if type(value) is not dict:
                     ##Update existing value
