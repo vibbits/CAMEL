@@ -29,6 +29,7 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	$scope.exp = new Experiment();	    
 	$scope.exp.fields = {};
 	$scope.exp.references = [];
+	ctrl.experimentLoaded = true;
     }
     
     $scope.fields = Field.query(function(){
@@ -83,14 +84,6 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	}
     };
 
-    /**
-       Checks if there is more than one value left
-       for this field.
-    */
-    ctrl.hasFieldValuesLeft = function(field){
-	field_values = $scope.exp.fields[field.id];
-	return Object.keys(field_values).length >1;
-    }
     
     ctrl.load_reference = function(){
 	if (!$scope.ref_selected_index) return;
@@ -146,6 +139,25 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	return typeof(value) != 'object';
     };
 
+    ctrl.countValues = function(field_id){
+	var count=0;
+	for (var value_id in $scope.exp.fields[field_id]){
+	    if ($scope.exp.fields[field_id].hasOwnProperty(value_id)){
+		var value = $scope.exp.fields[field_id][value_id];
+		if (value == undefined){
+		    count++;
+		}
+		else if (value.hasOwnProperty('filename')){
+		    count++;
+		}
+		else if (ctrl.isValue(value)){
+		    count++;
+		}
+	    }
+	}
+	return count;
+    }
+    
     /**
      * Does this field have (non-action) values for this experiment?
      * New values will be 'undefined'.
@@ -159,22 +171,19 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	    return false;
 	}
 
-	for (var value_id in $scope.exp.fields[field.id]){
-	    if ($scope.exp.fields[field.id].hasOwnProperty(value_id)){
-		var value = $scope.exp.fields[field.id][value_id];
-		if (value == undefined){
-		    return true;
-		}
-		if (value.hasOwnProperty('filename')){
-		    return true;
-		}
-		if (ctrl.isValue(value)){
-		    return true;
-		}
-	    }
-	}
-	return false;
+	var value_count = ctrl.countValues(field.id);
+	
+	return value_count>0;
     }
+
+    /**
+       Checks if there is more than one value left
+       for this field.
+    */
+    ctrl.hasFieldValuesLeft = function(field){
+	return ctrl.countValues(field.id) >1;
+    }
+
     
     ctrl.remove_value = function(fieldId, valueId){
 	var field = $scope.exp.fields[fieldId];
