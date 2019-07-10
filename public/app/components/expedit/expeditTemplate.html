@@ -158,22 +158,29 @@
 	</label>
 	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]">	  
 	  <button type="button" class="close" aria-label="Close"
-		  data-ng-click="expedit.remove_value(field.id, value_id)"
-		  data-ng-if="!field.required || expedit.hasFieldValuesLeft(field)">
+		  data-ng-click="expedit.remove_value(field.id, value_id)">
 	    <span aria-hidden="true">&times;</span>
 	  </button>
-	  <div data-ng-if="field_value['filename']">Uploaded file: {{field_value['filename']}}</div>
+	  <!-- Attachment is registered in database -->
 	  <a href="{{download_url}}/{{exp.id}}/{{field.id}}/{{field_value}}"
 	     data-ng-if="expedit.isValue(field_value)" target="_blank">{{field_value}}</a>
-	  <input type="file" class="form-control"
-		 id="{{field.id}}"
-		 name="{{field.id}}_{{value_id}}"
-		 files-model="attachments[field.id][value_id].file"
-		 data-ng-required="field.required">
-	  <span class="btn btn-secondary pointer" data-ng-click="expedit.uploadAttachment(field.id, value_id)">Upload</span>
-	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
+	  <!-- Attachment has (just) been uploaded -->
+	  <div data-ng-if="field_value['filename']">Newly uploaded file: {{field_value['filename']}}</div>
+	  <!-- Fresh upload button -->
+	  <div data-ng-if="!field_value">
+	    <input type="file" class="form-control"
+		   id="{{field.id}}"
+		   name="{{field.id}}_{{value_id}}"
+		   files-model="attachments[field.id][value_id].file"
+		   data-ng-required="field.required">
+	    <span class="btn btn-secondary pointer" data-ng-click="expedit.uploadAttachment(field.id, value_id)">Upload</span>
+	  </div>
+	  <div class="invalid-feedback manual-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
 	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
-	      Required field.
+	      Required upload.
+	    </div>
+	    <div data-ng-show="exp.fields[field.id][value_id]==undefined">
+	      Upload not yet completed.
 	    </div>
 	  </div>
 	</div>

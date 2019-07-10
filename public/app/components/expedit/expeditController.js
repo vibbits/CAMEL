@@ -180,6 +180,26 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	    || $scope.refForm.$invalid){
 	    return;
 	}
+
+	//check for non-uploaded attachments
+	var non_uploads = 0;
+	for (var f in $scope.attachments){
+	    if ($scope.attachments.hasOwnProperty(f)){
+		for (var att in $scope.attachments[f]){
+		    if ($scope.attachments[f].hasOwnProperty(att)){
+			var value = $scope.exp.fields[f][att];
+			if (value == undefined){
+			    non_uploads++;
+			}
+		    }
+		}
+	    }
+	}
+	if (non_uploads > 0){
+	    console.log("Non-uploads pending");
+	    return;
+	}
+
 	
 	if (ctrl.new_experiment){
 	    $scope.exp.$save().then(function(){
