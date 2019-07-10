@@ -139,9 +139,31 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	}
     };
 
+    /**
+     * Is this value a non-action value?
+     */
     ctrl.isValue = function(value){
 	return typeof(value) != 'object';
     };
+
+    /**
+     * Does this field have (non-action) values for this experiment?
+     */
+    ctrl.hasValues = function(field){
+	if (!$scope.exp.fields.hasOwnProperty(field.id)){
+	    return false;
+	}
+
+	for (var value_id in $scope.exp.fields[field.id]){
+	    if ($scope.exp.fields[field.id].hasOwnProperty(value_id)){
+		var value = $scope.exp.fields[field.id][value_id];
+		if (ctrl.isValue(value)){
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
     
     ctrl.remove_value = function(fieldId, valueId){
 	var field = $scope.exp.fields[fieldId];
