@@ -148,8 +148,13 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 
     /**
      * Does this field have (non-action) values for this experiment?
+     * New values will be 'undefined'.
+     * Make an exception for just uploaded files.
      */
     ctrl.hasValues = function(field){
+	if (!ctrl.experimentLoaded){
+	    return false;
+	}
 	if (!$scope.exp.fields.hasOwnProperty(field.id)){
 	    return false;
 	}
@@ -157,6 +162,12 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	for (var value_id in $scope.exp.fields[field.id]){
 	    if ($scope.exp.fields[field.id].hasOwnProperty(value_id)){
 		var value = $scope.exp.fields[field.id][value_id];
+		if (value == undefined){
+		    return true;
+		}
+		if (value.hasOwnProperty('filename')){
+		    return true;
+		}
 		if (ctrl.isValue(value)){
 		    return true;
 		}
