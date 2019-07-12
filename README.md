@@ -50,7 +50,7 @@ enabled, also make sure that this folder has the context
 ### Configuration
 
 Backend configuration: `camel.conf.default`  
-Copy to ´camel.conf´ and add database credentials and upload paths.
+Copy to `camel.conf` and add database credentials and upload paths.
 
 Frontend configuration: `public/app/app.config.default.js`  
 Copy to `public/app/app.config.js` and set API and download URLs.
