@@ -156,7 +156,7 @@ def _put_file(uuid, exp_id, field_id, filename):
         new_name = postfixed + ''.join(target_file.suffixes)
         target_file = target_file.parent.joinpath(new_name)
         
-    shutil.move(str(tmp_file), str(target_file))
+    shutil.move(str(tmp_file), str(target_file), copy_function=shutil.copy)
 
     return target_file.name
 
