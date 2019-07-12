@@ -40,6 +40,20 @@ Dependencies:
 Apache webserver needs to have the the `mod_wsgi` module installed for
 Python3 with a `ScriptAlias` pointing at the entry point `camel.wsgi`
 
+For data attachments, CAMEL will need a directory on the webserver
+that is read/writable for Apache and can be publicly served, either as
+a CAMEL subfolder, or in its own DocumentRoot. On systems with SELinux
+enabled, also make sure that this folder has the context
+`httpd_sys_rw_content_t` and the sebool is set to
+`allow_httpd_sys_script_anon_write`.
+
+### Configuration
+
+Backend configuration: `camel.conf.default`  
+Copy to ´camel.conf´ and add database credentials and upload paths.
+
+Frontend configuration: `public/app/app.config.default.js`  
+Copy to `public/app/app.config.js` and set API and download URLs.
 
 #### API Calls
 All data can be retrieved with simple `get` requests.  
