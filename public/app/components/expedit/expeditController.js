@@ -136,18 +136,18 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
      * Is this value a non-action value?
      */
     ctrl.isValue = function(value){
-	return typeof(value) != 'object';
+	return typeof(value) != 'object'
+	    || value.hasOwnProperty('filename');
     };
-
+    ctrl.isStringValue = function(value){
+	return typeof(value) == 'string';
+    };
     ctrl.countValues = function(field_id){
 	var count=0;
 	for (var value_id in $scope.exp.fields[field_id]){
 	    if ($scope.exp.fields[field_id].hasOwnProperty(value_id)){
 		var value = $scope.exp.fields[field_id][value_id];
 		if (value == undefined){
-		    count++;
-		}
-		else if (value.hasOwnProperty('filename')){
 		    count++;
 		}
 		else if (ctrl.isValue(value)){
@@ -184,11 +184,20 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	return ctrl.countValues(field.id) >1;
     }
 
+    /**
+     * Always show a close button for attachments fields,
+     * except for a last upload control when the field is required.
+     */
+    ctrl.showRemoveAttachButton = function(field, field_value){
+	if (field.required && !ctrl.hasFieldValuesLeft(field)){
+	    return !!field_value;
+	}
+	return true;
+    };
     
     ctrl.remove_value = function(fieldId, valueId){
 	var field = $scope.exp.fields[fieldId];
-	var field_type = ctrl.type_map[fieldId];
-	
+	var field_type = ctrl.type_map[fieldId];	
 	if (valueId.startsWith("new_")){
 	    //delete newly created values
 	    delete field[valueId];

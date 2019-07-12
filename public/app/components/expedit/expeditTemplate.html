@@ -156,14 +156,15 @@
       <div class="form-group" data-ng-switch-when="value_ATTACH">
 	<label for="{{field.id}}">{{field.title}}<span class="red" data-ng-if="field.required">*</span>
 	</label>
-	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]">
+	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
 	  <button type="button" class="close" aria-label="Close"
-		  data-ng-click="expedit.remove_value(field.id, value_id)">
+		  data-ng-click="expedit.remove_value(field.id, value_id)"
+		  data-ng-if="expedit.showRemoveAttachButton(field, field_value)">
 	    <span aria-hidden="true">&times;</span>
 	  </button>
 	  <!-- Attachment is registered in database -->
 	  <a href="{{download_url}}/{{exp.id}}/{{field.id}}/{{field_value}}"
-	     data-ng-if="expedit.isValue(field_value)" target="_blank">{{field_value}}</a>
+	     data-ng-if="expedit.isStringValue(field_value)" target="_blank">{{field_value}}</a>
 	  <!-- Attachment has (just) been uploaded -->
 	  <div data-ng-if="field_value['filename']">Newly uploaded file: {{field_value['filename']}}</div>
 	  <!-- Fresh upload button -->
