@@ -1,7 +1,5 @@
 *~
 camel.conf
+public/app/app.config.js
 __pycache__
 auth/.htpasswd
-
-/public/uploads/*
-!/public/uploads/.keep

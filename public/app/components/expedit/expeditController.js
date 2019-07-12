@@ -1,5 +1,5 @@
 angular.module("CAMEL").controller('ExpeditController', function($scope, $location, $routeParams, $sce,
-								 Experiment, Field, Reference, Attachment){
+								 Experiment, Field, Reference, Attachment, config){
     var ctrl = this;
     ctrl.fieldsLoaded = false;
     ctrl.refsLoaded = false;
@@ -14,7 +14,7 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
     $scope.guest_email = "";
     $scope.guest_comments = "";
 
-    $scope.download_url = "uploads"
+    $scope.download_url = config.attachments;
     $scope.attachments = {};
     
     if ($location.$$path.startsWith('/experiment/edit/')
