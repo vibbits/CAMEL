@@ -167,7 +167,11 @@ def _del_file(exp_id, field_id, filename):
     upload_conf = config['uploads']
     target_path = Path(upload_conf['PATH'])
     target_file = target_path.joinpath(str(exp_id), str(field_id), filename)
-    target_file.unlink()
+    try:
+        target_file.unlink()
+    except FileNotFoundError:
+        ## if the file is gone already: mission accimplished
+        pass
 
 def _edit_fields(exp_id, fields, field_types, db):
     '''
@@ -584,7 +588,7 @@ class Experiment(CamelResource):
         upload_conf = config['uploads']
         target_path = Path(upload_conf['PATH'])
         target_exp_path = target_path.joinpath(str(id))
-        shutil.rmtree(target_exp_path)
+        shutil.rmtree(target_exp_path, ignore_errors=True)
                 
         self.db.commit()
         cursor.close()

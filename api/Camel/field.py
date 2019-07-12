@@ -184,7 +184,7 @@ class Field(CamelResource):
             for row in res:
                 exp_id = row[0]
                 attachment_dir = upload_path.joinpath(str(exp_id), str(id))
-                shutil.rmtree(attachment_dir)
+                shutil.rmtree(attachment_dir, ignore_errors=True)
 
         ## Delete from db
         sql = "DELETE FROM `fields` WHERE `id` = %(id)s"
