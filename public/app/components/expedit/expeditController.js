@@ -9,6 +9,7 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
     
     ctrl.new_incr = 0;
     ctrl.type_map = {}
+    ctrl.req_map = {}
     
     $scope.guest_email = "";
     $scope.guest_comments = "";
@@ -34,11 +35,12 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
     
     $scope.fields = Field.query(function(){
 	ctrl.fieldsLoaded = true;
-	//type mapping
+	//field mapping
 	for (var i in $scope.fields){
 	    var field = $scope.fields[i];
 	    if (field.hasOwnProperty('id')){
 		ctrl.type_map[field.id] = field.type_column.split('_')[1];
+		ctrl.req_map[field.id] = field.required;
 	    }
 	    if (ctrl.new_experiment
 		&& field.hasOwnProperty('required') && field['required']){
@@ -194,7 +196,14 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	}
 	return true;
     };
-    
+
+    /**
+     * Remove a field from the page. New fields will simply be removed,
+     * persistent fields will become invisible and get a 'delete' action flag 
+     * for the API call.
+     * 
+     * Removing a required attachment should spawn a new attachment upload control.
+     */
     ctrl.remove_value = function(fieldId, valueId){
 	var field = $scope.exp.fields[fieldId];
 	var field_type = ctrl.type_map[fieldId];	
@@ -218,6 +227,14 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	//remove 'empty' field
 	if (count === 0){		
 	    delete $scope.exp.fields[fieldId];
+	}
+
+	//spawn required ATTACH field
+	if (field_type == 'ATTACH' && ctrl.req_map[fieldId]){
+	    if (ctrl.countValues(fieldId) == 0){
+		$scope.new_field_selected_id = fieldId;
+		ctrl.add_field();
+	    }
 	}
     }
 
