@@ -45,7 +45,8 @@ that is read/writable for Apache and can be publicly served, either as
 a CAMEL subfolder, or in its own DocumentRoot. On systems with SELinux
 enabled, also make sure that this folder has the context
 `httpd_sys_rw_content_t` and the sebool is set to
-`allow_httpd_sys_script_anon_write`.
+`allow_httpd_sys_script_anon_write`. Besides, SELinux will only allow CAMEL
+to do PubMed lookups if it has `httpd_can_network_connect` permissions too.
 
 ### Configuration
 

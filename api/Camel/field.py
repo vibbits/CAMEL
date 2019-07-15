@@ -1,6 +1,5 @@
 from flask_restful import request, reqparse
 from MySQLdb.cursors import DictCursor
-from flask_restful import reqparse
 
 from pathlib import Path
 import shutil
