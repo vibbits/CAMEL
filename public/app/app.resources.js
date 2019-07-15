@@ -41,4 +41,7 @@ angular.module("CAMEL")
 		}
 	    }
 	});
+    })
+    .factory("PubMed", function ReferenceFactory($resource, config) {
+	return $resource(config.apiUrl+"/pubmed/:id", {id: '@id'});
     });

@@ -1,5 +1,6 @@
 angular.module("CAMEL").controller('ExpeditController', function($scope, $location, $routeParams, $sce,
-								 Experiment, Field, Reference, Attachment, config){
+								 Experiment, Field, Reference, Attachment, PubMed,
+								 config){
     var ctrl = this;
     ctrl.fieldsLoaded = false;
     ctrl.refsLoaded = false;
@@ -86,6 +87,18 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	}
     };
 
+    ctrl.pubmed_fill = function(ref){
+	var pubmed = PubMed.get({'id': ref.pubmed_id}, function(){
+	    ref.title = pubmed.title;
+	    ref.authors = pubmed.authors;
+	    ref.journal = pubmed.journal;
+	    ref.pages = pubmed.pages;
+	    ref.url = pubmed.url;
+	    if (pubmed.year != null){
+		ref.year = pubmed.year;
+	    }
+	});
+    }
     
     ctrl.load_reference = function(){
 	if (!$scope.ref_selected_index) return;
