@@ -70,7 +70,13 @@
 	      </div>
 	    </div>
 	    <div data-ng-switch-when="value_ATTACH">
-	      <i class="material-icons" data-ng-show="experiment.fields.hasOwnProperty(field.id)">check_circle</i>
+	      <ul class="download-icons" data-ng-if="experiment.fields.hasOwnProperty(field.id)">
+		<li data-ng-repeat="file in experiment.fields[field.id]">
+		  <a href="{{downloadUrl}}/{{experiment.id}}/{{field.id}}/{{file}}"
+		     target="_blank"
+		     title="{{file}}"><i class="material-icons">save</i></a>
+		</li>
+	      </ul>
 	      <i class="material-icons" data-ng-show="!experiment.fields.hasOwnProperty(field.id)">not_interested</i>
 	    </div>
 	    <div data-ng-switch-when="value_VARCHAR">

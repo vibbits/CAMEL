@@ -621,6 +621,13 @@ table th.fit{
     color: #c5c5c5;
 }
 
+ul.download-icons {
+    padding-left: 0;
+}
+ul.download-icons li{
+    list-style: none;
+    display: inline;
+}
 
 /*experiment page*/
 .field-value{

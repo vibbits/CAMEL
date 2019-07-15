@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .directive('experimentsTable', function($location, State) {
+    .directive('experimentsTable', function($location, State, config) {
     return {
         restrict: 'E',
         templateUrl: 'app/shared/experimentsTable/experimentsTable.html',
@@ -9,7 +9,7 @@ angular.module("CAMEL")
 	    refs: '='
         },
 	link: function(scope, elem, attr) {
-	    
+	    scope.downloadUrl = config.attachments;
 	    scope.showExperiment = function(experiment) {
 		$location.path("/experiment/"+experiment.id);
 	    };
