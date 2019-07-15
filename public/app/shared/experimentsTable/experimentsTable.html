@@ -58,8 +58,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr data-ng-repeat="experiment in experiments | orderBy: experiment:orderParams.desc:fieldComparator | limitTo: itemsPerPage:(paging.currentPage-1)*itemsPerPage" data-ng-click="showExperiment(experiment)" class="pointer">
-	<th scope="row">{{experiment.name}}</th>
+      <tr data-ng-repeat="experiment in experiments | orderBy: experiment:orderParams.desc:fieldComparator | limitTo: itemsPerPage:(paging.currentPage-1)*itemsPerPage">
+	<th scope="row" data-ng-click="showExperiment(experiment)" class="pointer">{{experiment.name}}</th>
 	<td data-ng-repeat="field in fields" data-ng-if="field.show">
 	  <div data-ng-switch="field.type_column">
 	    <div data-ng-switch-when="value_BOOL">
