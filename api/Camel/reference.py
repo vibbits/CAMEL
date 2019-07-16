@@ -6,7 +6,7 @@ from Camel.auth import is_authenticated
 
 class ReferenceList(CamelResource):
     def get(self):
-        sql = "SELECT * FROM `references` ORDER BY `year`"
+        sql = "SELECT * FROM `references` ORDER BY `year`, `title`"
 
         c = self.db.cursor(DictCursor)
         c.execute(sql)
