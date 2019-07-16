@@ -54,6 +54,18 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 
     $scope.references = Reference.query(function(){
 	ctrl.refsLoaded = true;
+	ctrl.refPubMedIdMap = {};
+	for (var refId in $scope.references){
+	    if ($scope.references.hasOwnProperty(refId)){
+		var ref = $scope.references[refId];
+		if (ref.hasOwnProperty('pubmed_id')){
+		    var pubmed_id = ref.pubmed_id;
+		    if (pubmed_id){
+			ctrl.refPubMedIdMap[pubmed_id] = ref.id;
+		    }
+		}
+	    }
+	}
     });
 
 
