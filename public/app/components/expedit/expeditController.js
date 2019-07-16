@@ -263,6 +263,16 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	}
     }
 
+    ctrl.ref_check_duplicate = function(ref){
+	ref.duplicate = false;
+	if (ref.pubmed_id && ctrl.refPubMedIdMap.hasOwnProperty(ref.pubmed_id)){
+	    //PubMedId already is in db
+	    if ((typeof(ref.id) == 'string' && ref.id.startsWith('new_'))
+		|| ref.id != ctrl.refPubMedIdMap[ref.pubmed_id]){
+		ref.duplicate = true;
+	    }
+	}
+    }
     
     ctrl.submit_changes = function(){
 	$scope.nameForm.$submitted = true;
@@ -289,10 +299,18 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	    }
 	}
 	if (non_uploads > 0){
-	    console.log("Non-uploads pending");
 	    return;
 	}
-
+	
+	//check for duplicate pubmed_ids
+	for (var ref_i in $scope.exp.references){
+	    if ($scope.exp.references.hasOwnProperty(ref_i)){
+		var ref = $scope.exp.references[ref_i];
+		if (ref.duplicate){
+		    return;
+		}
+	    }
+	}
 	
 	if (ctrl.new_experiment){
 	    $scope.exp.$save().then(function(){
