@@ -6,3 +6,4 @@
 
 ALTER TABLE `fields` MODIFY COLUMN `type_column` enum('value_VARCHAR','value_TEXT','value_INT','value_DOUBLE','value_BOOL', 'value_ATTACH');
 ALTER TABLE `experiments_fields` ADD COLUMN `value_ATTACH` varchar(255);
+ALTER TABLE `references` ADD UNIQUE(`pubmed_id`);
