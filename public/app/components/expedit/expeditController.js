@@ -11,18 +11,23 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
     ctrl.new_incr = 0;
     ctrl.type_map = {}
     ctrl.req_map = {}
+
+    ctrl.expNameList = [];
+    $scope.duplicateExpName = false;
     
     $scope.guest_email = "";
     $scope.guest_comments = "";
 
     $scope.download_url = config.attachments;
     $scope.attachments = {};
+
     
     if ($location.$$path.startsWith('/experiment/edit/')
 	&& $routeParams.hasOwnProperty('id')){
 	ctrl.new_experiment = false;
 	$scope.exp = Experiment.get($routeParams, function(){
 	    ctrl.experimentLoaded = true;
+	    ctrl.loadExpNameList();
 	},function(){
 	    console.log("Unknown experiment id");
 	    $location.path('/home');
@@ -32,7 +37,24 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	$scope.exp.fields = {};
 	$scope.exp.references = [];
 	ctrl.experimentLoaded = true;
+	ctrl.loadExpNameList();
     }
+
+    /**
+     * Get a list of Experiment names that are already in use
+     */
+    ctrl.loadExpNameList = function(){
+	Experiment.query(function(expList){
+	    for (var exp_i in expList){
+		if (expList.hasOwnProperty(exp_i)){
+		    var exp = expList[exp_i];
+		    if (exp.name != $scope.exp.name){
+			ctrl.expNameList.push(exp.name);
+		    }
+		}
+	    }
+	});	
+    };
     
     $scope.fields = Field.query(function(){
 	ctrl.fieldsLoaded = true;
@@ -68,6 +90,7 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	}
     });
 
+    
 
     ctrl.add_field = function(){
 	if (!$scope.new_field_selected_id) return;
@@ -263,6 +286,10 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	}
     }
 
+    ctrl.expname_check_duplicate = function(){
+	$scope.duplicateExpName = $scope.exp.name && ctrl.expNameList.indexOf($scope.exp.name)>0;
+    }
+    
     ctrl.ref_check_duplicate = function(ref){
 	ref.duplicate = false;
 	if (ref.pubmed_id && ctrl.refPubMedIdMap.hasOwnProperty(ref.pubmed_id)){

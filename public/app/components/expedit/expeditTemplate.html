@@ -19,10 +19,17 @@
   <div class="col">
     <form name="nameForm" class="was-validated" novalidate>
       <label for="expname">Name<span class="red">*</span></label>
-      <input id="expname" name="expName" type="text" class="form-control form-control-lg" placeholder="Experiment Name" data-ng-model="exp.name" required>
-      <div class="invalid-feedback" data-ng-show="nameForm.$submitted || nameForm.expName.$touched">
+      <input id="expname" name="expName" type="text"
+	     class="form-control form-control-lg"
+	     placeholder="Experiment Name"
+	     data-ng-change="expedit.expname_check_duplicate()"
+	     data-ng-model="exp.name" required>
+      <div class="invalid-feedback manual-feedback" data-ng-show="nameForm.$submitted || nameForm.expName.$touched">
 	<div data-ng-show="nameForm.expName.$error.required">
 	  Experiment name is required.
+	</div>
+	<div data-ng-show="duplicateExpName">
+	  Experiment name is already in use.
 	</div>
       </div>
     </form>
