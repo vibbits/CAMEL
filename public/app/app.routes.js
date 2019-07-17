@@ -11,6 +11,11 @@ angular.module('CAMEL')
 		controller: 'ContactController',
 		controllerAs: 'contact'
 	    })
+	    .when('/info', {
+		templateUrl:  'app/components/info/infoTemplate.html',
+		controller: 'InfoController',
+		controllerAs: 'info'
+	    })
 	    .when('/experiment/add', {
 		templateUrl:  'app/components/expedit/expeditTemplate.html',
 		controller: 'ExpeditController',

@@ -60,6 +60,8 @@ Copy to `public/app/app.config.js` and set API and download URLs.
 All data can be retrieved with simple `get` requests.  
 `post`, `put` and `delete` require an `AuthToken` in the headers, as explained below.
 
+To get the correct API URL, visit the `info` page in the CAMEL web tool.
+
 Get all experiment data, or one specific experiment.
 ```
 https://dev.bits.vib.be/CAMEL/api/experiment
