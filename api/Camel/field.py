@@ -18,6 +18,7 @@ class FieldList(CamelResource):
         self.reqparse.add_argument('unit', required = True, type = str, location = 'json')
         self.reqparse.add_argument('description', required = True, type = str, location = 'json')
         self.reqparse.add_argument('type_column', required = True, type = str, location = 'json')
+        self.reqparse.add_argument('options', required = True, type = str, location = 'json')
         self.reqparse.add_argument('link', required = True, type = int, location = 'json')
         self.reqparse.add_argument('required', required = True, type = int, location = 'json')
         self.reqparse.add_argument('group', required = True, type = int, location = 'json')
@@ -27,7 +28,7 @@ class FieldList(CamelResource):
         super(FieldList, self).__init__()
         
     def retrieveFieldData(self):
-        sql = ("SELECT `id`, `title`, `unit`, `description`, `type_column`, `link`, `required`, `weight`, `group`, `group_id` "
+        sql = ("SELECT `id`, `title`, `unit`, `description`, `type_column`, `options`, `link`, `required`, `weight`, `group`, `group_id` "
                "FROM `fields` "
                "ORDER BY `weight`")
 
@@ -46,8 +47,8 @@ class FieldList(CamelResource):
         if not auth.is_authenticated():
             return "Admin only", 401
         
-        sql = ("INSERT INTO `fields` (`title`, `unit`, `description`, `type_column`, `link`, `required`, `weight`, `group`, `group_id`) "
-               "VALUES (%(title)s, %(unit)s, %(description)s, %(type_column)s, %(link)s, %(required)s, %(weight)s, %(group)s, %(group_id)s)")
+        sql = ("INSERT INTO `fields` (`title`, `unit`, `description`, `type_column`, `options`, `link`, `required`, `weight`, `group`, `group_id`) "
+               "VALUES (%(title)s, %(unit)s, %(description)s, %(type_column)s, %(options)s, %(link)s, %(required)s, %(weight)s, %(group)s, %(group_id)s)")
 
         args = self.reqparse.parse_args()
         c = self.db.cursor()
@@ -68,6 +69,7 @@ class Field(CamelResource):
         self.reqparse.add_argument('title', type = str, location = 'json')
         self.reqparse.add_argument('unit', type = str, location = 'json')
         self.reqparse.add_argument('description', type = str, location = 'json')
+        self.reqparse.add_argument('options', type = str, location = 'json')
         self.reqparse.add_argument('link', type = int, location = 'json')
         self.reqparse.add_argument('required', type = int, location = 'json')
         self.reqparse.add_argument('group', type = int, location = 'json')
