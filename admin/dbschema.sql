@@ -88,6 +88,7 @@ CREATE TABLE `fields` (
   `unit` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `type_column` enum('value_VARCHAR','value_TEXT','value_INT','value_DOUBLE','value_BOOL','value_ATTACH') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `options` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `link` tinyint(1) NOT NULL DEFAULT 0,
   `required` tinyint(1) NOT NULL DEFAULT 0,
   `group` tinyint(1) DEFAULT 0,
@@ -143,4 +144,4 @@ CREATE TABLE `sessions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-17 17:34:34
+-- Dump completed on 2019-07-18 15:20:35
