@@ -20,7 +20,22 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 
     $scope.download_url = config.attachments;
     $scope.attachments = {};
-
+    
+    /**
+     * Get a list of Experiment names that are already in use
+     */
+    ctrl.loadExpNameList = function(){
+	Experiment.query(function(expList){
+	    for (var exp_i in expList){
+		if (expList.hasOwnProperty(exp_i)){
+		    var exp = expList[exp_i];
+		    if (exp.name != $scope.exp.name){
+			ctrl.expNameList.push(exp.name);
+		    }
+		}
+	    }
+	});	
+    };
     
     if ($location.$$path.startsWith('/experiment/edit/')
 	&& $routeParams.hasOwnProperty('id')){
@@ -40,21 +55,6 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	ctrl.loadExpNameList();
     }
 
-    /**
-     * Get a list of Experiment names that are already in use
-     */
-    ctrl.loadExpNameList = function(){
-	Experiment.query(function(expList){
-	    for (var exp_i in expList){
-		if (expList.hasOwnProperty(exp_i)){
-		    var exp = expList[exp_i];
-		    if (exp.name != $scope.exp.name){
-			ctrl.expNameList.push(exp.name);
-		    }
-		}
-	    }
-	});	
-    };
     
     $scope.fields = Field.query(function(){
 	ctrl.fieldsLoaded = true;
