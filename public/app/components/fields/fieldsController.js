@@ -7,6 +7,17 @@ angular.module("CAMEL")
 	ctrl.fields = Field.query(function(){
 	    ctrl.loaded = true;
 
+	    for (var field_i in ctrl.fields){
+		if (ctrl.fields.hasOwnProperty(field_i)){
+		    var field = ctrl.fields[field_i];
+		    if (field.options){
+			field.show_options = true;
+		    } else {
+			field.show_options = false;
+		    }
+		}
+	    }
+	    
 	    var indexDragging = 0;
 	    $("#fieldstable").sortable({
 		update: function(event, ui) {
