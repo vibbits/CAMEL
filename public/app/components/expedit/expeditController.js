@@ -64,6 +64,11 @@ angular.module("CAMEL").controller('ExpeditController', function($scope, $locati
 	    if (field.hasOwnProperty('id')){
 		ctrl.type_map[field.id] = field.type_column.split('_')[1];
 		ctrl.req_map[field.id] = field.required;
+		
+		if (field.type_column=='value_VARCHAR' && field.options){
+		    optionList = field.options.split(/ *, */);
+		    field.options = optionList;
+		}
 	    }
 	    if (ctrl.new_experiment
 		&& field.hasOwnProperty('required') && field['required']){

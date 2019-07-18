@@ -64,8 +64,16 @@
 		 id="{{field.id}}"
 		 name="{{field.id}}_{{value_id}}"
 		 data-ng-model="exp.fields[field.id][value_id]"
-		 data-ng-required="field.required">
-	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
+		 data-ng-required="field.required"
+		 data-ng-if="!field.options">
+	  <select id="{{field.id}}" class="form-control"
+		  name="{{field.id}}_{{value_id}}"
+		  data-ng-model="exp.fields[field.id][value_id]"
+		  data-ng-required="field.required"
+		  data-ng-if="field.options">
+	    <option data-ng-repeat="opt in field.options">{{opt}}</option>
+	  </select>
+	  <div class="invalid-feedback manual-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
 	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
 	      Required field.
 	    </div>
