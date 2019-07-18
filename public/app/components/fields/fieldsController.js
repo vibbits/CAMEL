@@ -30,6 +30,7 @@ angular.module("CAMEL")
 		title: '',
 		unit: '',
 		description: '',
+		options: '',
 		type_column: 'value_VARCHAR',
 		link: 0,
 		required: 0,
@@ -75,6 +76,13 @@ angular.module("CAMEL")
 	var confirmAction;
 	$scope.warningTitle = "Warning";
 	$scope.warningMessage = "Careful there";
+
+	ctrl.type_changed = function(field){
+	    if (field.type_column != 'value_VARCHAR'){
+		field.show_options=false;
+	    }
+	    field.changed=true;
+	}
 	
 	ctrl.confirm = function(confirmData){
 	    confirmAction(confirmData);
@@ -113,6 +121,9 @@ angular.module("CAMEL")
 	    for (var f in ctrl.fields){
 		if (ctrl.fields.hasOwnProperty(f)){
 		    var field = ctrl.fields[f];
+		    if (!field.show_options){
+			field.options='';
+		    }
 		    if (field.new_field){
 			newField = new Field(field);
 			newField.weight = Number(f)+1;

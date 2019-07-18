@@ -10,6 +10,7 @@
 	  <th>Unit</th>
 	  <th>Description</th>
 	  <th>Type</th>
+	  <th>Options</th>
 	  <th>Link</th>
 	  <th>Required</th>
 	  <th>Group</th>
@@ -33,11 +34,15 @@
 	    <input data-ng-model="field.unit" size="4" data-ng-change="field.changed=true">
 	  </td>
 	  <td>
-	    <input data-ng-model="field.description" data-ng-change="field.changed=true">
+	    <input class="form-control" data-ng-model="field.description" data-ng-change="field.changed=true">
+	    <input class="form-control" data-ng-model="field.options"
+		   placeholder="option1, option2, ..."
+		   data-ng-change="field.changed=true"
+		   data-ng-show="field.show_options">
 	  </td>
 	  <td>
 	    <div data-ng-if="field.new_field">
-	      <select data-ng-model="field.type_column" data-ng-change="field.changed=true">
+	      <select data-ng-model="field.type_column" data-ng-change="fields.type_changed(field)">
 		<option value="value_VARCHAR">STRING</option>
 		<option value="value_TEXT">TEXT</option>
 		<option value="value_INT">NUMBER</option>
@@ -49,6 +54,11 @@
 	    <div data-ng-if="!field.new_field">
 	      <pre>{{field.type_column.split('_')[1]}}</pre>
 	    </div>
+	  </td>
+	  <td>
+	    <input data-ng-model="field.show_options" type="checkbox"
+		   data-ng-disabled="field.type_column!='value_VARCHAR'"
+		   data-ng-true-value="1" data-ng-false-value="0">
 	  </td>
 	  <td>
 	    <input data-ng-model="field.link" type="checkbox"
