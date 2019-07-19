@@ -51,13 +51,21 @@ angular.module("CAMEL")
 	//Init fields
 	if (State.expFields.length == 0){
 	    ctrl.fields = Field.query(function(){
-		for (var i=0; i<ctrl.fields.length; i++){
-		    if (i<showNr){
-			ctrl.fields[i].show = true;
-		    } else {
-			ctrl.fields[i].show = false;
+		var i = 0;
+		for (var field_i in ctrl.fields){
+		    if (ctrl.fields.hasOwnProperty(field_i)){
+			var field = ctrl.fields[field_i];
+			if (i<showNr){
+			    field.show = true;
+			} else {
+			    field.show = false;
+			}
+			field.filter = false;
+			if (field.type_column == 'value_VARCHAR' && field.options){
+			    field.options = field.options.split(/ *, */);
+			}
+			i++;
 		    }
-		    ctrl.fields[i].filter = false;
 		}
 		State.expFields = ctrl.fields;
 	    });
