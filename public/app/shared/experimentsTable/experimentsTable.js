@@ -16,32 +16,7 @@ angular.module("CAMEL")
 
 	    //pager settings
 	    scope.paging = State.paging;
-	    scope.itemsPerPage = 20;
-	    scope.$watch('experiments.length', function(newValue, oldValue, scope){
-		scope.totalItems = scope.experiments.length;
-		scope.numPages = Math.ceil(scope.totalItems / scope.itemsPerPage);
-		if (scope.numPages != 0){
-		    scope.paging.currentPage = Math.min(scope.paging.currentPage, scope.numPages);
-		}
-	    });
-	    	    	    
-	    scope.firstPage = function(){
-		scope.paging.currentPage = 1;
-	    };
-	    scope.prevPage = function(){
-		if (scope.paging.currentPage > 1){		    
-		    scope.paging.currentPage -=1;
-		}
-	    };
-	    scope.nextPage = function(){
-		if (scope.paging.currentPage < scope.numPages){		    
-		    scope.paging.currentPage +=1;
-		}
-	    };	    
-	    scope.lastPage = function(){
-		scope.paging.currentPage = scope.numPages;
-	    };
-
+	    scope.itemsPerPage = 20;	    	 	    	    	    
 
 	    //Sort functionality
 	    if (!State.expOrder.hasOwnProperty('key')){
