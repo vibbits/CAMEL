@@ -54,7 +54,16 @@
 	    <span data-ng-switch="field.type_column">
 	      <label for="filter-{{field.id}}">{{field.title}} <span data-ng-if="field.unit">({{field.unit}})</span>:</label>
 	      <span data-ng-switch-when="value_VARCHAR">
-		<input id="filter-{{field.id}}" class="form-control" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.filterUpdate(field.id)">
+		<input id="filter-{{field.id}}" class="form-control"
+		       data-ng-model="experiments.filter[field.id]"
+		       data-ng-change="experiments.filterUpdate(field.id)"
+		       data-ng-if="!field.options">
+		<select id="filter-{{field.id}}" class="form-control"
+			data-ng-model="experiments.filter[field.id]"
+			data-ng-change="experiments.filterUpdate(field.id)"
+			data-ng-if="field.options">
+		  <option data-ng-repeat="opt in field.options">{{opt}}</option>
+		</select>
 	      </span>
 	      <span data-ng-switch-when="value_TEXT">
 		<input id="filter-{{field.id}}" class="form-control" data-ng-model="experiments.filter[field.id]" data-ng-change="experiments.filterUpdate(field.id)">
