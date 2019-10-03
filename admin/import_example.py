@@ -36,7 +36,7 @@ password = ''
 
 if not password:
     import getpass
-    getpass.getpass()
+    password=getpass.getpass()
 
 ## Get an authentication token
 '''
