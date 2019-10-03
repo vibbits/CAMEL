@@ -119,7 +119,7 @@ easy as [retrieving the corresponding download link](admin/get_attachments.py).
 Programmatically uploading new attachments is done in two steps. First
 post the file to the `attachment` API, getting a `uuid` in
 response. Then use this `uuid` to update the experiment record in a
-similar way as other field data can be updated. [(Python example)](attachment_example.py).
+similar way as other field data can be updated. ([Python example](admin/attachment_example.py)).
 
 ## Authentication
 
