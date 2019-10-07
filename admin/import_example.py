@@ -93,7 +93,7 @@ new_experiment = {
             'journal': 'Journal Abbr.',
             'year': '2019',
             'pages': '',
-            'pubmed_id': '',
+            'pubmed_id': None,
             'url': ''          
         }
         ]
@@ -139,6 +139,7 @@ new_field = {
     'unit': "centimeters",
     'description': "This is a testing field",
     'type_column': 'value_VARCHAR', ## Content type. Can also be 'value_INT', 'value_DOUBLE','value_BOOL','value_TEXT'
+    'options': 0, ##this is not a dropdown field
     'link': 0, ## it should not be treated as URL
     'required': 0,  ## required field
     'group': 0,   ## boolean toggling a group of fields
