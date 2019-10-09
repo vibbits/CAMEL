@@ -25,7 +25,7 @@ auth_header = {'AuthToken': token}
 
 
 ##Say we want to add an attachment (a jpg in this folder) to experiment 717
-local_file_name = "test_upload.jpg"
+local_file_name = 'test_upload.jpg'
 this_exp_url = exp_url+'/717'
 
 ##We upload the file to a temporary location on the server
