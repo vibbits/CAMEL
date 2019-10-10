@@ -6,8 +6,8 @@ import requests as req
 
 ## Get the URL where attachments are hosted
 ## and the API URL
-attach_url = "http://dev.bits.vib.be/CAMEL/api/attachment"
-api_url = "http://dev.bits.vib.be/CAMEL/api"
+attach_url = "http://localhost/camel_files"
+api_url = "http://localhost/CAMEL/api"
 
 ## Get field info for eg. Mutation Data
 field_api_url = api_url+"/field/Mutation Data"
