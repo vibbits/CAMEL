@@ -2,6 +2,8 @@
 
 Compendium of Adaptive Microbial Experiments in the Lab
 
+https://cameldatabase.com
+
 This database is part of the following review:  
 Bram Van den Bergh,
 Toon Swings, Maarten Fauvart & Jan Michiels (2018) Experimental
@@ -11,7 +13,7 @@ evolution. [Microbiology and Molecular Biology Reviews][MMBR] (MMBR).
 [MMBR]: http://mmbr.asm.org/
 
 
-This project aims to be an updated, interactive version of:  
+This project is the updated, interactive version of the original list at:  
 https://www.biw.kuleuven.be/comp2/camel/
 
 ## Application outline
