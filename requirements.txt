@@ -1,0 +1,6 @@
+Flask==1.1.1
+pylint==2.4.4
+Flask-RESTful==0.3.7
+mysqlclient==1.4.6
+requests==2.22.0
+click==7.0
