@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+  camel:
+    container_name: api_web 
+    build: 
+      context: .
+      dockerfile: ./.docker/CAMEL.Dockerfile
+      args:
+        - BUILD_DATE=${BUILD_DATE}
+        - VCS_REF=${VCS_REF}
+        - VERSION=${VERSION}
+    ports:
+      - "8888:80"
+    restart: always
+    volumes:
+      - '.:/var/www/CAMEL'
+      - './camel.conf:/var/www/CAMEL/api/Camel/camel.conf'
+      - './CAMEL.sql:/tmp/CAMEL.sql'
+
+  db:
+    container_name: camel-database
+    build:
+      context: .
+      dockerfile: ./.docker/DB.Dockerfile
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: CAMEL
+      MYSQL_USER: camel
+      MYSQL_PASSWORD: abcdef
