@@ -34,13 +34,15 @@ To verify that it works.
 
 1. Clone the project.
 
-2. `cd docker-flask-app-apache2-wsgi-py3-mariadb`
+2. `cd CAMEL`
 
-3. `docker-compose build` (or with env variables - see comments in Dockerfile under 'To get following env arguments filled')
+3. add SQL dump of the database in .docker folder
 
-4. `docker-compose up -d`
+4. `docker-compose build` (or with env variables - see comments in Dockerfile under 'To get following env arguments filled')
 
-5. Verify. In browser, open: http://localhost:8888/api/hello. The webpage (of ***example Flask app***) should appear.
+5. `docker-compose up -d --build`
+
+6. Verify. In browser, open: http://localhost:8888/api/experiment/1. The JSON object of experiment 1 should appear.
 
 6. `docker-compose down`
 
