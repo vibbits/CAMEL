@@ -15,8 +15,6 @@ services:
     restart: always
     volumes:
       - '.:/var/www/CAMEL'
-      - './camel.conf:/var/www/CAMEL/api/Camel/camel.conf'
-      - './CAMEL.sql:/tmp/CAMEL.sql'
 
   db:
     container_name: camel-database
