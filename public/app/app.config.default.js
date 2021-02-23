@@ -2,6 +2,6 @@
 // URLs with the correct hosting locations.
 angular.module("camel.constants", [])
     .constant('config', {
-	apiUrl: "http://localhost/CAMEL/api",
-	attachments: "http://localhost/camel_files"	
+	apiUrl: "http://localhost:8888/api",
+	attachments: "http://localhost:8888/camel_files"
     });

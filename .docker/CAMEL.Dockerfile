@@ -3,6 +3,7 @@ FROM ubuntu:18.04
 RUN apt-get update -y && apt-get upgrade -y
 RUN apt-get install -y apache2 libmysqlclient-dev build-essential libapache2-mod-wsgi-py3 --no-install-recommends
 RUN a2enmod wsgi
+RUN a2enmod rewrite
 
 RUN mkdir /var/www/CAMEL
 COPY ./requirements.txt /var/www/CAMEL
