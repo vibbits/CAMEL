@@ -50,7 +50,7 @@ app = Flask(__name__)
 api = Api(app)
 
 ## Define routing
-api.add_resource(Auth, '/auth')
+api.add_resource(Auth, '/auth/')
 api.add_resource(Logout, '/auth/logout')
 api.add_resource(ExperimentList, '/experiment')
 api.add_resource(Experiment, '/experiment/<int:id>')
