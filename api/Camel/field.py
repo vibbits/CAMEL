@@ -1,12 +1,11 @@
-from flask_restful import request, reqparse
-from MySQLdb.cursors import DictCursor
-
 from pathlib import Path
 import shutil
 
-from Camel import CamelResource
-from Camel import auth
-from Camel import config
+from flask_restful import request, reqparse
+from MySQLdb.cursors import DictCursor
+
+from Camel import CamelResource, config
+from Camel.auth import login_required
 
 class FieldList(CamelResource):
 
@@ -43,10 +42,8 @@ class FieldList(CamelResource):
         return rows
 
 
+    @login_required
     def post(self):
-        if not auth.is_authenticated():
-            return "Admin only", 401
-        
         sql = ("INSERT INTO `fields` (`title`, `unit`, `description`, `type_column`, `options`, `link`, `required`, `weight`, `group`, `group_id`) "
                "VALUES (%(title)s, %(unit)s, %(description)s, %(type_column)s, %(options)s, %(link)s, %(required)s, %(weight)s, %(group)s, %(group_id)s)")
 
@@ -130,10 +127,8 @@ class Field(CamelResource):
                 
         return field_props
 
+    @login_required
     def put(self, id):
-        if not auth.is_authenticated():
-            return "Admin only", 401
-
         sql = "SELECT count(*) FROM `fields` WHERE `id` = %(id)s"
         c = self.db.cursor()
         c.execute(sql, {'id': id})
@@ -160,10 +155,8 @@ class Field(CamelResource):
             
         return "Update succesful", 204
         
+    @login_required
     def delete(self, id):
-        if not auth.is_authenticated():
-            return "Admin only", 401
-
         ## Does field exist?
         sql = "SELECT `id`, `type_column` FROM `fields` WHERE `id` = %(id)s"
         c = self.db.cursor()

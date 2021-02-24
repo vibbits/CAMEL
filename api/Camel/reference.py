@@ -1,7 +1,7 @@
 from flask_restful import request
 from MySQLdb.cursors import DictCursor
 from Camel import CamelResource
-from Camel.auth import is_authenticated
+from Camel.auth import login_required
 
 
 class ReferenceList(CamelResource):
@@ -26,10 +26,8 @@ class Reference(CamelResource):
         return res
 
         
+    @login_required
     def delete(self, id):
-        if not is_authenticated():
-            return "Admin only", 401
-
         sql = "DELETE FROM `references` WHERE `id` = %(ref_id)s"
 
         c = self.db.cursor()

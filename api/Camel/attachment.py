@@ -1,6 +1,6 @@
 from flask_restful import request, reqparse
 from Camel import CamelResource
-from Camel.auth import is_authenticated
+from Camel.auth import login_required
 from Camel import config
 
 from os import path
@@ -17,11 +17,8 @@ class Attachment(CamelResource):
         ##POST arguments
         self.reqparse.add_argument('uuid', type = str)
 
-
+    @login_required
     def post(self):
-        if not is_authenticated():
-            return "Admin only", 401
-
         uploadedFile = request.files['file']
         uuid = str(uuid4())
         target = str(self.tmp_uploads.joinpath(uuid))

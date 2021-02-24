@@ -4,7 +4,7 @@ from pathlib import Path
 
 from Camel import CamelResource
 from Camel.field import FieldList
-from Camel.auth import is_authenticated
+from Camel.auth import login_required
 from Camel import config
 
 
@@ -467,10 +467,8 @@ class ExperimentList(CamelResource):
         result = self.retrieveExperimentData()
         return result
 
+    @login_required
     def post(self):
-        if not is_authenticated():
-            return "Admin only", 401
-
         args = self.reqparse.parse_args()
 
         exp_name = args['name']
@@ -526,16 +524,12 @@ class Experiment(CamelResource):
         else:
             return 'Unknown Experiment ID', 400
     
-
+    @login_required
     def put(self, id):        
         ## Without authentication, the user can only make
         ## suggestions, but never overwrite an entry.
-        ##suggestion = not is_authenticated()
 
         ##TODO implement the suggestion idea        
-        if not is_authenticated():
-            return "Admin only", 401
-
         
         args = self.reqparse.parse_args()
 
@@ -560,10 +554,8 @@ class Experiment(CamelResource):
         
         return "UPDATED", 204
 
+    @login_required
     def delete(self, id):
-        if not is_authenticated():
-            return "Admin only", 401
-
         cursor = self.db.cursor()
 
         ## Get linked references

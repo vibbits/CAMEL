@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from functools import wraps
 
 import bcrypt
 import MySQLdb
@@ -22,21 +23,31 @@ def db_connect(config):
 
     return db
 
-def is_authenticated():    
-    if 'AuthToken' in request.headers:
-        token = request.headers['AuthToken']
-    else:
-        return False
-    
-    db = db_connect(config)
-    sql = "SELECT `token` from `sessions` WHERE `token` = %(token)s"
-    c = db.cursor()
-    c.execute(sql, {'token': token})
-    rows = c.fetchall()    
-    c.close()
-    db.close()
+def login_required(endpoint):
+    @wraps(endpoint)
+    def wrapped_endpoint(self, *args, **kwargs):
+        unauthorised = ('Unauthorized', 401, {
+            'WWW-Authenticate': 'Basic realm="Login Required"'
+        })
 
-    return len(rows)==1
+        if 'AuthToken' not in request.headers:
+            return unauthorised
+
+        token = request.headers['AuthToken']
+        db = db_connect(config)
+        sql = "SELECT `token` from `sessions` WHERE `token` = %(token)s"
+        c = db.cursor()
+        c.execute(sql, {'token': token})
+        rows = c.fetchall()
+        c.close()
+        db.close()
+
+        if len(rows) == 0:
+            return unauthorised
+
+        return endpoint(self, *args, **kwargs)
+
+    return wrapped_endpoint
 
 def start_session(db):
     import uuid
@@ -84,25 +95,22 @@ class Auth(CamelResource):
 
 
 class Logout(CamelResource):
+    @login_required
     def get(self):
-        if 'AuthToken' in request.headers:
-            token = request.headers['AuthToken']
+        token = request.headers['AuthToken']
         
-            db = db_connect()
-            c = db.cursor()
-            sql = "SELECT * FROM `sessions` WHERE `token` = %(token)s"
-            c.execute(sql, {'token': token})
-            rows = c.fetchall()
-            if len(rows) < 1:
-                return "Invalid Auth token", 401
+        db = db_connect(config)
+        c = db.cursor()
+        sql = "SELECT * FROM `sessions` WHERE `token` = %(token)s"
+        c.execute(sql, {'token': token})
+        rows = c.fetchall()
 
-            ## Delete current token
-            sql = "DELETE FROM `sessions` WHERE `token` = %(token)s"
-            c.execute(sql, {'token': token})
-            db.commit()
-            c.close()
-            cleanup_tokens(db)
-            db.close()
-            return "Logged out"
-        else:
-            return "Not logged in", 401
+        ## Delete current token
+        sql = "DELETE FROM `sessions` WHERE `token` = %(token)s"
+        c.execute(sql, {'token': token})
+        db.commit()
+        c.close()
+        cleanup_tokens(db)
+        db.close()
+        return "Logged out"
+
