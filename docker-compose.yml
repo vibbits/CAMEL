@@ -1,8 +1,22 @@
 version: "3.7"
 
 services:
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./.docker/api.dockerfile
+    ports:
+      - "8080:8080"
+    restart: always
+    volumes:
+      - './api:/app'
+      - './camel.conf:/app/camel.conf:ro'
+      - './.htpasswd:/app/.htpasswd:ro'
+      - './gunicorn_config.py:/app/gunicorn_config.py'
+
   camel:
-    container_name: api_web 
+    container_name: gateway
     build: 
       context: .
       dockerfile: ./.docker/CAMEL.Dockerfile
@@ -14,7 +28,10 @@ services:
       - "8888:80"
     restart: always
     volumes:
-      - '.:/var/www/CAMEL'
+      - './admin:/var/www/CAMEL/admin'
+      - './auth:/var/www/CAMEL/auth'
+      - './camel.conf:/var/www/CAMEL/camel.conf:ro'
+      - './public:/var/www/CAMEL/public'
       - './CAMEL.sql:/tmp/CAMEL.sql'
 
   db:
