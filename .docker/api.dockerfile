@@ -6,6 +6,10 @@ RUN apt install -y default-libmysqlclient-dev build-essential --no-install-recom
 RUN mkdir /app
 WORKDIR /app
 
+COPY ./camel.conf /app
+COPY ./.htpasswd /app
+COPY ./gunicorn_config.py /app
+
 COPY ./requirements.txt /app
 RUN pip install -r ./requirements.txt
 ENV APP_PATH="/app"

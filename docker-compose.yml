@@ -10,10 +10,9 @@ services:
       - "8080:8080"
     restart: always
     volumes:
-      - './api:/app'
-      - './camel.conf:/app/camel.conf:ro'
-      - './.htpasswd:/app/.htpasswd:ro'
-      - './gunicorn_config.py:/app/gunicorn_config.py'
+      - './api/Camel:/app/Camel'
+    environment:
+      - APP_PATH=/app
 
   camel:
     container_name: gateway
@@ -32,7 +31,6 @@ services:
       - './auth:/var/www/CAMEL/auth'
       - './camel.conf:/var/www/CAMEL/camel.conf:ro'
       - './public:/var/www/CAMEL/public'
-      - './CAMEL.sql:/tmp/CAMEL.sql'
 
   db:
     container_name: camel-database
