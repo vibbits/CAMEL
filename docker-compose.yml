@@ -37,6 +37,8 @@ services:
     build:
       context: .
       dockerfile: ./.docker/DB.Dockerfile
+    ports:
+      - "3306:3306"
     restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: password
