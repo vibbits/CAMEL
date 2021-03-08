@@ -25,6 +25,7 @@
   <script type="text/javascript" src="app/components/home/homeController.js"></script>
   <script type="text/javascript" src="app/components/experiments/experimentsController.js"></script>
   <script type="text/javascript" src="app/components/experiment/experimentController.js"></script>
+  <script type="text/javascript" src="app/components/mutations/mutationsController.js"></script>
   <script type="text/javascript" src="app/components/fields/fieldsController.js"></script>
   <script type="text/javascript" src="app/components/expedit/expeditController.js"></script>
   <script type="text/javascript" src="app/shared/experimentsTable/experimentsTable.js"></script>
@@ -101,6 +102,11 @@
 	    <button class="btn btn-primary"
 	  	    data-ng-class="{'btn-raised active': isCurrent('experiments')}"
 	  	    data-ng-click="navigateTo('experiments')">Experiments</button>
+	  </li>
+	  <li class="nav-item">
+	    <button class="btn btn-primary"
+	  	    data-ng-class="{'btn-raised active': isCurrent('mutations')}"
+	  	    data-ng-click="navigateTo('mutations')">Mutations</button>
 	  </li>
 	  <li class="nav-item" data-ng-if="auth.isAuthenticated()">
 	    <button class="btn btn-primary"
