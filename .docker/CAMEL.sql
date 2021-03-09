@@ -16,33 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `cello2go`
---
-
-DROP TABLE IF EXISTS `cello2go`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cello2go` (
-  `experiment_id` int(11) NOT NULL,
-  `start_pos` int(20) NOT NULL,
-  `end_pos` int(20) DEFAULT NULL,
-  `cello2go_probabilities` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `location` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`experiment_id`),
-  UNIQUE KEY `unique_mutation` (`experiment_id`,`start_pos`,`end_pos`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `cello2go`
---
-
-LOCK TABLES `cello2go` WRITE;
-/*!40000 ALTER TABLE `cello2go` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cello2go` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `experiments`
 --
 
@@ -154,7 +127,7 @@ CREATE TABLE `fields` (
   PRIMARY KEY (`id`),
   KEY `fk_group_id` (`group_id`),
   CONSTRAINT `fk_group_id` FOREIGN KEY (`group_id`) REFERENCES `fields` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -163,113 +136,8 @@ CREATE TABLE `fields` (
 
 LOCK TABLES `fields` WRITE;
 /*!40000 ALTER TABLE `fields` DISABLE KEYS */;
-INSERT INTO `fields` VALUES (1,'Species','','','value_VARCHAR','',0,1,0,1,NULL),(2,'Goal','','Goal of experiment','value_VARCHAR','Study (the evolution of complex) traits, Study evolution, Optimize strains for application',0,1,0,2,NULL),(3,'Number of Lines','','','value_INT','',0,1,0,3,NULL),(4,'Setup of the experiment','','','value_VARCHAR','serial transfer, continuous, MA',0,1,0,4,NULL),(5,'Recipient','','','value_VARCHAR','',0,0,0,5,NULL),(6,'Medium','','','value_VARCHAR','',0,0,0,6,NULL),(7,'Selective Condition','','','value_VARCHAR','',0,0,0,7,NULL),(8,'Cripple Mutant','','','value_BOOL','',0,0,1,8,NULL),(9,'How Cripple Mutant','','','value_VARCHAR','',0,0,0,9,8),(10,'Changing Environments','','','value_BOOL','',0,0,1,10,NULL),(11,'How Changing Environment','','','value_VARCHAR','',0,0,0,11,10),(12,'Structured or Heterogeneous Environment','','','value_BOOL','',0,0,1,12,NULL),(13,'How Structured or Heterogeneous Environment','','','value_VARCHAR','',0,0,0,13,12),(14,'Natural conditions/complex environments','','','value_BOOL','',0,0,1,14,NULL),(15,'How Natural conditions/complex Environment','','','value_VARCHAR','',0,0,0,15,14),(16,'Number of Generations','','','value_INT','',0,0,0,16,NULL),(17,'Absolute Time','days','','value_INT','',0,0,0,17,NULL),(18,'Determination of Contamination','','','value_VARCHAR','',0,0,0,18,NULL),(19,'Fitness Determination','','','value_BOOL','',0,0,1,19,NULL),(20,'Fitness Parameter','','','value_VARCHAR','',0,0,0,20,19),(21,'Means to perform direct competition experiments','','','value_VARCHAR','',0,0,0,21,NULL),(22,'Detection/tracking of beneficial mutations by','','','value_VARCHAR','',0,0,0,22,NULL),(23,'Whole Genome Sequencing','','Was WGS used?','value_BOOL','',0,0,1,23,NULL),(24,'WGS Technology','','','value_VARCHAR','',0,0,0,24,23),(25,'WGS Platform','','','value_VARCHAR','',0,0,0,25,23),(26,'Number of Clones Sequenced','','','value_INT','',0,0,0,26,23),(27,'Number of Populations Sequenced','','','value_INT','',0,0,0,27,23),(28,'Coverage Clones','','','value_INT','',0,0,0,28,23),(29,'Coverage Populations','','','value_INT','',0,0,0,29,23),(30,'Detection Limit','%','','value_DOUBLE','',0,0,0,30,23),(31,'Link to NGS Dataset','','','value_VARCHAR','',1,0,0,31,23),(32,'Maximum Population Size','','','value_INT','',0,0,0,32,NULL),(33,'Minimum Population Size','','','value_INT','',0,0,0,33,NULL),(34,'Major Outcomes','','Describe main results','value_TEXT','',0,0,0,34,NULL),(35,'Remarks','','','value_TEXT','',0,0,0,35,NULL),(36,'Mutation data','','Is there mutation data associated with the experiment?','value_BOOL','',0,0,1,36,NULL),(40,'Mutation data complete?','','Is the provided file filtered or does it contain the full list of mutations','value_BOOL','',0,1,0,37,36);
+INSERT INTO `fields` VALUES (1,'Species','','','value_VARCHAR','',0,1,0,1,NULL),(2,'Goal','','Goal of experiment','value_VARCHAR','Study (the evolution of complex) traits, Study evolution, Optimize strains for application',0,1,0,2,NULL),(3,'Number of Lines','','','value_INT','',0,1,0,3,NULL),(4,'Setup of the experiment','','','value_VARCHAR','serial transfer, continuous, MA',0,1,0,4,NULL),(5,'Recipient','','','value_VARCHAR','',0,0,0,5,NULL),(6,'Medium','','','value_VARCHAR','',0,0,0,6,NULL),(7,'Selective Condition','','','value_VARCHAR','',0,0,0,7,NULL),(8,'Cripple Mutant','','','value_BOOL','',0,0,1,8,NULL),(9,'How Cripple Mutant','','','value_VARCHAR','',0,0,0,9,8),(10,'Changing Environments','','','value_BOOL','',0,0,1,10,NULL),(11,'How Changing Environment','','','value_VARCHAR','',0,0,0,11,10),(12,'Structured or Heterogeneous Environment','','','value_BOOL','',0,0,1,12,NULL),(13,'How Structured or Heterogeneous Environment','','','value_VARCHAR','',0,0,0,13,12),(14,'Natural conditions/complex environments','','','value_BOOL','',0,0,1,14,NULL),(15,'How Natural conditions/complex Environment','','','value_VARCHAR','',0,0,0,15,14),(16,'Number of Generations','','','value_INT','',0,0,0,16,NULL),(17,'Absolute Time','days','','value_INT','',0,0,0,17,NULL),(18,'Determination of Contamination','','','value_VARCHAR','',0,0,0,18,NULL),(19,'Fitness Determination','','','value_BOOL','',0,0,1,19,NULL),(20,'Fitness Parameter','','','value_VARCHAR','',0,0,0,20,19),(21,'Means to perform direct competition experiments','','','value_VARCHAR','',0,0,0,21,NULL),(22,'Detection/tracking of beneficial mutations by','','','value_VARCHAR','',0,0,0,22,NULL),(23,'Whole Genome Sequencing','','Was WGS used?','value_BOOL','',0,0,1,23,NULL),(24,'WGS Technology','','','value_VARCHAR','',0,0,0,24,23),(25,'WGS Platform','','','value_VARCHAR','',0,0,0,25,23),(26,'Number of Clones Sequenced','','','value_INT','',0,0,0,26,23),(27,'Number of Populations Sequenced','','','value_INT','',0,0,0,27,23),(28,'Coverage Clones','','','value_INT','',0,0,0,28,23),(29,'Coverage Populations','','','value_INT','',0,0,0,29,23),(30,'Detection Limit','%','','value_DOUBLE','',0,0,0,30,23),(31,'Link to NGS Dataset','','','value_VARCHAR','',1,0,0,31,23),(32,'Maximum Population Size','','','value_INT','',0,0,0,32,NULL),(33,'Minimum Population Size','','','value_INT','',0,0,0,33,NULL),(34,'Major Outcomes','','Describe main results','value_TEXT','',0,0,0,34,NULL),(35,'Remarks','','','value_TEXT','',0,0,0,35,NULL),(36,'Mutation data','','Is there mutation data associated with the experiment?','value_BOOL','',0,0,1,36,NULL),(40,'Mutation data complete?','','Is the provided file filtered or does it contain the full list of mutations','value_BOOL','',0,1,0,37,36),(41,'Chromosome ID','','Chromosome ID used to compare sequence output with','value_VARCHAR','',0,0,0,38,36),(42,'Start Position','','First genomic position of variant','value_INT','',0,0,0,39,36),(43,'End Position','','Last genomic position of variant','value_INT','',0,0,0,40,36),(44,'Type','','Type of genomic mutation','value_VARCHAR','SNP, DEL, INS, INV, MNV, REPL, AMP',0,0,0,41,36),(45,'Reference Amino Acid','','Reference base at this position','value_TEXT','',0,0,0,42,36),(46,'Alternate Amino Acid','','Mutant base at this position','value_TEXT','',0,0,0,43,36),(47,'Gene','','Gene effected by mutation','value_TEXT','',0,0,0,44,36),(48,'Change in Amino Acid','','AA Change at the defined location','value_VARCHAR','',0,0,0,45,36),(49,'Population','','Population of Origin','value_VARCHAR','',0,0,0,46,36),(50,'Clone','','Clone ID that was sequenced','value_VARCHAR','',0,0,0,47,36),(51,'Time','days','Timepoint of sampling during evolution','value_VARCHAR','',0,0,0,48,36),(52,'Frequency','','Frequency of allele in the sample','value_DOUBLE','',0,0,0,49,36),(53,'Comments','','Free field to make comments (abbreviation of anibiotic)','value_VARCHAR','',0,0,0,50,36),(54,'Impact','','[MUTFUNC] Is the mutation predicted to impact function? \'1\' if yes, \'0\' if no','value_BOOL','',0,0,0,51,36),(55,'Score','','[MUTFUNC] Sift score, any mutation with a score below 0.05 is considered deleterious','value_DOUBLE','',0,0,0,52,36),(56,'Information Content','','[MUTFUNC] Information content at this position of the alignment (a high value indicates strong conservation, where the maximum value is 4.32)','value_DOUBLE','',0,0,0,53,36),(57,'Free Energy Change','','[MUTFUNC] Predicted change in free energy of unfolding, where a value above 0 indicates a destabilising mutation','value_DOUBLE','',0,0,0,54,36),(58,'PDB ID','','[MUTFUNC] PDB identifier or homology model identifier of the structure containing the mutation','value_VARCHAR','',0,0,0,55,36),(59,'Sequence','','[MUTFUNC] Sequence of the linear motif','value_VARCHAR','',0,0,0,56,36),(60,'Accession','','[MUTFUNC] ELM accession for the linear motif','value_VARCHAR','',0,0,0,57,36),(61,'Modification Type','','[MUTFUNC] Type of post-translational modifications','value_VARCHAR','',0,0,0,57,36),(62,'Site Function','','[MUTFUNC] Function of this phosphorylation site, if any','value_VARCHAR','',0,0,0,58,36),(63,'Function Evidence','','[MUTFUNC] Evidence of site function, if any','value_VARCHAR','',0,0,0,59,36),(64,'Predicted Kinase','','[MUTFUNC] Kinase predicted to lose phosphorylation at this site','value_VARCHAR','',0,0,0,60,36),(65,'Probability of Kinase Loss','','[MUTFUNC] Probability of kinase losing phosphorylation at this site','value_DOUBLE','',0,0,0,61,36),(66,'Knockout p-value','','[MUTFUNC] P-value of over or under-expression for the downstream gene when the transcription factor is knocked out','value_DOUBLE','',0,0,0,62,36),(67,'Transcription Factor','','[MUTFUNC] Transcription factor predicted to bind this binding site','value_VARCHAR','',0,0,0,63,36),(68,'Category of Mutation','','[MUTFUNC] Category of Mutfunc Mutation','value_TEXT','',0,0,0,64,36),(69,'Interaction Score','','[MECHISMO]','value_DOUBLE','',0,0,0,65,36),(70,'Total Interaction Score','','[MECHISMO]','value_DOUBLE','',0,0,0,66,36),(71,'CELLO2GO Probabilities','','[CELLO2GO]','value_VARCHAR','',0,0,0,67,36),(72,'Intracellular Location','','[CELLO2GO]','value_VARCHAR','',0,0,0,68,36);
 /*!40000 ALTER TABLE `fields` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `mechismo`
---
-
-DROP TABLE IF EXISTS `mechismo`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `mechismo` (
-  `experiment_id` int(11) NOT NULL,
-  `start_pos` int(20) NOT NULL,
-  `end_pos` int(20) DEFAULT NULL,
-  `interaction_score` double NOT NULL,
-  `total_interaction_score` double NOT NULL,
-  PRIMARY KEY (`experiment_id`),
-  UNIQUE KEY `unique_mutation` (`experiment_id`,`start_pos`,`end_pos`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `mechismo`
---
-
-LOCK TABLES `mechismo` WRITE;
-/*!40000 ALTER TABLE `mechismo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `mechismo` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `mutations`
---
-
-DROP TABLE IF EXISTS `mutations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `mutations` (
-  `id` int(11) NOT NULL,
-  `experiment_id` int(11) NOT NULL,
-  `chrom_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `start_pos` int(20) NOT NULL,
-  `end_pos` int(20) DEFAULT NULL,
-  `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ref` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `alt` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `gen` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `delta_aa` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `pop` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `clone` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `time` double DEFAULT NULL,
-  `freq` double DEFAULT NULL,
-  `comment` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_mutation` (`experiment_id`,`start_pos`,`end_pos`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `mutations`
---
-
-LOCK TABLES `mutations` WRITE;
-/*!40000 ALTER TABLE `mutations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `mutations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `mutfunc`
---
-
-DROP TABLE IF EXISTS `mutfunc`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `mutfunc` (
-  `experiment_id` int(11) NOT NULL,
-  `start_pos` int(20) NOT NULL,
-  `end_pos` int(20) DEFAULT NULL,
-  `refaa` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `altaa` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `impact_score` double DEFAULT NULL,
-  `ic` double DEFAULT NULL,
-  `ddg` double DEFAULT NULL,
-  `pdb_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `sequence` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `accession` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `modification_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `site_function` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `function_evidence` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `predicted_kinase` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `probability_loss` double DEFAULT NULL,
-  `knockout_pvalue` double DEFAULT NULL,
-  `tf` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `category_mutation` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`experiment_id`),
-  UNIQUE KEY `unique_mutation` (`experiment_id`,`start_pos`,`end_pos`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `mutfunc`
---
-
-LOCK TABLES `mutfunc` WRITE;
-/*!40000 ALTER TABLE `mutfunc` DISABLE KEYS */;
-/*!40000 ALTER TABLE `mutfunc` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -336,4 +204,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-04 15:31:53
+-- Dump completed on 2021-03-09 15:17:36
