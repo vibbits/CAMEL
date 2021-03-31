@@ -196,6 +196,28 @@ INSERT INTO `sessions` VALUES ('239ab633-133d-42d9-b39a-e041fd40d738','2021-03-0
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+DROP TABLE IF EXISTS `mutations_fields`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mutations_fields` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `experiment_id` int(11) NOT NULL,
+  `mutation_id` int(11) NOT NULL,
+  `field_id` int(11) NOT NULL,
+  `value_VARCHAR` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `value_TEXT` mediumtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `value_INT` bigint(20) DEFAULT NULL,
+  `value_DOUBLE` double DEFAULT NULL,
+  `value_BOOL` tinyint(1) DEFAULT NULL,
+  `value_ATTACH` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_experiment_mut_id` (`experiment_id`),
+  KEY `fk_field_mut_id` (`field_id`),
+  CONSTRAINT `fk_experiment_mut_id` FOREIGN KEY (`experiment_id`) REFERENCES `experiments` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_field_mut_id` FOREIGN KEY (`field_id`) REFERENCES `fields` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=112859 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

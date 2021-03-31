@@ -1,1 +1,145 @@
-<h3>HELLO WORLD</h3>
+<div class="row mt-5 mb-3">
+    <!-- Field list card. Turning on and off columns and filters -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+      Fields
+        </div>
+        <div class="card-body">
+      <div id="field-selector">
+        <div data-ng-repeat="field in mutations.fields">
+          <div class="filter-control">
+            <i class="material-icons align-middle pointer" data-ng-class="{'md-icon-faded': !field.filter}" data-ng-click="mutations.toggleFilterItem(field)">filter_list</i>
+            <span class="pointer" data-ng-class="{'column-name-selected': field.show}" data-ng-click="mutations.toggleColumn(field)">
+          {{field.title}}
+            </span>
+          </div>
+        </div>
+        <hr>
+        <div>
+          References:<br>
+          <span data-ng-repeat="ref in mutations.refs">
+            <i class="material-icons align-middle pointer"
+           data-ng-class="{'md-icon-faded': !ref.filter}"
+           data-ng-click="mutations.toggleRefFilter(ref)">filter_list
+            </i>
+            <span class="pointer"
+              data-ng-class="{'column-name-selected': ref.show}"
+              data-ng-click="mutations.toggleRefShow(ref)">
+          {{ref.field}}
+            </span>
+            <span data-ng-if="!$last">, </span>
+          </span>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+    <!-- Filter block card -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+      Filter
+        </div>
+        <div class="card-body">
+      <div id="filter-blocks">
+        <!-- Fixed experiment name filter -->
+        <div class="form-group filter-item">
+          <label for="expname-filter">Experiment Name:</label>
+          <input id="expname-filter" class="form-control" data-ng-model="mutations.filter.ExperimentName" data-ng-change="mutations.query()">
+        </div>
+  
+        <!-- Dynamic field filters -->
+        <div class="form-group filter-item" data-ng-repeat="field in mutations.fields" data-ng-if="field.filter">
+          <span data-ng-switch="field.type_column">
+            <label for="filter-{{field.id}}">{{field.title}} <span data-ng-if="field.unit">({{field.unit}})</span>:</label>
+            <span data-ng-switch-when="value_VARCHAR">
+          <input id="filter-{{field.id}}" class="form-control"
+                 data-ng-model="mutations.filter[field.id]"
+                 data-ng-change="mutations.filterUpdate(field.id)"
+                 data-ng-if="!field.options">
+          <select id="filter-{{field.id}}" class="form-control"
+              data-ng-model="mutations.filter[field.id]"
+              data-ng-change="mutations.filterUpdate(field.id)"
+              data-ng-if="field.options">
+            <option data-ng-repeat="opt in field.options">{{opt}}</option>
+          </select>
+            </span>
+            <span data-ng-switch-when="value_TEXT">
+          <input id="filter-{{field.id}}" class="form-control" data-ng-model="mutations.filter[field.id]" data-ng-change="mutations.filterUpdate(field.id)">
+            </span>
+            <span data-ng-switch-when="value_BOOL">
+          <input id="filter-{{field.id}}" type="checkbox" data-ng-model="mutations.filter[field.id]" data-ng-change="mutations.filterUpdate(field.id)">
+            </span>
+            <span data-ng-switch-when="value_ATTACH">
+          <input id="filter-{{field.id}}" type="checkbox" data-ng-model="mutations.filter[field.id]" data-ng-change="mutations.filterUpdate(field.id)">
+            </span>
+            <span class="form-row" data-ng-switch-when="value_INT">
+          <div class="col">
+            <label for="filter-min-{{field.id}}">Min:</label>
+            <input type="number" id="filter-min-{{field.id}}" class="form-control" data-ng-model="mutations.filter['min_'+field.id]" data-ng-change="mutations.filterUpdate('min_'+field.id)">
+          </div>
+          <div class="col">
+            <label for="filter-max-{{field.id}}">Max:</label>
+            <input type="number" id="filter-max-{{field.id}}" class="form-control" data-ng-model="mutations.filter['max_'+field.id]" data-ng-change="mutations.filterUpdate('max_'+field.id)">
+          </div>
+            </span>
+            <span class="form-row" data-ng-switch-when="value_DOUBLE">
+          <div class="col">
+            <label for="filter-min-{{field.id}}">Min:</label>
+            <input type="number" step="0.0000000000001" id="filter-min-{{field.id}}" class="form-control" data-ng-model="mutations.filter['min_'+field.id]" data-ng-change="mutations.filterUpdate('min_'+field.id)">
+          </div>
+          <div class="col">
+            <label for="filter-max-{{field.id}}">Max:</label>
+            <input type="number" step="0.0000000000001" id="filter-max-{{field.id}}" class="form-control" data-ng-model="mutations.filter['max_'+field.id]" data-ng-change="mutations.filterUpdate('max_'+field.id)">
+          </div>
+            </span>
+            <button type="button" class="close" aria-label="Close" data-ng-click="mutations.toggleFilterItem(field)">
+          <span aria-hidden="true">&times;</span>
+            </button>
+          </span>
+        </div>
+        <div class="form-group filter-item" data-ng-repeat="ref in mutations.refs" data-ng-if="ref.filter">
+          <label for="filter-{{ref.field}}">{{ref.header}}:</label>
+          <span class="form-row" data-ng-if="ref.field=='year'">
+            <div class="col">
+          <label for="filter-min-year">Min:</label>
+          <input id="filter-min-year" class="form-control" data-ng-model="mutations.filter['ref_min_year']" data-ng-change="mutations.filterUpdate('ref_min_year')">
+            </div>
+            <div class="col">
+          <label for="filter-max-year">Max:</label>
+          <input id="filter-max-year" class="form-control" data-ng-model="mutations.filter['ref_max_year']" data-ng-change="mutations.filterUpdate('ref_max_year')">
+            </div>
+            <button type="button" class="close" aria-label="Close" data-ng-click="mutations.toggleFilterItem(ref)">
+          <span aria-hidden="true">&times;</span>
+            </button>
+          </span>
+          <span class="form-row" data-ng-if="ref.field!='year'">
+            <input id="filter-{{ref.field}}" class="form-control" data-ng-model="mutations.filter['ref_'+ref.field]" data-ng-change="mutations.filterUpdate('ref_'+ref.field)">
+            <button type="button" class="close" aria-label="Close" data-ng-click="mutations.toggleFilterItem(ref)">
+          <span aria-hidden="true">&times;</span>
+            </button>
+          </span>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mutation table -->
+  <div class="row">
+    <div class="col-md-6">
+      Showing <code>{{mutations.exp_count}}</code> mutations 
+      <span data-ng-hide="mutations.loaded">(Refreshing data... )</span>    
+    </div>
+    <div class="col-md-6 text-md-right">
+      <i class="material-icons pointer" title="Save search results as CSV" data-ng-click="mutations.export()">save_alt</i>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <mutation-table experiments="mutations.experiments" fields="mutations.fields" refs="mutations.refs" data-ng-show="mutations.init_loaded"></mutation-table>
+    </div>
+  </div>
+  
