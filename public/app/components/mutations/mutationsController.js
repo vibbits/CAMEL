@@ -1,7 +1,7 @@
 angular.module("CAMEL")
     .controller('MutationsController', function($scope, $location, $window, $timeout, $routeParams, $route, $http, Experiment, Field, State){
 	var ctrl = this;
-    var showNr = 5;
+    var showNr = 1;
     ctrl.refs = State.expRefs;
 
     ctrl.toggleRefShow = function(ref){
@@ -18,7 +18,7 @@ angular.module("CAMEL")
 		for (var field_i in ctrl.fields){
 		    if (ctrl.fields.hasOwnProperty(field_i)){
 			var field = ctrl.fields[field_i];
-			if (i<showNr){
+			if (i<showNr || (i>37 && i<44)){
 			    field.show = true;
 			} else {
 			    field.show = false;
