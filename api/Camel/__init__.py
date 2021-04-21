@@ -44,6 +44,7 @@ from Camel.field import Field, FieldList
 from Camel.reference import Reference, ReferenceList
 from Camel.attachment import Attachment
 from Camel.pubmed import PubMed
+from Camel.mutation import Mutation, MutationList
 
 ## Init Flask App
 app = Flask(__name__)
@@ -54,6 +55,8 @@ api.add_resource(Auth, '/auth/')
 api.add_resource(Logout, '/auth/logout')
 api.add_resource(ExperimentList, '/experiment')
 api.add_resource(Experiment, '/experiment/<int:id>')
+api.add_resource(MutationList, '/mutation')
+api.add_resource(Mutation, '/mutation/<int:id>')
 api.add_resource(FieldList, '/field')
 api.add_resource(Field, '/field/<string:id>')
 api.add_resource(ReferenceList, '/reference')

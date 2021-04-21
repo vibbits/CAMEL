@@ -3,3 +3,5 @@ camel.conf
 public/app/app.config.js
 __pycache__
 auth/.htpasswd
+.docker/.DS_Store
+.DS_Store

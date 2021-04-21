@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .controller('MutationsController', function($scope, $location, $window, $timeout, $routeParams, $route, $http, Experiment, Field, State){
+    .controller('MutationsController', function($scope, $location, $window, $timeout, $routeParams, $route, $http, Mutation, Field, State){
 	var ctrl = this;
     var showNr = 1;
     ctrl.refs = State.expRefs;
@@ -81,7 +81,7 @@ angular.module("CAMEL")
 
 	ctrl.query = function(){
 	    ctrl.loaded = false;
-	    ctrl.tmp_experiments = Experiment.query(ctrl.filter, function(){
+	    ctrl.tmp_experiments = Mutation.query(ctrl.filter, function(){
 		ctrl.experiments = ctrl.tmp_experiments;
 		ctrl.exp_count = ctrl.experiments.length;
 		ctrl.loaded = true;

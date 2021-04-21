@@ -4,6 +4,11 @@ angular.module("CAMEL")
 	    update: {method: 'PUT'}
 	});
     })
+	.factory("Mutation", function MutationFactory($resource, config) {
+	return $resource(config.apiUrl+"/mutation/:id", {id: '@id'}, {
+		update: {method: 'PUT'}
+	});
+	})
     .factory("Field", function FieldFactory($resource, config) {
 	return $resource(config.apiUrl+"/field/:id", {id: '@id'}, {
 	    update: {method: 'PUT'}

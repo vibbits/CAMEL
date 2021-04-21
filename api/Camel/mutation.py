@@ -20,20 +20,20 @@ def _compose_query(where_base = [], where_field = [], not_field = [], where_ref 
     :param where_field: list of WHERE statements for experiment_fields sub_query
     :param where_ref: list of WHERE statements for references_fields sub_query
     '''
-    base = ("SELECT e.`id` AS `mutation_id`, e.`name`, "
+    base = ("SELECT e.`id` AS `experiment_id`, mf.`mutation_id`, e.`name`, "
             "f.`id` AS `field_id`, f.`title` AS `field_title`, f.`weight`, "
-            "ef.`id` as value_id, "
-            "ef.`value_INT`, ef.`value_VARCHAR`, ef.`value_DOUBLE`, ef.`value_BOOL`, ef.`value_TEXT`, ef.`value_ATTACH` "
+            "mf.`id` as value_id, "
+            "mf.`value_INT`, mf.`value_VARCHAR`, mf.`value_DOUBLE`, mf.`value_BOOL`, mf.`value_TEXT`, mf.`value_ATTACH` "
             "FROM `experiments` e "
-            "LEFT JOIN `experiments_fields` ef ON e.`id` = ef.`mutation_id` "
-            "LEFT JOIN `fields` f ON ef.`field_id` = f.`id` ")
+            "LEFT JOIN `mutations_fields` mf ON e.`id` = mf.`experiment_id` "
+            "LEFT JOIN `fields` f ON mf.`field_id` = f.`id`  ")
 
     field_filter = ("e.`id` IN (SELECT ef_filter.`mutation_id` "
-                         "FROM `experiments_fields` ef_filter "
+                         "FROM `mutations_fields` ef_filter "
                          "WHERE {} ) ")
     
     not_field_filter = ("e.`id` NOT IN (SELECT ef_filter.`mutation_id` "
-                         "FROM `experiments_fields` ef_filter "
+                         "FROM `mutations_fields` ef_filter "
                          "WHERE {} ) ")
 
     ref_filter = ("e.`id` IN (SELECT er_filter.`mutation_id` "
@@ -42,7 +42,7 @@ def _compose_query(where_base = [], where_field = [], not_field = [], where_ref 
                   "WHERE {} ) ")
 
     
-    order = " ORDER BY e.`id`, f.`weight`"
+    order = " ORDER BY e.`id`, mf.`mutation_id`, f.`weight`"
 
     where = []
     where+= where_base
@@ -68,9 +68,9 @@ def _compose_query(where_base = [], where_field = [], not_field = [], where_ref 
 
 def _compact(res, field_types, db):
     '''
-    Gather all result values from the query and group them by experiment.
+    Gather all result values from the query and group them by experiment and by mutation.
 
-    :return a list of dictionaries, one per experiment 
+    :return a dictionary of list of dictionaries, one per mutation 
     '''
     ##Combine all field/value results into a 'summary' (one entry per experiment)
     summary = {}
@@ -106,13 +106,13 @@ def _compact(res, field_types, db):
         sql = ("SELECT r.`id`, r.`authors`, r.`title`, r.`journal`, r.`year`, r.`pages`, r.`pubmed_id`, r.`url` "
                "FROM `references` r "
                "JOIN `experiments_references` er ON r.`id` = er.`reference_id` "
-               "WHERE er.`mutation_id` = %(ID)s")
+               "WHERE er.`experiment_id` = %(ID)s")
 
         c = db.cursor(DictCursor)
         c.execute(sql, {'ID': mut_id})
         res = c.fetchall()
         c.close()            
-        mut['references'] = res
+        # mut['references'] = res
 
         result.append(mut)
 
@@ -520,9 +520,9 @@ class Mutation(CamelResource):
         result = _compact(res, field_types, self.db)
 
         if len(result) > 0:
-            return result[0]
+            return result
         else:
-            return 'Unknown Experiment ID', 400
+            return 'Unknown Mutation ID', 400
     
     @login_required
     def put(self, id):        

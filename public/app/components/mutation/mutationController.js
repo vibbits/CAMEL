@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .controller('ExperimentController', function($scope, $location, $timeout, $routeParams, $route, $http, Experiment, Field, config) {
+    .controller('MutationController', function($scope, $location, $timeout, $routeParams, $route, $http, Experiment, Field, config) {
 	var ctrl = this;
 
 	$scope.download_url = config.attachments;
