@@ -17,7 +17,7 @@ def _compose_query(where_base = [], where_field = [], not_field = [], where_ref 
     Compose the SQL query to fetch a filtered list of experiments
 
     :param where_base: list of WHERE statements for main query
-    :param where_field: list of WHERE statements for experiment_fields sub_query
+    :param where_field: list of WHERE statements for mutations_fields sub_query
     :param where_ref: list of WHERE statements for references_fields sub_query
     '''
     base = ("SELECT e.`id` AS `experiment_id`, mf.`mutation_id`, e.`name`, "
@@ -191,7 +191,7 @@ def _edit_fields(exp_id, fields, field_types, db):
                     value = value['filename']
                     value = _put_file(uuid, exp_id, field_id, value)
                 
-                sql = ("INSERT INTO `experiments_fields` "
+                sql = ("INSERT INTO `mutations_fields` "
                        "(`experiment_id`, `field_id`, `value_{type_col}`) "
                        "VALUES (%(exp_id)s, %(field_id)s, %(val)s) ").format(type_col = field_type)
                 cursor.execute(sql, {'exp_id': exp_id, 'field_id': field_id, 'val': value})
@@ -199,16 +199,16 @@ def _edit_fields(exp_id, fields, field_types, db):
             else:
                 if type(value) is not dict:
                     ##Update existing value
-                    sql = "UPDATE `experiments_fields` SET `value_{type_col}` = %(value)s WHERE `id`=%(val_id)s".format(type_col=field_type)
+                    sql = "UPDATE `mutations_fields` SET `value_{type_col}` = %(value)s WHERE `id`=%(val_id)s".format(type_col=field_type)
                     cursor.execute(sql, {'val_id': value_id, 'value': value})
                 elif 'action' in value and value['action'] == 'delete':
                     ##Delete value
                     if field_type == 'ATTACH':
-                        sql = "SELECT `value_ATTACH` as filename FROM `experiments_fields` WHERE `id` = %(val_id)s"
+                        sql = "SELECT `value_ATTACH` as filename FROM `mutations_fields` WHERE `id` = %(val_id)s"
                         cursor.execute(sql, {'val_id': value_id})
                         row = cursor.fetchone()
                         _del_file(exp_id, field_id, row[0])
-                    sql = "DELETE FROM `experiments_fields` WHERE `id` = %(val_id)s"
+                    sql = "DELETE FROM `mutations_fields` WHERE `id` = %(val_id)s"
                     cursor.execute(sql, {'val_id': value_id})
     cursor.close()
 
@@ -513,6 +513,7 @@ class Mutation(CamelResource):
         
         c = self.db.cursor(DictCursor)
         sql = _compose_query(where_base)
+        print(sql)
         c.execute(sql, tokens)
         res = c.fetchall()
         c.close()

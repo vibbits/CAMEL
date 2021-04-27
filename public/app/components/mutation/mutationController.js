@@ -1,9 +1,9 @@
 angular.module("CAMEL")
-    .controller('MutationController', function($scope, $location, $timeout, $routeParams, $route, $http, Experiment, Field, config) {
+    .controller('MutationController', function($scope, $location, $timeout, $routeParams, $route, $http, Mutation, Field, config) {
 	var ctrl = this;
 
 	$scope.download_url = config.attachments;
-	$scope.exp = Experiment.get($routeParams,
+	$scope.exp = Mutation.get($routeParams,
 				    function(){
 					//experiment loaded
 				    },
