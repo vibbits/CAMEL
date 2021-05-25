@@ -22,13 +22,13 @@ def _compose_query(where_base = [], where_field = [], not_field = [], where_ref 
     '''
     base = ("SELECT e.`id` AS `experiment_id`, mf.`mutation_id`, e.`name`, "
             "f.`id` AS `field_id`, f.`title` AS `field_title`, f.`weight`, "
-            "mf.`id` as value_id, "
+            "mf.`mutation_id` as value_id, "
             "mf.`value_INT`, mf.`value_VARCHAR`, mf.`value_DOUBLE`, mf.`value_BOOL`, mf.`value_TEXT`, mf.`value_ATTACH` "
             "FROM `experiments` e "
-            "LEFT JOIN `mutations_fields` mf ON e.`id` = mf.`experiment_id` "
+            "INNER JOIN `mutations_fields` mf ON e.`id` = mf.`experiment_id` "
             "LEFT JOIN `fields` f ON mf.`field_id` = f.`id`  ")
 
-    field_filter = ("e.`id` IN (SELECT ef_filter.`mutation_id` "
+    field_filter = ("mf.`mutation_id` IN (SELECT ef_filter.`mutation_id` "
                          "FROM `mutations_fields` ef_filter "
                          "WHERE {} ) ")
     
@@ -382,6 +382,8 @@ class MutationList(CamelResource):
                 
         c = self.db.cursor(DictCursor)
         sql = _compose_query(self.where_base, self.where_field, self.not_field, self.where_ref)
+        print(sql)
+        print(self.tokens)
 
         c.execute(sql, self.tokens)
         res = c.fetchall()
@@ -513,7 +515,6 @@ class Mutation(CamelResource):
         
         c = self.db.cursor(DictCursor)
         sql = _compose_query(where_base)
-        print(sql)
         c.execute(sql, tokens)
         res = c.fetchall()
         c.close()
