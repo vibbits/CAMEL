@@ -20,29 +20,23 @@ def _compose_query(where_base = [], where_field = [], not_field = [], where_ref 
     :param where_field: list of WHERE statements for mutations_fields sub_query
     :param where_ref: list of WHERE statements for references_fields sub_query
     '''
-    base = ("SELECT e.`id` AS `experiment_id`, mf.`mutation_id`, e.`name`, "
-            "f.`id` AS `field_id`, f.`title` AS `field_title`, f.`weight`, "
-            "mf.`mutation_id` as value_id, "
-            "mf.`value_INT`, mf.`value_VARCHAR`, mf.`value_DOUBLE`, mf.`value_BOOL`, mf.`value_TEXT`, mf.`value_ATTACH` "
-            "FROM `experiments` e "
-            "INNER JOIN `mutations_fields` mf ON e.`id` = mf.`experiment_id` "
-            "LEFT JOIN `fields` f ON mf.`field_id` = f.`id`  ")
+    base = ("SELECT * FROM `mutations_table` mt")
 
-    field_filter = ("mf.`mutation_id` IN (SELECT ef_filter.`mutation_id` "
+    field_filter = ("mt.`mutation_id` IN (SELECT ef_filter.`mutation_id` "
                          "FROM `mutations_fields` ef_filter "
                          "WHERE {} ) ")
     
-    not_field_filter = ("e.`id` NOT IN (SELECT ef_filter.`mutation_id` "
+    not_field_filter = ("mt.`mutation_id` NOT IN (SELECT ef_filter.`mutation_id` "
                          "FROM `mutations_fields` ef_filter "
                          "WHERE {} ) ")
 
-    ref_filter = ("e.`id` IN (SELECT er_filter.`mutation_id` "
+    ref_filter = ("mt.`mutation_id` IN (SELECT er_filter.`mutation_id` "
                   "FROM `experiments_references` er_filter "
                   "JOIN `references` r_filter ON er_filter.`reference_id` = r_filter.`id` "
                   "WHERE {} ) ")
 
     
-    order = " ORDER BY e.`id`, mf.`mutation_id`, f.`weight`"
+    order = " ORDER BY mt.`experiment_id`, mt.`mutation_id`, mt.`weight`"
 
     where = []
     where+= where_base
@@ -510,7 +504,7 @@ class Mutation(CamelResource):
         super(Mutation, self).__init__()
     
     def get(self, id):
-        where_base = ["e.`id` = %(id)s"]
+        where_base = ["mt.`id` = %(id)s"]
         tokens = {'id': id}
         
         c = self.db.cursor(DictCursor)
