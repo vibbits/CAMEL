@@ -3,7 +3,7 @@ from MySQLdb.cursors import DictCursor
 from pathlib import Path
 
 from Camel import CamelResource
-from Camel.field import FieldList
+from Camel.field_mut import FieldMutList
 from Camel.auth import login_required
 from Camel import config
 
@@ -116,7 +116,7 @@ def _map_field_types():
     '''
     :return a mapping of field id's to field type (VARCHAR, TEXT, INT, BOOL)
     '''
-    fieldList = FieldList()
+    fieldList = FieldMutList()
     rows = fieldList.retrieveFieldData()
             
     field_types = {}

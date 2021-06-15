@@ -1,5 +1,5 @@
 angular.module("CAMEL")
-    .controller('MutationsController', function($scope, $location, $window, $timeout, $routeParams, $route, $http, Mutation, Field, State){
+    .controller('MutationsController', function($scope, $location, $window, $timeout, $routeParams, $route, $http, Mutation, FieldMut, State){
 	var ctrl = this;
     var showNr = 1;
     ctrl.refs = State.expRefs;
@@ -13,12 +13,12 @@ angular.module("CAMEL")
 
     //Init fields
     if (State.expFields.length == 0){
-	    ctrl.fields = Field.query(function(){
+	    ctrl.fields = FieldMut.query(function(){
 		var i = 0;
 		for (var field_i in ctrl.fields){
 		    if (ctrl.fields.hasOwnProperty(field_i)){
 			var field = ctrl.fields[field_i];
-			if (i<showNr || (i>37 && i<44)){
+			if (i<showNr+6){
 			    field.show = true;
 			} else {
 			    field.show = false;
