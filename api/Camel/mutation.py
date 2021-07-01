@@ -465,12 +465,14 @@ class MutationList(CamelResource):
 
     @login_required
     def post(self):
+        print("Mutation(CamelResource):") 
         args = self.reqparse.parse_args()
+        print(args)
 
         exp_name = args['name']
 
         ##Experiment
-        sql = "INSERT INTO `experiments` (`name`) VALUES (%(exp_name)s)"
+        sql = "INSERT INTO `mutations_fields` (`name`) VALUES (%(exp_name)s)"
         cursor = self.db.cursor()
         cursor.execute(sql, {'exp_name': exp_name})
         exp_id = cursor.lastrowid
@@ -504,7 +506,7 @@ class Mutation(CamelResource):
         super(Mutation, self).__init__()
     
     def get(self, id):
-        where_base = ["mt.`id` = %(id)s"]
+        where_base = ["mt.`experiment_id` = %(id)s"]
         tokens = {'id': id}
         
         c = self.db.cursor(DictCursor)
@@ -524,8 +526,7 @@ class Mutation(CamelResource):
     def put(self, id):        
         ## Without authentication, the user can only make
         ## suggestions, but never overwrite an entry.
-
-        ##TODO implement the suggestion idea        
+        ##TODO implement the suggestion idea       
         
         args = self.reqparse.parse_args()
 
