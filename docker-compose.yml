@@ -34,10 +34,14 @@ services:
 
   db:
     container_name: camel-database
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
     build:
       context: .
       dockerfile: ./.docker/DB.Dockerfile
-    restart: on-failure
+    ports:
+      - "3306:3306"
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: CAMEL

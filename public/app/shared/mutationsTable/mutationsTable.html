@@ -1,0 +1,82 @@
+<paginator paging="paging" experiments="experiments" items-per-page="itemsPerPage"></paginator>
+<div class="table-responsive">
+  <table id="mutation-table" class="table table-striped table-hover">
+    <thead class="thead-dark">
+      <tr>
+	<th scope="col" class="pointer" data-ng-click="sortExperiments('name')">
+	  Name
+	  <i class="material-icons" data-ng-if="orderParams.key=='name'">swap_vertical_circle</i>
+	</th>
+        <th scope="col" class="pointer"
+	    data-ng-repeat="field in fields"
+	    data-ng-if="field.show"
+	    data-ng-click="sortExperiments(field, 'fields')">
+	  {{field.title}} <span data-ng-if="field.unit">({{field.unit}})</span>	  
+	  <span data-ng-if="field.description">
+	    <i class="material-icons" title="{{field.description}}">info</i>
+	  </span>
+	  <i class="material-icons" data-ng-if="orderParams.key==field.id">swap_vertical_circle</i>
+	</th>
+	<th scope="col" class="pointer"
+	    data-ng-repeat="ref in refs"
+	    data-ng-if="ref.show"
+	    data-ng-click="sortExperiments(ref, 'refs')">
+	  {{ref.header}}
+	  <i class="material-icons" data-ng-if="orderParams.key==ref.field">swap_vertical_circle</i>
+	</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-ng-repeat="experiment in experiments | orderBy: experiment:orderParams.desc:fieldComparator | limitTo: itemsPerPage:(paging.currentPage-1)*itemsPerPage">
+	<th scope="row" data-ng-click="showExperiment(experiment)" class="pointer">{{experiment.name}}</th>
+	<td data-ng-repeat="field in fields" data-ng-if="field.show">
+	  <div data-ng-switch="field.type_column">
+	    <div data-ng-switch-when="value_BOOL">
+	      <div data-ng-if="experiment.fields[field.id]">
+		<i class="material-icons" data-ng-repeat="check in experiment.fields[field.id]">
+		  {{check==1? 'check_circle':'not_interested'}}
+		</i>
+	      </div>
+	    </div>
+	    <div data-ng-switch-when="value_ATTACH">
+	      <ul class="download-icons" data-ng-if="experiment.fields.hasOwnProperty(field.id)">
+		<li data-ng-repeat="file in experiment.fields[field.id]">
+		  <a href="{{downloadUrl}}/{{experiment.id}}/{{field.id}}/{{file}}"
+		     target="_blank"
+		     title="{{file}}"><i class="material-icons">save</i></a>
+		</li>
+	      </ul>
+	    </div>
+	    <div data-ng-switch-when="value_VARCHAR">
+	      <div data-ng-if="field.link">
+		<ul class="link-list">
+		  <li data-ng-repeat="link in experiment.fields[field.id]">
+		    <a href="{{link}}" target="_blank">{{link}}</a>
+		  </li>
+		</ul>
+	      </div>
+	      <div data-ng-if="!field.link">
+		<div data-ng-repeat="value in experiment.fields[field.id]">
+		  {{value}}
+		</div>
+	      </div>
+	    </div>
+	    <div data-ng-switch-default>
+	      <span data-ng-repeat="value in experiment.fields[field.id]">
+		{{value}}
+	      </span>
+	    </div>
+	  </div>
+	</td>
+	<td data-ng-repeat="ref in refs" data-ng-if="ref.show">
+	  <ul data-ng-class="{'no-list-style': experiment.references.length <= 1}">
+	    <li data-ng-repeat="pub in experiment.references">
+	      {{pub[ref.field]}}
+	    </li>
+	  </ul>
+	</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<paginator paging="paging" experiments="experiments" items-per-page="itemsPerPage"></paginator>

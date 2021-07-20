@@ -38,6 +38,16 @@ angular.module('CAMEL')
 		controller: 'ExperimentsController',
 		controllerAs: 'experiments'
 	    })
+		.when('/mutation/:id', {
+		templateUrl:  'app/components/mutation/mutationTemplate.html',
+		controller: 'MutationController',
+		controllerAs: 'mutation'
+		})
+		.when('/mutations', {
+		templateUrl:  'app/components/mutations/mutationsTemplate.html',
+		controller: 'MutationsController',
+		controllerAs: 'mutations'
+		})
 	    .when('/fields', {
 		templateUrl:  'app/components/fields/fieldsTemplate.html',
 		controller: 'FieldsController',
