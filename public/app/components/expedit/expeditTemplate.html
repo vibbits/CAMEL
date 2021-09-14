@@ -4,13 +4,13 @@
   <div class="card-body">
     <h5 class="card-title">Not logged in</h5>
     <p>
-      As you are not logged in with <em>Editor privileges</em>, any
-      changes made to this Experiment entry will be saved separately
-      as an edit suggestion to the curators of this database.
+      As you are not logged in with <em>Editor privileges</em>, any changes made
+      to this Experiment entry will be saved separately as an edit suggestion to
+      the curators of this database.
     </p>
     <p>
-      You can leave your email address if you wish the curators to
-      contact you when reviewing your suggestions.
+      You can leave your email address if you wish the curators to contact you
+      when reviewing your suggestions.
     </p>
   </div>
 </div>
@@ -19,18 +19,26 @@
   <div class="col">
     <form name="nameForm" class="was-validated" novalidate>
       <label for="expname">Name<span class="red">*</span></label>
-      <input id="expname" name="expName" type="text"
-	     class="form-control form-control-lg"
-	     placeholder="Experiment Name"
-	     data-ng-change="expedit.expname_check_duplicate()"
-	     data-ng-model="exp.name" required>
-      <div class="invalid-feedback manual-feedback" data-ng-show="nameForm.$submitted || nameForm.expName.$touched">
-	<div data-ng-show="nameForm.expName.$error.required">
-	  Experiment name is required.
-	</div>
-	<div data-ng-show="duplicateExpName">
-	  Experiment name is already in use.
-	</div>
+      <input
+        id="expname"
+        name="expName"
+        type="text"
+        class="form-control form-control-lg"
+        placeholder="Experiment Name"
+        data-ng-change="expedit.expname_check_duplicate()"
+        data-ng-model="exp.name"
+        required
+      />
+      <div
+        class="invalid-feedback manual-feedback"
+        data-ng-show="nameForm.$submitted || nameForm.expName.$touched"
+      >
+        <div data-ng-show="nameForm.expName.$error.required">
+          Experiment name is required.
+        </div>
+        <div data-ng-show="duplicateExpName">
+          Experiment name is already in use.
+        </div>
       </div>
     </form>
   </div>
@@ -40,11 +48,15 @@
   <div class="col">
     <label for="field-select">Add field: </label>
     <select id="field-select" data-ng-model="new_field_selected_id">
-      <option
-	value="{{field.id}}"
-	data-ng-repeat="field in fields">{{field.title}}</option>
+      <option value="{{field.id}}" data-ng-repeat="field in fields">
+        {{field.title}}
+      </option>
     </select>
-    <i class="material-icons align-middle pointer" data-ng-click="expedit.add_field()">add_circle</i>
+    <i
+      class="material-icons align-middle pointer"
+      data-ng-click="expedit.add_field()"
+      >add_circle</i
+    >
   </div>
 </div>
 
@@ -52,259 +64,467 @@
   <div data-ng-repeat="field in fields" data-ng-if="expedit.hasValues(field)">
     <div data-ng-switch="field.type_column">
       <div class="form-group" data-ng-switch-when="value_VARCHAR">
-	<label for="{{field.id}}">{{field.title}}<span class="red" data-ng-if="field.required">*</span>
-	</label>
-	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
-	  <button type="button" class="close" aria-label="Close"
-		  data-ng-click="expedit.remove_value(field.id, value_id)"
-		  data-ng-if="!field.required || expedit.hasFieldValuesLeft(field)">
-	    <span aria-hidden="true">&times;</span>
-	  </button>
-	  <input type="{{field.link?'url':'text'}}" class="form-control"
-		 id="{{field.id}}"
-		 name="{{field.id}}_{{value_id}}"
-		 data-ng-model="exp.fields[field.id][value_id]"
-		 data-ng-required="field.required"
-		 data-ng-if="!field.options">
-	  <select id="{{field.id}}" class="form-control"
-		  name="{{field.id}}_{{value_id}}"
-		  data-ng-model="exp.fields[field.id][value_id]"
-		  data-ng-required="field.required"
-		  data-ng-if="field.options">
-	    <option data-ng-repeat="opt in field.options">{{opt}}</option>
-	  </select>
-	  <div class="invalid-feedback manual-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
-	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
-	      Required field.
-	    </div>
-	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.url">
-	      This should be an absolute URL.
-	    </div>
-	  </div>
-	</div>
-	<small class="form-text text-muted">{{field.description}}</small>
+        <label for="{{field.id}}"
+          >{{field.title}}<span class="red" data-ng-if="field.required">*</span>
+        </label>
+        <div
+          data-ng-repeat="(value_id, field_value) in exp.fields[field.id]"
+          data-ng-if="expedit.isValue(field_value)"
+        >
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            data-ng-click="expedit.remove_value(field.id, value_id)"
+            data-ng-if="!field.required || expedit.hasFieldValuesLeft(field)"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <input
+            type="{{field.link?'url':'text'}}"
+            class="form-control"
+            id="{{field.id}}"
+            name="{{field.id}}_{{value_id}}"
+            data-ng-model="exp.fields[field.id][value_id]"
+            data-ng-required="field.required"
+            data-ng-if="!field.options"
+          />
+          <select
+            id="{{field.id}}"
+            class="form-control"
+            name="{{field.id}}_{{value_id}}"
+            data-ng-model="exp.fields[field.id][value_id]"
+            data-ng-required="field.required"
+            data-ng-if="field.options"
+          >
+            <option data-ng-repeat="opt in field.options">{{opt}}</option>
+          </select>
+          <div
+            class="invalid-feedback manual-feedback"
+            data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched"
+          >
+            <div
+              data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required"
+            >
+              Required field.
+            </div>
+            <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.url">
+              This should be an absolute URL.
+            </div>
+          </div>
+        </div>
+        <small class="form-text text-muted">{{field.description}}</small>
       </div>
       <div class="form-group" data-ng-switch-when="value_TEXT">
-	<label for="{{field.id}}">{{field.title}}<span class="red" data-ng-if="field.required">*</span></label>
-	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
-	  <button type="button" class="close" aria-label="Close"
-		  data-ng-click="expedit.remove_value(field.id, value_id)"
-		  data-ng-if="!field.required">
-	    <span aria-hidden="true">&times;</span>
-	  </button>
-	  <textarea id="{{field.id}}" class="form-control"
-		    name="{{field.id}}_{{value_id}}"
-		    data-ng-model="exp.fields[field.id][value_id]"
-		    data-ng-required="field.required">
-	  </textarea>
-	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
-	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
-	      Required field.
-	    </div>
-	  </div>
-	</div>
-	<small class="form-text text-muted">{{field.description}}</small>
+        <label for="{{field.id}}"
+          >{{field.title}}<span class="red" data-ng-if="field.required"
+            >*</span
+          ></label
+        >
+        <div
+          data-ng-repeat="(value_id, field_value) in exp.fields[field.id]"
+          data-ng-if="expedit.isValue(field_value)"
+        >
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            data-ng-click="expedit.remove_value(field.id, value_id)"
+            data-ng-if="!field.required"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <textarea
+            id="{{field.id}}"
+            class="form-control"
+            name="{{field.id}}_{{value_id}}"
+            data-ng-model="exp.fields[field.id][value_id]"
+            data-ng-required="field.required"
+          >
+          </textarea>
+          <div
+            class="invalid-feedback"
+            data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched"
+          >
+            <div
+              data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required"
+            >
+              Required field.
+            </div>
+          </div>
+        </div>
+        <small class="form-text text-muted">{{field.description}}</small>
       </div>
       <div class="form-group" data-ng-switch-when="value_INT">
-	<label for="{{field.id}}">{{field.title}}<span class="red" data-ng-if="field.required">*</span></label>
-	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
-	  <button type="button" class="close" aria-label="Close"
-		  data-ng-click="expedit.remove_value(field.id, value_id)"
-		  data-ng-if="!field.required || expedit.hasFieldValuesLeft(field)">
-	    <span aria-hidden="true">&times;</span>
-	  </button>
-	  <input type="number" class="form-control"
-		 id="{{field.id}}"
-		 name="{{field.id}}_{{value_id}}"
-		 data-ng-model="exp.fields[field.id][value_id]"
-		 data-ng-required="field.required">
-	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
-	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
-	      Required field.
-	    </div>
-	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.number">
-	      This field should contain an integer.
-	    </div>
-	  </div>
-	</div>
-	<small class="form-text text-muted">{{field.description}}</small>
+        <label for="{{field.id}}"
+          >{{field.title}}<span class="red" data-ng-if="field.required"
+            >*</span
+          ></label
+        >
+        <div
+          data-ng-repeat="(value_id, field_value) in exp.fields[field.id]"
+          data-ng-if="expedit.isValue(field_value)"
+        >
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            data-ng-click="expedit.remove_value(field.id, value_id)"
+            data-ng-if="!field.required || expedit.hasFieldValuesLeft(field)"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <input
+            type="number"
+            class="form-control"
+            id="{{field.id}}"
+            name="{{field.id}}_{{value_id}}"
+            data-ng-model="exp.fields[field.id][value_id]"
+            data-ng-required="field.required"
+          />
+          <div
+            class="invalid-feedback"
+            data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched"
+          >
+            <div
+              data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required"
+            >
+              Required field.
+            </div>
+            <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.number">
+              This field should contain an integer.
+            </div>
+          </div>
+        </div>
+        <small class="form-text text-muted">{{field.description}}</small>
       </div>
       <div class="form-check" data-ng-switch-when="value_BOOL">
-	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
-	  <button type="button" class="close" aria-label="Close"
-		  data-ng-click="expedit.remove_value(field.id, value_id)"
-		  data-ng-if="!field.required">
-	    <span aria-hidden="true">&times;</span>
-	  </button>
-	  <input type="checkbox" class="form-check-input"
-		 id="{{field.id}}"
-		 data-ng-true-value="1" data-ng-false-value="0"
-		 data-ng-model="exp.fields[field.id][value_id]">
-	  <label for="{{field.id}}" class="form-check-label">{{field.title}}<span class="red" data-ng-if="field.required">*</span></label>
-	</div>
-	<small class="form-text text-muted">{{field.description}}</small>
+        <div
+          data-ng-repeat="(value_id, field_value) in exp.fields[field.id]"
+          data-ng-if="expedit.isValue(field_value)"
+        >
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            data-ng-click="expedit.remove_value(field.id, value_id)"
+            data-ng-if="!field.required"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="{{field.id}}"
+            data-ng-true-value="1"
+            data-ng-false-value="0"
+            data-ng-model="exp.fields[field.id][value_id]"
+          />
+          <label for="{{field.id}}" class="form-check-label"
+            >{{field.title}}<span class="red" data-ng-if="field.required"
+              >*</span
+            ></label
+          >
+        </div>
+        <small class="form-text text-muted">{{field.description}}</small>
       </div>
       <div class="form-group" data-ng-switch-when="value_DOUBLE">
-	<label for="{{field.id}}">{{field.title}}<span class="red" data-ng-if="field.required">*</span></label>
-	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
-	  <button type="button" class="close" aria-label="Close"
-		  data-ng-click="expedit.remove_value(field.id, value_id)"
-		  data-ng-if="!field.required || expedit.hasFieldValuesLeft(field)">
-	    <span aria-hidden="true">&times;</span>
-	  </button>
-	  <input type="number" step="0.0000000000000001" class="form-control"
-		 id="{{field.id}}"
-		 name="{{field.id}}_{{value_id}}"
-		 data-ng-model="exp.fields[field.id][value_id]"
-		 data-ng-required="field.required">
-	  <div class="invalid-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
-	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
-	      Required field.
-	    </div>
-	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.number">
-	      This field should contain a double.
-	    </div>
-	  </div>
-	</div>
-	<small class="form-text text-muted">{{field.description}}</small>
+        <label for="{{field.id}}"
+          >{{field.title}}<span class="red" data-ng-if="field.required"
+            >*</span
+          ></label
+        >
+        <div
+          data-ng-repeat="(value_id, field_value) in exp.fields[field.id]"
+          data-ng-if="expedit.isValue(field_value)"
+        >
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            data-ng-click="expedit.remove_value(field.id, value_id)"
+            data-ng-if="!field.required || expedit.hasFieldValuesLeft(field)"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <input
+            type="number"
+            step="0.0000000000000001"
+            class="form-control"
+            id="{{field.id}}"
+            name="{{field.id}}_{{value_id}}"
+            data-ng-model="exp.fields[field.id][value_id]"
+            data-ng-required="field.required"
+          />
+          <div
+            class="invalid-feedback"
+            data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched"
+          >
+            <div
+              data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required"
+            >
+              Required field.
+            </div>
+            <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.number">
+              This field should contain a double.
+            </div>
+          </div>
+        </div>
+        <small class="form-text text-muted">{{field.description}}</small>
       </div>
       <div class="form-group" data-ng-switch-when="value_ATTACH">
-	<label for="{{field.id}}">{{field.title}}<span class="red" data-ng-if="field.required">*</span>
-	</label>
-	<div data-ng-repeat="(value_id, field_value) in exp.fields[field.id]" data-ng-if="expedit.isValue(field_value)">
-	  <button type="button" class="close" aria-label="Close"
-		  data-ng-click="expedit.remove_value(field.id, value_id)"
-		  data-ng-if="expedit.showRemoveAttachButton(field, field_value)">
-	    <span aria-hidden="true">&times;</span>
-	  </button>
-	  <!-- Attachment is registered in database -->
-	  <a href="{{download_url}}/{{exp.id}}/{{field.id}}/{{field_value}}"
-	     data-ng-if="expedit.isStringValue(field_value)" target="_blank">{{field_value}}</a>
-	  <!-- Attachment has (just) been uploaded -->
-	  <div data-ng-if="field_value['filename']">Newly uploaded file: {{field_value['filename']}}</div>
-	  <!-- Fresh upload button -->
-	  <div data-ng-if="!field_value">
-	    <input type="file" class="form-control"
-		   id="{{field.id}}"
-		   name="{{field.id}}_{{value_id}}"
-		   files-model="attachments[field.id][value_id].file"
-		   data-ng-required="field.required">
-	    <span class="btn btn-secondary pointer" data-ng-click="expedit.uploadAttachment(field.id, value_id)">Upload</span>
-	  </div>
-	  <div class="invalid-feedback manual-feedback" data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched">
-	    <div data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required">
-	      Required upload.
-	    </div>
-	    <div data-ng-show="exp.fields[field.id][value_id]==undefined">
-	      Upload not yet completed.
-	    </div>
-	  </div>
-	</div>
-	<small class="form-text text-muted">{{field.description}}</small>
+        <label for="{{field.id}}"
+          >{{field.title}}<span class="red" data-ng-if="field.required">*</span>
+        </label>
+        <div
+          data-ng-repeat="(value_id, field_value) in exp.fields[field.id]"
+          data-ng-if="expedit.isValue(field_value)"
+        >
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            data-ng-click="expedit.remove_value(field.id, value_id)"
+            data-ng-if="expedit.showRemoveAttachButton(field, field_value)"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <!-- Attachment is registered in database -->
+          <a
+            href="{{download_url}}/{{exp.id}}/{{field.id}}/{{field_value}}"
+            data-ng-if="expedit.isStringValue(field_value)"
+            target="_blank"
+            >{{field_value}}</a
+          >
+          <!-- Attachment has (just) been uploaded -->
+          <div data-ng-if="field_value['filename']">
+            Newly uploaded file: {{field_value['filename']}}
+          </div>
+          <!-- Fresh upload button -->
+          <div data-ng-if="!field_value">
+            <input
+              type="file"
+              class="form-control"
+              id="{{field.id}}"
+              name="{{field.id}}_{{value_id}}"
+              files-model="attachments[field.id][value_id].file"
+              data-ng-required="field.required"
+            />
+            <span
+              class="btn btn-secondary pointer"
+              data-ng-click="expedit.uploadAttachment(field.id, value_id)"
+              >Upload</span
+            >
+          </div>
+          <div
+            class="invalid-feedback manual-feedback"
+            data-ng-show="fieldsForm.$submitted || fieldsForm[field.id+'_'+value_id].$touched"
+          >
+            <div
+              data-ng-show="fieldsForm[field.id+'_'+value_id].$error.required"
+            >
+              Required upload.
+            </div>
+            <div data-ng-show="exp.fields[field.id][value_id]==undefined">
+              Upload not yet completed.
+            </div>
+          </div>
+        </div>
+        <small class="form-text text-muted">{{field.description}}</small>
       </div>
     </div>
   </div>
 </form>
 
-
-<h3>References <i class="material-icons align-middle pointer" data-ng-click="expedit.add_reference()">add_circle</i></h3>
-
+<h3>
+  References
+  <i
+    class="material-icons align-middle pointer"
+    data-ng-click="expedit.add_reference()"
+    >add_circle</i
+  >
+</h3>
 
 <label for="ref-select">Add existing reference: </label>
 <select id="ref-select" data-ng-model="ref_selected_index">
-  <option
-    data-ng-repeat="ref in references"
-    value="{{$index}}">
+  <option data-ng-repeat="ref in references" value="{{$index}}">
     {{ref.year}} - {{ref.title}}
   </option>
 </select>
-<i class="material-icons align-middle pointer" data-ng-click="expedit.load_reference()">add_circle</i>
-
+<i
+  class="material-icons align-middle pointer"
+  data-ng-click="expedit.load_reference()"
+  >add_circle</i
+>
 
 <form name="refForm" class="was-validated" novalidate>
-  <fieldset class="form-group mt-3 card" data-ng-repeat="ref in exp.references" data-ng-if="expedit.isActiveReference(ref)">
+  <fieldset
+    class="form-group mt-3 card"
+    data-ng-repeat="ref in exp.references"
+    data-ng-if="expedit.isActiveReference(ref)"
+  >
     <div class="card-body">
-      <button type="button" class="close" aria-label="Close" data-ng-click="expedit.remove_reference(ref)">
-	<span aria-hidden="true">&times;</span>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        data-ng-click="expedit.remove_reference(ref)"
+      >
+        <span aria-hidden="true">&times;</span>
       </button>
       <div class="form-group">
-	<label for="title_{{ref.id}}">Title<span class="red">*</span></label>
-	<input type="text" id="title_{{ref.id}}" name="title_{{ref.id}}" class="form-control" data-ng-model="ref.title" required>
-	<div class="invalid-feedback" data-ng-show="refForm.$submitted || refForm['title_'+ref.id].$touched">
-	  <div data-ng-show="refForm['title_'+ref.id].$error.required">
-	    Title is required.
-	  </div>
-	</div>
-      </div>	  
+        <label for="title_{{ref.id}}">Title<span class="red">*</span></label>
+        <input
+          type="text"
+          id="title_{{ref.id}}"
+          name="title_{{ref.id}}"
+          class="form-control"
+          data-ng-model="ref.title"
+          required
+        />
+        <div
+          class="invalid-feedback"
+          data-ng-show="refForm.$submitted || refForm['title_'+ref.id].$touched"
+        >
+          <div data-ng-show="refForm['title_'+ref.id].$error.required">
+            Title is required.
+          </div>
+        </div>
+      </div>
       <div class="form-group">
-	<label for="authors_{{ref.id}}">Authors<span class="red">*</span></label>
-	<input type="text" id="authors_{{ref.id}}" name="authors_{{ref.id}}" class="form-control" data-ng-model="ref.authors" required>
-	<div class="invalid-feedback" data-ng-show="refForm.$submitted || refForm['authors_'+ref.id].$touched">
-	  <div data-ng-show="refForm['authors_'+ref.id].$error.required">
-	    Author list is required.
-	  </div>
-	</div>
-	<small class="form-text text-muted">Comma-separated list of authors (Lastname FN, ...)</small>
+        <label for="authors_{{ref.id}}"
+          >Authors<span class="red">*</span></label
+        >
+        <input
+          type="text"
+          id="authors_{{ref.id}}"
+          name="authors_{{ref.id}}"
+          class="form-control"
+          data-ng-model="ref.authors"
+          required
+        />
+        <div
+          class="invalid-feedback"
+          data-ng-show="refForm.$submitted || refForm['authors_'+ref.id].$touched"
+        >
+          <div data-ng-show="refForm['authors_'+ref.id].$error.required">
+            Author list is required.
+          </div>
+        </div>
+        <small class="form-text text-muted"
+          >Comma-separated list of authors (Lastname FN, ...)</small
+        >
       </div>
       <div class="form-row">
-	<div class="col-md form-group">
-	  <label for="year_{{ref.id}}">Year<span class="red">*</span></label>
-	  <input type="number" id="year_{{ref.id}}" name="year_{{ref.id}}" class="form-control" data-ng-model="ref.year" required>
-	  <div class="invalid-feedback" data-ng-show="refForm.$submitted || refForm['year_'+ref.id].$touched">
-	    <div data-ng-show="refForm['year_'+ref.id].$error.required">
-	      Year is required.
-	    </div>
-	    <div data-ng-show="refForm['year_'+ref.id].$error.number">
-	      Year should be numeric.
-	    </div>
-	  </div>
-	</div>
-	<div class="col-md form-group">
-	  <label for="journal_{{ref.id}}">Journal<span class="red">*</span></label>
-	  <input type="text" id="journal_{{ref.id}}" name="journal_{{ref.id}}" class="form-control" data-ng-model="ref.journal" required>
-	  <div class="invalid-feedback" data-ng-show="refForm.$submitted || refForm['journal_'+ref.id].$touched">
-	    <div data-ng-show="refForm['journal_'+ref.id].$error.required">
-	      Journal is required.
-	    </div>
-	  </div>
-	</div>
-	<div class="col-md form-group">
-	  <label for="pages_{{ref.id}}">Pages</label>
-	  <input type="text" id="pages_{{ref.id}}" class="form-control" data-ng-model="ref.pages">
-	  <small class="form-text text-muted">Free text field representing volume, pages,...</small>
-	</div>
-      </div>      
+        <div class="col-md form-group">
+          <label for="year_{{ref.id}}">Year<span class="red">*</span></label>
+          <input
+            type="number"
+            id="year_{{ref.id}}"
+            name="year_{{ref.id}}"
+            class="form-control"
+            data-ng-model="ref.year"
+            required
+          />
+          <div
+            class="invalid-feedback"
+            data-ng-show="refForm.$submitted || refForm['year_'+ref.id].$touched"
+          >
+            <div data-ng-show="refForm['year_'+ref.id].$error.required">
+              Year is required.
+            </div>
+            <div data-ng-show="refForm['year_'+ref.id].$error.number">
+              Year should be numeric.
+            </div>
+          </div>
+        </div>
+        <div class="col-md form-group">
+          <label for="journal_{{ref.id}}"
+            >Journal<span class="red">*</span></label
+          >
+          <input
+            type="text"
+            id="journal_{{ref.id}}"
+            name="journal_{{ref.id}}"
+            class="form-control"
+            data-ng-model="ref.journal"
+            required
+          />
+          <div
+            class="invalid-feedback"
+            data-ng-show="refForm.$submitted || refForm['journal_'+ref.id].$touched"
+          >
+            <div data-ng-show="refForm['journal_'+ref.id].$error.required">
+              Journal is required.
+            </div>
+          </div>
+        </div>
+        <div class="col-md form-group">
+          <label for="pages_{{ref.id}}">Pages</label>
+          <input
+            type="text"
+            id="pages_{{ref.id}}"
+            class="form-control"
+            data-ng-model="ref.pages"
+          />
+          <small class="form-text text-muted"
+            >Free text field representing volume, pages,...</small
+          >
+        </div>
+      </div>
       <div class="form-row">
-	<div class="col-sm-10 form-group">
-	  <label for="pubmed_{{ref.id}}">PubMed ID</label>
-	  <input type="number" id="pubmed_{{ref.id}}" name="pubmed_{{ref.id}}" class="form-control"
-		 data-ng-model="ref.pubmed_id"
-		 data-ng-change="expedit.ref_check_duplicate(ref)">
-	  <div class="invalid-feedback manual-feedback" data-ng-show="refForm.$submitted || refForm['pubmed_'+ref.id].$touched">
-	    <div data-ng-show="refForm['pubmed_'+ref.id].$error.number">
-	      Pubmed ID should be numeric.
-	    </div>
-	    <div data-ng-show="ref.duplicate">
-	      Pubmed ID already exists in CAMEL. Please use the "add existing reference" feature instead.
-	    </div>
-	  </div>
-	</div>
-	<div class="col-sm-2 mt-3">
-	  <button type="button"
-		  class="btn btn-secondary"
-		  data-ng-click="expedit.pubmed_fill(ref)"
-		  data-ng-disabled="!ref.pubmed_id">Auto-fill</button>
-	</div>
-      </div>      
+        <div class="col-sm-10 form-group">
+          <label for="pubmed_{{ref.id}}">PubMed ID</label>
+          <input
+            type="number"
+            id="pubmed_{{ref.id}}"
+            name="pubmed_{{ref.id}}"
+            class="form-control"
+            data-ng-model="ref.pubmed_id"
+            data-ng-change="expedit.ref_check_duplicate(ref)"
+          />
+          <div
+            class="invalid-feedback manual-feedback"
+            data-ng-show="refForm.$submitted || refForm['pubmed_'+ref.id].$touched"
+          >
+            <div data-ng-show="refForm['pubmed_'+ref.id].$error.number">
+              Pubmed ID should be numeric.
+            </div>
+            <div data-ng-show="ref.duplicate">
+              Pubmed ID already exists in CAMEL. Please use the "add existing
+              reference" feature instead.
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2 mt-3">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-ng-click="expedit.pubmed_fill(ref)"
+            data-ng-disabled="!ref.pubmed_id"
+          >
+            Auto-fill
+          </button>
+        </div>
+      </div>
       <div class="form-group">
-	<label for="url_{{ref.id}}">URL</label>
-	<input type="url" id="url_{{ref.id}}" name="url_{{ref.id}}" class="form-control" data-ng-model="ref.url">
-	<div class="invalid-feedback" data-ng-show="refForm.$submitted || refForm['url_'+ref.id].$touched">
-	  <div data-ng-show="refForm['url_'+ref.id].$error.url">
-	    This should be an absolute URL.
-	  </div>
-	</div>
-	<small class="form-text text-muted">DOI- or direct link to paper</small>
+        <label for="url_{{ref.id}}">URL</label>
+        <input
+          type="url"
+          id="url_{{ref.id}}"
+          name="url_{{ref.id}}"
+          class="form-control"
+          data-ng-model="ref.url"
+        />
+        <div
+          class="invalid-feedback"
+          data-ng-show="refForm.$submitted || refForm['url_'+ref.id].$touched"
+        >
+          <div data-ng-show="refForm['url_'+ref.id].$error.url">
+            This should be an absolute URL.
+          </div>
+        </div>
+        <small class="form-text text-muted">DOI- or direct link to paper</small>
       </div>
     </div>
   </fieldset>
@@ -315,32 +535,79 @@
     <legend>Contact</legend>
     <div class="form-group">
       <label for="email">E-mail</label>
-      <input type="email" id="email" class="form-control" data-ng-model="guest_email" required>
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        data-ng-model="guest_email"
+        required
+      />
       <small class="form-text text-muted">Allow us to contact you.</small>
     </div>
     <div class="form-group">
       <label for="comments">Comments</label>
-      <textarea type="email" id="comments" class="form-control" data-ng-model="guest_comments"></textarea>
-      <small class="form-text text-muted">Remarks concerning this submission.</small>
+      <textarea
+        type="email"
+        id="comments"
+        class="form-control"
+        data-ng-model="guest_comments"
+      ></textarea>
+      <small class="form-text text-muted"
+        >Remarks concerning this submission.</small
+      >
     </div>
   </fieldset>
 </form>
 
 <div><small class="form-text red">* : required fields</small></div>
 
-<div><button type="submit" class="btn btn-primary" data-ng-click="expedit.submit_changes()">Submit all changes</button></div>
-<div><button type="submit" class="btn btn-secondary" data-ng-click="expedit.cancel()">Cancel</button></div>
-<div><button type="submit" class="btn btn-secondary" data-ng-click="expedit.delete()">DELETE</button></div>
-
-
+<div>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    data-ng-click="expedit.submit_changes()"
+  >
+    Submit all changes
+  </button>
+</div>
+<div>
+  <button
+    type="submit"
+    class="btn btn-secondary"
+    data-ng-click="expedit.cancel()"
+  >
+    Cancel
+  </button>
+</div>
+<div>
+  <button
+    type="submit"
+    class="btn btn-secondary"
+    data-ng-click="expedit.delete()"
+  >
+    DELETE
+  </button>
+</div>
 
 <!-- Delete Experiment Modal Dialog -->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModal" aria-hidden="true">
+<div
+  class="modal fade"
+  id="confirmModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="confirmModal"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="confirmModalLabel">{{warningTitle}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -348,8 +615,16 @@
         <span data-ng-bind-html="warningMessage"></span>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-ng-click="expedit.confirm(confirmData)">Yes, I understand</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-ng-click="expedit.confirm(confirmData)"
+        >
+          Yes, I understand
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">
+          Cancel
+        </button>
       </div>
     </div>
   </div>

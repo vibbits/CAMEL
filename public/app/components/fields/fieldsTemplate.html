@@ -1,114 +1,197 @@
 <h3>Fields Editor</h3>
 <div class="table-responsive mt-3">
-  <form name="fieldUpdateForm" class="was-validated" novalidate>    
+  <form name="fieldUpdateForm" class="was-validated" novalidate>
     <table class="table table-striped">
-      <thead class="thead-dark">    
-	<tr>
-	  <th></th>
-	  <th>id</th>
-	  <th>Title</th>
-	  <th>Unit</th>
-	  <th>Description</th>
-	  <th>Type</th>
-	  <th>Options</th>
-	  <th>Link</th>
-	  <th>Required</th>
-	  <th>Group</th>
-	  <th>Group ID</th>
-	  <th></th>	
-	</tr>
+      <thead class="thead-dark">
+        <tr>
+          <th></th>
+          <th>id</th>
+          <th>Title</th>
+          <th>Unit</th>
+          <th>Description</th>
+          <th>Type</th>
+          <th>Options</th>
+          <th>Link</th>
+          <th>Required</th>
+          <th>Group</th>
+          <th>Group ID</th>
+          <th></th>
+        </tr>
       </thead>
-      <tbody id="fieldstable">      
-	<tr class="ui-state-default" data-ng-class="{'changed': field.changed || field.new_field}" data-ng-repeat="field in fields.fields">
-	  <td><i class="material-icons pointer">drag_handle</i></td>
-	  <td>{{field.id}}</td>
-	  <td>
-	    <input name="title_{{field.id}}" class="form-control" data-ng-model="field.title" data-ng-change="field.changed=true" required>
-	    <div class="invalid-feedback inverse" data-ng-show="fieldUpdateForm.$submitted || fieldUpdateForm['title_'+field.id].$touched">
-	      <div data-ng-show="fieldUpdateForm['title_'+field.id].$error.required">
-		The field needs a (prefably unique and meaningful) title.
-	      </div>
-	    </div>
-	  </td>
-	  <td>
-	    <input data-ng-model="field.unit" size="4" data-ng-change="field.changed=true">
-	  </td>
-	  <td>
-	    <input class="form-control" data-ng-model="field.description" data-ng-change="field.changed=true">
-	    <input class="form-control" data-ng-model="field.options"
-		   placeholder="option1, option2, ..."
-		   data-ng-change="field.changed=true"
-		   data-ng-show="field.show_options">
-	  </td>
-	  <td>
-	    <div data-ng-if="field.new_field">
-	      <select data-ng-model="field.type_column" data-ng-change="fields.type_changed(field)">
-		<option value="value_VARCHAR">STRING</option>
-		<option value="value_TEXT">TEXT</option>
-		<option value="value_INT">NUMBER</option>
-		<option value="value_DOUBLE">DOUBLE</option>
-		<option value="value_BOOL">BOOLEAN</option>
-		<option value="value_ATTACH">ATTACH</option>
-	      </select>
-	    </div>
-	    <div data-ng-if="!field.new_field">
-	      <pre>{{field.type_column.split('_')[1]}}</pre>
-	    </div>
-	  </td>
-	  <td>
-	    <input data-ng-model="field.show_options" type="checkbox"
-		   data-ng-disabled="field.type_column!='value_VARCHAR'">
-	  </td>
-	  <td>
-	    <input data-ng-model="field.link" type="checkbox"
-		   data-ng-true-value="1" data-ng-false-value="0"
-		   data-ng-change="field.changed=true">
-	  </td>
-	  <td>
-	    <input data-ng-model="field.required"
-		   type="checkbox" data-ng-true-value="1" data-ng-false-value="0"
-		   data-ng-change="field.changed=true">
-	  </td>
-	  <td>
-	    <input data-ng-model="field.group" type="checkbox"
-		   data-ng-true-value="1" data-ng-false-value="0"
-		   data-ng-change="field.changed=true">
-	  </td>
-	  <td>
-	    <input data-ng-model="field.group_id" size="2" data-ng-change="field.changed=true">
-	  </td>
-	  <td><i class="material-icons pointer" data-ng-click="fields.removeRow(field)">delete</i></td>
-	</tr>
+      <tbody id="fieldstable">
+        <tr
+          class="ui-state-default"
+          data-ng-class="{'changed': field.changed || field.new_field}"
+          data-ng-repeat="field in fields.fields"
+        >
+          <td><i class="material-icons pointer">drag_handle</i></td>
+          <td>{{field.id}}</td>
+          <td>
+            <input
+              name="title_{{field.id}}"
+              class="form-control"
+              data-ng-model="field.title"
+              data-ng-change="field.changed=true"
+              required
+            />
+            <div
+              class="invalid-feedback inverse"
+              data-ng-show="fieldUpdateForm.$submitted || fieldUpdateForm['title_'+field.id].$touched"
+            >
+              <div
+                data-ng-show="fieldUpdateForm['title_'+field.id].$error.required"
+              >
+                The field needs a (prefably unique and meaningful) title.
+              </div>
+            </div>
+          </td>
+          <td>
+            <input
+              data-ng-model="field.unit"
+              size="4"
+              data-ng-change="field.changed=true"
+            />
+          </td>
+          <td>
+            <input
+              class="form-control"
+              data-ng-model="field.description"
+              data-ng-change="field.changed=true"
+            />
+            <input
+              class="form-control"
+              data-ng-model="field.options"
+              placeholder="option1, option2, ..."
+              data-ng-change="field.changed=true"
+              data-ng-show="field.show_options"
+            />
+          </td>
+          <td>
+            <div data-ng-if="field.new_field">
+              <select
+                data-ng-model="field.type_column"
+                data-ng-change="fields.type_changed(field)"
+              >
+                <option value="value_VARCHAR">STRING</option>
+                <option value="value_TEXT">TEXT</option>
+                <option value="value_INT">NUMBER</option>
+                <option value="value_DOUBLE">DOUBLE</option>
+                <option value="value_BOOL">BOOLEAN</option>
+                <option value="value_ATTACH">ATTACH</option>
+              </select>
+            </div>
+            <div data-ng-if="!field.new_field">
+              <pre>{{field.type_column.split('_')[1]}}</pre>
+            </div>
+          </td>
+          <td>
+            <input
+              data-ng-model="field.show_options"
+              type="checkbox"
+              data-ng-disabled="field.type_column!='value_VARCHAR'"
+            />
+          </td>
+          <td>
+            <input
+              data-ng-model="field.link"
+              type="checkbox"
+              data-ng-true-value="1"
+              data-ng-false-value="0"
+              data-ng-change="field.changed=true"
+            />
+          </td>
+          <td>
+            <input
+              data-ng-model="field.required"
+              type="checkbox"
+              data-ng-true-value="1"
+              data-ng-false-value="0"
+              data-ng-change="field.changed=true"
+            />
+          </td>
+          <td>
+            <input
+              data-ng-model="field.group"
+              type="checkbox"
+              data-ng-true-value="1"
+              data-ng-false-value="0"
+              data-ng-change="field.changed=true"
+            />
+          </td>
+          <td>
+            <input
+              data-ng-model="field.group_id"
+              size="2"
+              data-ng-change="field.changed=true"
+            />
+          </td>
+          <td>
+            <i
+              class="material-icons pointer"
+              data-ng-click="fields.removeRow(field)"
+              >delete</i
+            >
+          </td>
+        </tr>
       </tbody>
     </table>
   </form>
 </div>
 <div class="row mt-2">
   <div class="col">
-    <span class="pointer" data-ng-click="fields.newRow()"><i class="material-icons align-middle">add_circle_outline</i>
+    <span class="pointer" data-ng-click="fields.newRow()"
+      ><i class="material-icons align-middle">add_circle_outline</i>
       Add row
     </span>
   </div>
 </div>
 <div class="row mt-2">
   <div class="col">
-    <div><button type="submit" class="btn btn-primary" data-ng-click="fields.saveChanges()">Submit all changes</button></div>
     <div>
-      <small class="text-muted">(All fields shown in orange will be updated.)</small>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        data-ng-click="fields.saveChanges()"
+      >
+        Submit all changes
+      </button>
     </div>
-    <div><button type="submit" class="btn btn-secondary" data-ng-click="fields.cancel()">Cancel</button></div>    
+    <div>
+      <small class="text-muted"
+        >(All fields shown in orange will be updated.)</small
+      >
+    </div>
+    <div>
+      <button
+        type="submit"
+        class="btn btn-secondary"
+        data-ng-click="fields.cancel()"
+      >
+        Cancel
+      </button>
+    </div>
   </div>
 </div>
 
-
-
 <!-- Remove row Modal Dialog -->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModal" aria-hidden="true">
+<div
+  class="modal fade"
+  id="confirmModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="confirmModal"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="confirmModalLabel">{{warningTitle}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -116,8 +199,16 @@
         <span data-ng-bind-html="warningMessage"></span>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-ng-click="fields.confirm(confirmData)">Yes, I understand</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-ng-click="fields.confirm(confirmData)"
+        >
+          Yes, I understand
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">
+          Cancel
+        </button>
       </div>
     </div>
   </div>
