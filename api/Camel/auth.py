@@ -30,10 +30,10 @@ def login_required(endpoint):
             'WWW-Authenticate': 'Basic realm="Login Required"'
         })
 
-        if 'AuthToken' not in request.headers:
+        if 'Authheader' not in request.headers:
             return unauthorised
 
-        token = request.headers['AuthToken']
+        token = request.headers['Authheader']
         db = db_connect(config)
         sql = "SELECT `token` from `sessions` WHERE `token` = %(token)s"
         c = db.cursor()

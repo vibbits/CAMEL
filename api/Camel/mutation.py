@@ -1,6 +1,9 @@
+import numpy as np
 from flask_restful import request, reqparse
 from MySQLdb.cursors import DictCursor
 from pathlib import Path
+import pandas as pd
+import datetime
 
 from Camel import CamelResource
 from Camel.field_mut import FieldMutList
@@ -265,7 +268,7 @@ class MutationList(CamelResource):
         self.reqparse.add_argument('references', type = list, location = 'json')
 
         super(MutationList, self).__init__()
-    
+
     def _add_field_filters(self, field_id, field_type, value):
         if field_type == 'VARCHAR' or field_type == 'TEXT':
             filter_query = ("(ef_filter.`field_id` = %(FieldID_{field_id})s AND ef_filter.`value_{field_type}` "
@@ -465,13 +468,14 @@ class MutationList(CamelResource):
 
     @login_required
     def post(self):
-        print("Mutation(CamelResource):") 
+        print("Mutation(CamelResource):")
+        print(self.reqparse.args)
         args = self.reqparse.parse_args()
         print(args)
 
         exp_name = args['name']
 
-        ##Experiment
+        ##Mutations
         sql = "INSERT INTO `mutations_fields` (`name`) VALUES (%(exp_name)s)"
         cursor = self.db.cursor()
         cursor.execute(sql, {'exp_name': exp_name})
