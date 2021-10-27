@@ -124,7 +124,13 @@ To verify that it works.
    5.4. `docker-compose down`
 
 6. We assume that you have a database dump of MySQL in the root folder. 
-   It could have been created via `mysqldump --add-drop-table -u admin -p`cat /etc/psa/.psa.shadow` dbname > dbname.sql`
+   It could have been created via `mysqldump --add-drop-table -u admin -p` cat /etc/psa/.psa.shadow` dbname > dbname.sql`
+
+   In CAMEL's current state, to run `mysqldump` from the Dockerized MariaDB, try:
+
+   `docker exec [CONTAINER ID] [path to mysqldump executible] -u [USERNAME] --password=[PASSWORD] CAMEL > CAMEL.sql`
+   or
+   `docker exec 16b028adef6f mysqldump -u camel --password=abcdef CAMEL > CAMEL.sql`
    
    This database dump could be imported in the database server once started by using 
    `mysql -u admin -p`cat /etc/psa/.psa.shadow` -h camel-database dbname < dbname.sql`

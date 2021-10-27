@@ -41,9 +41,11 @@ class CamelResource(Resource):
 from Camel.auth import Auth, Logout
 from Camel.experiment import Experiment, ExperimentList
 from Camel.field import Field, FieldList
+from Camel.field_mut import FieldMut, FieldMutList
 from Camel.reference import Reference, ReferenceList
 from Camel.attachment import Attachment
 from Camel.pubmed import PubMed
+from Camel.mutation import Mutation, MutationList
 
 ## Init Flask App
 app = Flask(__name__)
@@ -54,8 +56,12 @@ api.add_resource(Auth, '/auth/')
 api.add_resource(Logout, '/auth/logout')
 api.add_resource(ExperimentList, '/experiment')
 api.add_resource(Experiment, '/experiment/<int:id>')
+api.add_resource(MutationList, '/mutation')
+api.add_resource(Mutation, '/mutation/<int:id>')
 api.add_resource(FieldList, '/field')
 api.add_resource(Field, '/field/<string:id>')
+api.add_resource(FieldMutList, '/field_mut')
+api.add_resource(FieldMut, '/field_mut/<string:id>')
 api.add_resource(ReferenceList, '/reference')
 api.add_resource(Reference, '/reference/<int:id>')
 api.add_resource(Attachment, '/attachment')

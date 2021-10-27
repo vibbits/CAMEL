@@ -1,4 +1,5 @@
-angular.module("CAMEL")
-    .controller('ContactController', function($scope, $location){
-	var ctrl = this;
-    });
+angular
+  .module("CAMEL")
+  .controller("ContactController", function ($scope, $location) {
+    var ctrl = this;
+  });

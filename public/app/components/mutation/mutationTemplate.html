@@ -1,0 +1,104 @@
+<div class="card mt-3">
+  <div class="card-body">
+    <h5 class="card-title">{{exp.name}}</h5>
+    <div class="table-responsive-md">
+      <table class="table table-striped thead-dark">
+        <tr data-ng-repeat="field in fields" data-ng-if="exp.fields[field.id]">
+          <th class="fit">
+            {{field.title}}
+            <span data-ng-if="field.unit">({{field.unit}})</span>
+            <span data-ng-if="field.description">
+              <i class="material-icons" title="{{field.description}}">info</i>
+            </span>
+          </th>
+          <td>
+            <div data-ng-switch="field.type_column">
+              <div data-ng-switch-when="value_BOOL">
+                <i
+                  class="material-icons"
+                  data-ng-repeat="check in exp.fields[field.id]"
+                >
+                  {{check==1? 'check_circle':'not_interested'}}
+                </i>
+              </div>
+              <div data-ng-switch-when="value_VARCHAR">
+                <div data-ng-if="field.link">
+                  <ul class="link-list">
+                    <li data-ng-repeat="value in exp.fields[field.id]">
+                      <a href="{{value}}" target="_blank">{{value}}</a>
+                    </li>
+                  </ul>
+                </div>
+                <div data-ng-if="!field.link">
+                  <span
+                    class="field-value"
+                    data-ng-repeat="value in exp.fields[field.id]"
+                  >
+                    {{value}}
+                  </span>
+                </div>
+              </div>
+              <div data-ng-switch-when="value_TEXT">
+                <div data-ng-repeat="value in exp.fields[field.id]">
+                  {{value}}
+                </div>
+              </div>
+              <div data-ng-switch-when="value_ATTACH">
+                <div data-ng-repeat="value in exp.fields[field.id]">
+                  <a
+                    href="{{download_url}}/{{exp.id}}/{{field.id}}/{{value}}"
+                    target="_blank"
+                    >{{value}}</a
+                  >
+                </div>
+              </div>
+              <div data-ng-switch-default>
+                <span
+                  class="field-value"
+                  data-ng-repeat="value in exp.fields[field.id]"
+                >
+                  {{value}}
+                </span>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>Reference(s)</th>
+          <td>
+            <ul class="reference-list">
+              <li data-ng-repeat="ref in exp.references">
+                <div class="paper-reference">
+                  {{ref.authors}}, <em>{{ref.title}}</em> ({{ref.year}})
+                  {{ref.journal}}, {{ref.pages}}
+                  <span data-ng-if="ref.url"
+                    >(<a href="{{ref.url}}" target="_blank">article</a>)</span
+                  >
+                  <span data-ng-if="ref.pubmed_id"
+                    >(<a
+                      href="https://www.ncbi.nlm.nih.gov/pubmed/?term={{ref.pubmed_id}}"
+                      target="_blank"
+                      >pubmed</a
+                    >)</span
+                  >
+                </div>
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col">
+        <a href="#!/experiments">
+          <i class="material-icons">arrow_back</i>
+        </a>
+      </div>
+      <div class="col text-right" data-ng-if="auth.isAuthenticated()">
+        <button class="btn btn-secondary" data-ng-click="experiment.edit()">
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

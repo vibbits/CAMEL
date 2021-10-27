@@ -1,6 +1,7 @@
-angular.module("CAMEL")
-    .controller('InfoController', function($scope, $location, config){
-	var ctrl = this;
+angular
+  .module("CAMEL")
+  .controller("InfoController", function ($scope, $location, config) {
+    var ctrl = this;
 
-	$scope.config = config;
-    });
+    $scope.config = config;
+  });
